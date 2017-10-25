@@ -1,0 +1,10 @@
+# Exclude all hidden files...
+.*
+
+# ...except those related to git or testing
+!.git*
+!.travis.yml
+
+# Exclude build and packaging leftovers
+/debian
+build/*
