@@ -124,6 +124,44 @@ class QueryBuilder
         return $deleteFrom;
     }
 
+    public function unpackCondition($expression, array $values)
+    {
+        $placeholders = preg_match_all('/(\?)/', $expression, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+
+        if ($placeholders === 0) {
+            return [$expression, []];
+        }
+
+        if ($placeholders === 1) {
+            $offset = $matches[0][1][1];
+            $expression = substr($expression, 0, $offset)
+                . implode(', ', array_fill(0, count($values), '?'))
+                . substr($expression, $offset + 1);
+
+            return [$expression, $values];
+        }
+
+        $unpackedExpression = [];
+        $unpackedValues = [];
+        $offset = null;
+
+        foreach ($matches as $match) {
+            $value = array_shift($values);
+            $left = substr($expression, $offset, $match[1][1]);
+            if (is_array($value)) {
+                $unpackedExpression[] = $left
+                    . implode(', ', array_fill(0, count($value), '?'));
+                $unpackedValues = array_merge($unpackedValues, $value);
+            } else {
+                $unpackedExpression[] = $left;
+                $unpackedValues[] = $value;
+            }
+            $offset = $match[1][1] + 1;
+        }
+
+        return [implode('', $unpackedExpression), $unpackedValues];
+    }
+
     public function buildCondition(array $condition, array &$values)
     {
         $sql = [];
@@ -132,7 +170,14 @@ class QueryBuilder
 
         foreach ($condition as $expression => $value) {
             if (is_array($value)) {
-                $sql[] = $this->buildCondition($value, $values);
+                if (is_int($expression)) {
+                    // Operator format
+                    $sql[] = $this->buildCondition($value, $values);
+                } else {
+                    list($unpackedExpression, $unpackedValues) = $this->unpackCondition($expression, $value);
+                    $sql[] = $unpackedExpression;
+                    $values = array_merge($values, $unpackedValues);
+                }
             } else {
                 if ($value instanceof ExpressionInterface) {
                     $sql[] = $value->getStatement();
