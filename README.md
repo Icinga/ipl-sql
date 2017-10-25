@@ -11,3 +11,5 @@ should be inverted. We'll restructure the web frontend, so that it also works
 based on ipl components.
 
 Please read on in our [documentation](doc/01-Introduction.md).
+
+[![Build Status](https://travis-ci.org/Icinga/ipl.svg?branch=master)](https://travis-ci.org/Icinga/ipl)
