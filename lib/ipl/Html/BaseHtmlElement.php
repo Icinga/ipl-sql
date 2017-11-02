@@ -126,7 +126,7 @@ abstract class BaseHtmlElement extends HtmlDocument
             return sprintf(
                 '<%s%s>%s</%s>',
                 $tag,
-                $this->getAttributes()->render(),
+                $this->renderAttributes(),
                 $content,
                 $tag
             );
@@ -134,8 +134,17 @@ abstract class BaseHtmlElement extends HtmlDocument
             return sprintf(
                 '<%s%s />',
                 $tag,
-                $this->getAttributes()->render()
+                $this->renderAttributes()
             );
+        }
+    }
+
+    public function renderAttributes()
+    {
+        if ($this->attributes === null && empty($this->defaultAttributes)) {
+            return '';
+        } else {
+            return $this->getAttributes()->render();
         }
     }
 

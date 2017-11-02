@@ -13,6 +13,9 @@ class Attributes
     /** @var callable */
     protected $callbacks = [];
 
+    /** @var string */
+    protected $prefix = '';
+
     /**
      * Attributes constructor.
      * @param Attribute[] $attributes
@@ -103,7 +106,7 @@ class Attributes
     }
 
     /**
-     * @param Attribute|string $attribute
+     * @param Attribute|array|string $attribute
      * @param string|array $value
      * @return $this
      */
@@ -247,6 +250,20 @@ class Attributes
 
             $parts[] = $attribute->render();
         }
-        return ' ' . implode(' ', $parts);
+
+        $separator = ' ' . $this->prefix;
+
+        return $separator . implode($separator, $parts);
+    }
+
+    /**
+     * @param string $prefix
+     * @return $this
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
     }
 }
