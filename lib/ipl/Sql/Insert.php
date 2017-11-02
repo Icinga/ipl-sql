@@ -7,28 +7,28 @@ class Insert
     /**
      * The table to INSERT INTO
      *
-     * @var array|null
+     * @var string
      */
     protected $into;
 
     /**
      * The columns for which the query provides values
      *
-     * @var array|null
+     * @var array
      */
     protected $columns;
 
     /**
      * The values to INSERT INTO
      *
-     * @var array|null
+     * @var array
      */
     protected $values;
 
     /**
      * Get the table to INSERT INTO
      *
-     * @return  array|null
+     * @return  string|null
      */
     public function getInto()
     {
@@ -40,18 +40,18 @@ class Insert
      *
      * Note that this method does NOT quote the table you specify for the INSERT INTO.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the table names passed to this method.
+     * {@link Sql::quoteIdentifier()} for the table name passed to this method.
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   string|array    $table  The table to INSERT INTO. The table specification must be in one of the
-     *                                  following formats: 'table', 'table alias', ['alias' => 'table']
+     * @param   string  $table  The table to INSERT INTO. The table specification must be in one of the following
+     *                          formats: 'table' or 'schema.table'
      *
      * @return  $this
      */
     public function into($table)
     {
-        $this->into = ! is_array($table) ? [$table] : $table;
+        $this->into = $table;
 
         return $this;
     }
@@ -59,19 +59,19 @@ class Insert
     /**
      * Get the columns for which the statement provides values
      *
-     * @return  array|null
+     * @return  array
      */
     public function getColumns()
     {
         if (! empty($this->columns)) {
-            return $this->columns;
+            return array_keys($this->columns);
         }
 
         if (! empty($this->values)) {
             return array_keys($this->values);
         }
 
-        return null;
+        return [];
     }
 
     /**
@@ -100,11 +100,11 @@ class Insert
     /**
      * Get the values to INSERT INTO
      *
-     * @return  array|null
+     * @return  array
      */
     public function getValues()
     {
-        return $this->values;
+        return array_values($this->values ?: []);
     }
 
     /**
@@ -115,7 +115,7 @@ class Insert
      * restriction regarding quoting applies here. If you use {@link columns()} to set the columns and specify the
      * values in terms of column-value pairs, the columns from {@link columns()} will be used nonetheless.
      *
-     * @param   array   $values Array of values or values in terms of column-value pairs
+     * @param   array   $values Array of values or column-value pairs
      *
      * @return  $this
      */
