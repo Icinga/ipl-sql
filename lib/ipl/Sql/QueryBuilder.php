@@ -214,29 +214,17 @@ class QueryBuilder
     /**
      * Build the INSERT INTO part of query
      *
-     * @param   array   $into
+     * @param   string|null $into
      *
      * @return  string  The INSERT INTO part of the query
      */
-    public function buildInsertInto(array $into = null)
+    public function buildInsertInto($into)
     {
-        if ($into === null) {
+        if (empty($into)) {
             return '';
         }
 
-        $insertInto = 'INSERT INTO';
-
-        reset($into);
-        $alias = key($into);
-        $table = current($into);
-
-        if (is_int($alias)) {
-            $insertInto .= " $table";
-        } else {
-            $insertInto .= " $table $alias";
-        }
-
-        return $insertInto;
+        return "INSERT INTO $into";
     }
 
     /**
@@ -248,12 +236,8 @@ class QueryBuilder
      *
      * @return  string  The columns and values part of the INSERT INTO query
      */
-    public function buildInsertColumnsAndValues(array $columns = null, array $insertValues = null, array &$values)
+    public function buildInsertColumnsAndValues(array $columns, array $insertValues, array &$values)
     {
-        if ($columns === null) {
-            return '';
-        }
-
         $sql = ['(' . implode(',', $columns) . ')'];
 
         $preparedValues = [];
