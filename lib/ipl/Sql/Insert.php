@@ -26,6 +26,13 @@ class Insert
     protected $values;
 
     /**
+     * The select query for INSERT INTO ... SELECT
+     *
+     * @var Select
+     */
+    protected $select;
+
+    /**
      * Get the table to INSERT INTO
      *
      * @return  string|null
@@ -124,5 +131,29 @@ class Insert
         $this->values = $values;
 
         return $this;
+    }
+
+    /**
+     * Create a INSERT INTO ... SELECT statement
+     *
+     * @param   Select  $select
+     *
+     * @return  $this
+     */
+    public function select(Select $select)
+    {
+        $this->select = $select;
+
+        return $this;
+    }
+
+    /**
+     * Get the select query for the INSERT INTO ... SELECT statement
+     *
+     * @return  Select|null
+     */
+    public function getSelect()
+    {
+        return $this->select;
     }
 }

@@ -48,6 +48,14 @@ trait WhereTrait
 
     protected function mergeCondition(array $condition, $operator)
     {
-        $this->where = $this->where === null ? $condition : [$operator, $this->where, $condition];
+        if ($this->where === null) {
+            $this->where = [$operator, $condition];
+        } else {
+            if ($this->where[0] === $operator) {
+                $this->where[] = $condition;
+            } else {
+                $this->where = [$operator, $this->where, $condition];
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace ipl\Sql;
 
 class QueryBuilder
 {
-    protected $separator = "\n";
+    protected $separator = " ";
 
     /**
      * Assemble a DELETE query
@@ -26,7 +26,7 @@ class QueryBuilder
     }
 
     /**
-     * Assemble a INSERT query
+     * Assemble a INSERT statement
      *
      * @param   Insert  $insert
      *
@@ -36,9 +36,13 @@ class QueryBuilder
     {
         $values = [];
 
+        $select = $insert->getSelect();
+
         $sql = array_filter([
             $this->buildInsertInto($insert->getInto()),
-            $this->buildInsertColumnsAndValues($insert->getColumns(), $insert->getValues(), $values)
+            $select
+                ? $this->buildInsertIntoSelect($insert->getColumns(), $select, $values)
+                : $this->buildInsertColumnsAndValues($insert->getColumns(), $insert->getValues(), $values)
         ]);
 
         return [implode($this->separator, $sql), $values];
@@ -212,11 +216,11 @@ class QueryBuilder
     }
 
     /**
-     * Build the INSERT INTO part of query
+     * Build the INSERT INTO part of a INSERT INTO ... statement
      *
      * @param   string|null $into
      *
-     * @return  string  The INSERT INTO part of the query
+     * @return  string  The INSERT INTO part of a INSERT INTO ... statement
      */
     public function buildInsertInto($into)
     {
@@ -228,13 +232,32 @@ class QueryBuilder
     }
 
     /**
-     * Build the columns and values part of a INSERT INTO query
+     * Build the columns and SELECT part of a INSERT INTO ... SELECT statement
+     *
+     * @param   array   $columns
+     * @param   Select  $select
+     * @param   array   $values
+     *
+     * @return  string  The columns and SELECT part of the INSERT INTO ... SELECT statement
+     */
+    public function buildInsertIntoSelect(array $columns, Select $select, array &$values)
+    {
+        $sql = [
+            '(' . implode(',', $columns) . ')',
+            $this->assembleSelect($select, $values)[0]
+        ];
+
+        return implode($this->separator, $sql);
+    }
+
+    /**
+     * Build the columns and values part of a INSERT INTO ... statement
      *
      * @param   array   $columns
      * @param   array   $insertValues
      * @param   array   $values
      *
-     * @return  string  The columns and values part of the INSERT INTO query
+     * @return  string  The columns and values part of a INSERT INTO ... statement
      */
     public function buildInsertColumnsAndValues(array $columns, array $insertValues, array &$values)
     {
@@ -264,9 +287,9 @@ class QueryBuilder
      *
      * @return  string  The SELECT part of the query
      */
-    public function buildSelect(array $columns = null, $distinct = false)
+    public function buildSelect(array $columns, $distinct = false)
     {
-        if ($columns === null) {
+        if (empty($columns)) {
             return '';
         }
 
