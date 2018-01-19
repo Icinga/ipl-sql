@@ -18,7 +18,7 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
     /**
      * The columns to SELECT
      *
-     * @var array|null
+     * @var array
      */
     protected $columns;
 
@@ -37,21 +37,21 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
      *   ...
      * ]
      *
-     * @var array|null
+     * @var array
      */
     protected $join;
 
     /**
      * The columns to GROUP BY
      *
-     * @var array|null
+     * @var array
      */
     protected $groupBy;
 
     /**
      * Internal representation for the HAVING part of the query
      *
-     * @var array|null
+     * @var array
      */
     protected $having;
 
@@ -63,7 +63,7 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
      *   ...
      * ]
      *
-     * @var array|null
+     * @var array
      */
     protected $union;
 
@@ -94,11 +94,11 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
     /**
      * Get the columns to SELECT
      *
-     * @return  array|null
+     * @return  array
      */
     public function getColumns()
     {
-        return $this->columns;
+        return $this->columns ?: [];
     }
 
     /**
@@ -113,7 +113,7 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
      * {@link Sql::quoteIdentifier()} as well.
      *
      * @param   string|array    $columns    The column(s) to add to the SELECT. The items can be any mix of the
-     *                                      following: ['column', 'column as alias', 'alias' => 'column']
+     *                                      following: 'column', 'column as alias', ['alias' => 'column']
      *
      * @return  $this
      */
@@ -123,7 +123,7 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
             $columns = [$columns];
         }
 
-        $this->columns = array_merge($this->columns, $columns);
+        $this->columns = array_merge($this->columns ?: [], $columns);
 
         return $this;
     }
@@ -160,7 +160,7 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
             $tables = [$tables];
         }
 
-        $this->from = array_merge($this->from, $tables);
+        $this->from = array_merge($this->from ?: [], $tables);
 
         return $this;
     }
@@ -394,11 +394,27 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
     }
 
     /**
-     * Reset the WHERE part of the query
+     * Reset the GROUP BY part of the query
+     *
+     * @return  $this
      */
-    public function resetWhere()
+    public function resetGroupBy()
     {
-        $this->where = null;
+        $this->groupBy = null;
+
+        return $this;
+    }
+
+    /**
+     * Reset the HAVING part of the query
+     *
+     * @return  $this
+     */
+    public function resetHaving()
+    {
+        $this->having = null;
+
+        return $this;
     }
 
     /**
@@ -426,30 +442,6 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
     }
 
     /**
-     * Reset the GROUP BY part of the query
-     *
-     * @return  $this
-     */
-    public function resetGroupBy()
-    {
-        $this->groupBy = null;
-
-        return $this;
-    }
-
-    /**
-     * Reset the HAVING part of the query
-     *
-     * @return  $this
-     */
-    public function resetHaving()
-    {
-        $this->having = null;
-
-        return $this;
-    }
-
-    /**
      * Reset queries combined with UNION and UNION ALL
      *
      * @return  $this
@@ -457,6 +449,18 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
     public function resetUnion()
     {
         $this->union = null;
+
+        return $this;
+    }
+
+    /**
+     * Reset the WHERE part of the query
+     *
+     * @return  $this
+     */
+    public function resetWhere()
+    {
+        $this->where = null;
 
         return $this;
     }
