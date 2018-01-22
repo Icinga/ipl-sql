@@ -2,6 +2,9 @@
 
 namespace ipl\Sql;
 
+/**
+ * SQL SELECT query
+ */
 class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
 {
     use LimitOffsetTrait;

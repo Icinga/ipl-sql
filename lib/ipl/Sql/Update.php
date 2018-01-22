@@ -2,6 +2,9 @@
 
 namespace ipl\Sql;
 
+/**
+ * SQL UPDATE query
+ */
 class Update implements WhereInterface
 {
     use WhereTrait;

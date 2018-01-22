@@ -2,6 +2,9 @@
 
 namespace ipl\Sql;
 
+/**
+ * SQL DELETE query
+ */
 class Delete implements WhereInterface
 {
     use WhereTrait;
