@@ -2,6 +2,9 @@
 
 namespace ipl\Sql;
 
+/**
+ * SQL INSERT query
+ */
 class Insert
 {
     /**

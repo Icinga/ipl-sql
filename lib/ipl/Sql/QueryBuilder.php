@@ -128,6 +128,14 @@ class QueryBuilder
         return $deleteFrom;
     }
 
+    /**
+     * Outsourced logic of {@link buildCondition()}
+     *
+     * @param   string  $expression
+     * @param   array   $values
+     *
+     * @return  array
+     */
     public function unpackCondition($expression, array $values)
     {
         $placeholders = preg_match_all('/(\?)/', $expression, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
@@ -166,6 +174,14 @@ class QueryBuilder
         return [implode('', $unpackedExpression), $unpackedValues];
     }
 
+    /**
+     * Outsourced logic {@link buildWhere()} and {@link buildHaving()} have in common
+     *
+     * @param   array   $condition
+     * @param   array   $values
+     *
+     * @return  string
+     */
     public function buildCondition(array $condition, array &$values)
     {
         $sql = [];

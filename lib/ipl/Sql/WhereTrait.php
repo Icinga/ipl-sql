@@ -33,6 +33,16 @@ trait WhereTrait
         return $this;
     }
 
+    /**
+     * Make $condition an array and build an array like this: [$operator] + $condition
+     *
+     * If $condition is empty, replace it with a boolean constant depending on the operator.
+     *
+     * @param   string|array    $condition
+     * @param   string          $operator
+     *
+     * @return  array
+     */
     protected function buildCondition($condition, $operator)
     {
         if (is_array($condition)) {
@@ -46,6 +56,12 @@ trait WhereTrait
         return array_merge([$operator], $condition);
     }
 
+    /**
+     * Merge the given condition with ours via the given operator
+     *
+     * @param   array   $condition  As returned by {@link buildCondition()}
+     * @param   string  $operator
+     */
     protected function mergeCondition(array $condition, $operator)
     {
         if ($this->where === null) {
