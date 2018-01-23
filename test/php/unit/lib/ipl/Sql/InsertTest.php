@@ -31,10 +31,10 @@ class InsertTest extends BaseTestCase
 
     public function testEmptyInsertInto()
     {
-        $this->assertEquals(null, $this->query->getInto());
-        $this->assertEquals([], $this->query->getColumns());
-        $this->assertEquals([], $this->query->getValues());
-        $this->assertEquals(null, $this->query->getSelect());
+        $this->assertSame(null, $this->query->getInto());
+        $this->assertSame([], $this->query->getColumns());
+        $this->assertSame([], $this->query->getValues());
+        $this->assertSame(null, $this->query->getSelect());
         $this->assertCorrectStatementAndValues('() VALUES()', []); // TODO(el): Should we render anything here?
     }
 
@@ -42,7 +42,7 @@ class InsertTest extends BaseTestCase
     {
         $this->query->into('table');
 
-        $this->assertEquals('table', $this->query->getInto());
+        $this->assertSame('table', $this->query->getInto());
         $this->assertCorrectStatementAndValues('INSERT INTO table () VALUES()', []);
     }
 
@@ -50,7 +50,7 @@ class InsertTest extends BaseTestCase
     {
         $this->query->into('schema.table');
 
-        $this->assertEquals('schema.table', $this->query->getInto());
+        $this->assertSame('schema.table', $this->query->getInto());
         $this->assertCorrectStatementAndValues('INSERT INTO schema.table () VALUES()', []);
     }
 
@@ -59,7 +59,7 @@ class InsertTest extends BaseTestCase
         $columns = ['c1', 'c2'];
         $this->query->columns($columns);
 
-        $this->assertEquals($columns, $this->query->getColumns());
+        $this->assertSame($columns, $this->query->getColumns());
         $this->assertCorrectStatementAndValues('(c1,c2) VALUES()', []);
     }
 
@@ -67,8 +67,8 @@ class InsertTest extends BaseTestCase
     {
         $this->query->values(['c1' => 'v1']);
 
-        $this->assertEquals(['c1'], $this->query->getColumns());
-        $this->assertEquals(['v1'], $this->query->getValues());
+        $this->assertSame(['c1'], $this->query->getColumns());
+        $this->assertSame(['v1'], $this->query->getValues());
         $this->assertCorrectStatementAndValues('(c1) VALUES(?)', ['v1']);
     }
 
@@ -77,8 +77,8 @@ class InsertTest extends BaseTestCase
         $this->query->columns(['c1', 'c2']);
         $this->query->values(['v1', 'v2']);
 
-        $this->assertEquals(['c1', 'c2'], $this->query->getColumns());
-        $this->assertEquals(['v1', 'v2'], $this->query->getValues());
+        $this->assertSame(['c1', 'c2'], $this->query->getColumns());
+        $this->assertSame(['v1', 'v2'], $this->query->getValues());
         $this->assertCorrectStatementAndValues('(c1,c2) VALUES(?,?)', ['v1', 'v2']);
     }
 
@@ -93,7 +93,7 @@ class InsertTest extends BaseTestCase
             ->columns(['c1', 'c2'])
             ->select($select);
 
-        $this->assertEquals($select, $this->query->getSelect());
+        $this->assertSame($select, $this->query->getSelect());
         $this->assertCorrectStatementAndValues('INSERT INTO table (c1,c2) SELECT c1, c2 FROM table', []);
     }
 
