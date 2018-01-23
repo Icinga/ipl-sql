@@ -2,7 +2,7 @@
 
 namespace ipl\Test;
 
-use ipl\Html\BaseHtmlElement;
+use ipl\Html\ValidHtml;
 
 /**
  * Class HtmlTestCase
@@ -10,7 +10,7 @@ use ipl\Html\BaseHtmlElement;
  */
 abstract class HtmlTestCase extends BaseTestCase
 {
-    protected function assertRendersHtml($html, BaseHtmlElement $element)
+    protected function assertRendersHtml($html, ValidHtml $element)
     {
         $this->assertXmlStringEqualsXmlString($html, $element->render());
     }
