@@ -3,10 +3,9 @@
 namespace test\ipl\Html;
 
 use ipl\Html\Html as h;
-use ipl\Html\HtmlElement;
-use ipl\Test\BaseTestCase;
+use ipl\Test\HtmlTestCase;
 
-class HtmlTest extends BaseTestCase
+class HtmlTest extends HtmlTestCase
 {
     public function testStaticCallsGiveValidElements()
     {
@@ -41,10 +40,5 @@ class HtmlTest extends BaseTestCase
             '<span class="test it">&gt;5</span>',
             h::span(['class' => 'test it'], ['>5'])
         );
-    }
-
-    protected function assertRendersHtml($html, HtmlElement $element)
-    {
-        $this->assertXmlStringEqualsXmlString($html, $element->render());
     }
 }
