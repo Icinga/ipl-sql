@@ -350,19 +350,21 @@ class QueryBuilder
     /**
      * Build the JOIN part(s) of a query
      *
-     * @param   array   $join
+     * @param   array   $joins
      *
      * @return  string  The JOIN part(s) of the query
      */
-    public function buildJoin(array $join = null)
+    public function buildJoin(array $joins = null)
     {
-        if ($join === null) {
+        if ($joins === null) {
             return '';
         }
 
         $sql = [];
 
-        foreach ($join as list($joinType, $table, $condition)) {
+        foreach ($joins as $join) {
+            list($joinType, $table, $condition) = $join;
+
             if (is_array($table)) {
                 list($alias, $tableName) = $table;
                 $sql[] = "$joinType JOIN $tableName $alias ON $condition";
@@ -462,20 +464,22 @@ class QueryBuilder
     /**
      * Build the UNION part of a query
      *
-     * @param   array   $union
+     * @param   array   $unions
      * @param   array   $values
      *
      * @return  string  The UNION part of the query
      */
-    public function buildUnion(array $union = null, array &$values)
+    public function buildUnion(array $unions = null, array &$values)
     {
-        if ($union === null) {
+        if ($unions === null) {
             return '';
         }
 
         $sql = [];
 
-        foreach ($union as list($select, $all)) {
+        foreach ($unions as $union) {
+            list($select, $all) = $union;
+
             if ($select instanceof Select) {
                 list($select, $values) = $this->assembleSelect($select, $values);
             }
