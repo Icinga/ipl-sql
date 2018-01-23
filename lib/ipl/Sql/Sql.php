@@ -11,12 +11,12 @@ class Sql
     /**
      * SQL AND operator
      */
-    const all = 'AND';
+    const ALL = 'AND';
 
     /**
      * SQL OR operator
      */
-    const any = 'OR';
+    const ANY = 'OR';
 
     /**
      * Quote an identifier for use in an SQL statement by the given quote character(s)

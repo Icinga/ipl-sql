@@ -19,16 +19,16 @@ trait WhereTrait
         return $this->where;
     }
 
-    public function where($condition, $operator = Sql::all)
+    public function where($condition, $operator = Sql::ALL)
     {
-        $this->mergeCondition($this->buildCondition($condition, $operator), Sql::all);
+        $this->mergeCondition($this->buildCondition($condition, $operator), Sql::ALL);
 
         return $this;
     }
 
-    public function orWhere($condition, $operator = Sql::all)
+    public function orWhere($condition, $operator = Sql::ALL)
     {
-        $this->mergeCondition($this->buildCondition($condition, $operator), Sql::any);
+        $this->mergeCondition($this->buildCondition($condition, $operator), Sql::ANY);
 
         return $this;
     }
@@ -37,7 +37,7 @@ trait WhereTrait
     {
         if (is_array($condition)) {
             if (empty($condition)) {
-                return [$operator, $operator === Sql::all ? '1' : '0'];
+                return [$operator, $operator === Sql::ALL ? '1' : '0'];
             }
         } else {
             $condition = [$condition];
