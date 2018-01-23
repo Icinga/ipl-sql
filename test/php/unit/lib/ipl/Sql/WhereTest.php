@@ -38,12 +38,12 @@ class WhereTest extends BaseTestCase
         $where = $this->query->getWhere();
 
         // Operator of the WHERE tree
-        $this->assertEquals(Sql::all, $where[0]);
+        $this->assertEquals(Sql::ALL, $where[0]);
 
         // Operator of each condition
-        $this->assertEquals(Sql::all, $where[1][0]);
-        $this->assertEquals(Sql::all, $where[2][0]);
-        $this->assertEquals(Sql::all, $where[3][0]);
+        $this->assertEquals(Sql::ALL, $where[1][0]);
+        $this->assertEquals(Sql::ALL, $where[2][0]);
+        $this->assertEquals(Sql::ALL, $where[3][0]);
 
         // Expressions
         $this->assertEquals('c1 = x', $where[1][1]);
@@ -74,16 +74,16 @@ class WhereTest extends BaseTestCase
         $where = $this->query->getWhere();
 
         // Operator of the WHERE tree
-        $this->assertEquals(Sql::all, $where[0]);
+        $this->assertEquals(Sql::ALL, $where[0]);
 
         // Operator of each condition
-        $this->assertEquals(Sql::all, $where[1][0]);
-        $this->assertEquals(Sql::all, $where[2][0]);
-        $this->assertEquals(Sql::all, $where[3][0]);
-        $this->assertEquals(Sql::all, $where[4][0]);
-        $this->assertEquals(Sql::all, $where[5][0]);
-        $this->assertEquals(Sql::all, $where[6][0]);
-        $this->assertEquals(Sql::all, $where[7][0]);
+        $this->assertEquals(Sql::ALL, $where[1][0]);
+        $this->assertEquals(Sql::ALL, $where[2][0]);
+        $this->assertEquals(Sql::ALL, $where[3][0]);
+        $this->assertEquals(Sql::ALL, $where[4][0]);
+        $this->assertEquals(Sql::ALL, $where[5][0]);
+        $this->assertEquals(Sql::ALL, $where[6][0]);
+        $this->assertEquals(Sql::ALL, $where[7][0]);
 
         // Expressions and values
         $this->assertEquals('c1 = x', $where[1][1]);
@@ -97,7 +97,8 @@ class WhereTest extends BaseTestCase
 
         list($stmt, $values) = $this->queryBuilder->assembleSelect($this->query);
         $this->assertEquals(
-            'WHERE (c1 = x) AND (c2 = ?) AND (c3 > ?) AND (c4 IS NULL) AND (c5 IS NOT NULL) AND (c6 IN (?, ?, ?)) AND ((c7 = ?) AND (c8 = ?))',
+            'WHERE (c1 = x) AND (c2 = ?) AND (c3 > ?) AND (c4 IS NULL)'
+            . ' AND (c5 IS NOT NULL) AND (c6 IN (?, ?, ?)) AND ((c7 = ?) AND (c8 = ?))',
             $stmt
         );
         $this->assertEquals(

@@ -285,13 +285,13 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
      *
      * @return  $this
      */
-    public function having($condition, $operator = Sql::all)
+    public function having($condition, $operator = Sql::ALL)
     {
         if (! is_array($condition)) {
             $condition = [$condition];
         }
 
-        $this->having[] = [Sql::all, [$operator, $condition]];
+        $this->having[] = [Sql::ALL, [$operator, $condition]];
 
 
         return $this;
@@ -308,13 +308,13 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
      *
      * @return  $this
      */
-    public function orHaving($condition, $operator = Sql::all)
+    public function orHaving($condition, $operator = Sql::ALL)
     {
         if (! is_array($condition)) {
             $condition = [$condition];
         }
 
-        $this->having[] = [Sql::any, [$operator, $condition]];
+        $this->having[] = [Sql::ANY, [$operator, $condition]];
 
         return $this;
     }

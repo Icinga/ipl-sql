@@ -36,7 +36,7 @@ interface WhereInterface
      *
      * @return  $this
      */
-    public function where($condition, $operator = Sql::all);
+    public function where($condition, $operator = Sql::ALL);
 
     /**
      * Add a OR part to the WHERE part of the query
@@ -49,5 +49,5 @@ interface WhereInterface
      *
      * @return  $this
      */
-    public function orWhere($condition, $operator = Sql::all);
+    public function orWhere($condition, $operator = Sql::ALL);
 }
