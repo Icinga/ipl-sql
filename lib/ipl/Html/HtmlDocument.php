@@ -93,7 +93,7 @@ class HtmlDocument implements ValidHtml, Countable
         return $this;
     }
 
-    public function remove(HtmlDocument $html)
+    public function remove(ValidHtml $html)
     {
         $key = spl_object_hash($html);
         if (array_key_exists($key, $this->contentIndex)) {
