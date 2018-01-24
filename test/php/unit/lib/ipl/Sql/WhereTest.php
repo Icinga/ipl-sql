@@ -50,15 +50,7 @@ class WhereTest extends BaseTestCase
         $this->assertEquals('c2 IS NULL', $where[2][1]);
         $this->assertEquals('c3 IS NOT NULL', $where[3][1]);
 
-        list($stmt, $values) = $this->queryBuilder->assembleSelect($this->query);
-        $this->assertEquals(
-            'WHERE (c1 = x) AND (c2 IS NULL) AND (c3 IS NOT NULL)',
-            $stmt
-        );
-        $this->assertEquals(
-            [],
-            $values
-        );
+        $this->assertCorrectStatementAndValues('WHERE (c1 = x) AND (c2 IS NULL) AND (c3 IS NOT NULL)', []);
     }
 
     public function testWhereArrayFormat()
@@ -95,15 +87,10 @@ class WhereTest extends BaseTestCase
         $this->assertEquals(1, $where[7]['c7 = ?']);
         $this->assertEquals(1, $where[7]['c8 = ?']);
 
-        list($stmt, $values) = $this->queryBuilder->assembleSelect($this->query);
-        $this->assertEquals(
+        $this->assertCorrectStatementAndValues(
             'WHERE (c1 = x) AND (c2 = ?) AND (c3 > ?) AND (c4 IS NULL)'
-            . ' AND (c5 IS NOT NULL) AND (c6 IN (?, ?, ?)) AND ((c7 = ?) AND (c8 = ?))',
-            $stmt
-        );
-        $this->assertEquals(
-            [1, 1, 1, 2, 3, 1, 1],
-            $values
+                . ' AND (c5 IS NOT NULL) AND (c6 IN (?, ?, ?)) AND ((c7 = ?) AND (c8 = ?))',
+            [1, 1, 1, 2, 3, 1, 1]
         );
     }
 
@@ -120,5 +107,13 @@ class WhereTest extends BaseTestCase
             null,
             $this->query->getWhere()
         );
+    }
+
+    protected function assertCorrectStatementAndValues($statement, $values)
+    {
+        list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
+
+        $this->assertSame($statement, $actualStatement);
+        $this->assertSame($values, $actualValues);
     }
 }
