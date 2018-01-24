@@ -5,7 +5,7 @@ namespace test\ipl\Html;
 use ipl\Html\Html as h;
 use ipl\Test\HtmlTestCase;
 
-class HtmlTest extends HtmlTestCase
+class HtmlDocumentTest extends HtmlTestCase
 {
     public function testStaticCallsGiveValidElements()
     {
