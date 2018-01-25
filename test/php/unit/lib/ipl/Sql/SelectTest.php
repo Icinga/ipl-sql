@@ -109,6 +109,52 @@ class SelectTest extends BaseTestCase
         );
     }
 
+    public function testRollupMysql()
+    {
+        $this->query
+            ->columns([
+                'division' => 'di.name',
+                'department' => 'de.name',
+                'employees' => 'COUNT(e.id)'
+            ])
+            ->from(['e' => 'employee'])
+            ->joinRight('department de', 'de.id = e.department')
+            ->joinRight('division di', 'di.id = de.division')
+            ->groupBy(['di.id', 'de.id WITH ROLLUP']);
+
+        $this->assertCorrectStatementAndValues(
+            'SELECT di.name AS division, de.name AS department, COUNT(e.id) AS employees'
+                . ' FROM employee e'
+                . ' RIGHT JOIN department de ON de.id = e.department'
+                . ' RIGHT JOIN division di ON di.id = de.division'
+                . ' GROUP BY di.id, de.id WITH ROLLUP',
+            []
+        );
+    }
+
+    public function testRollupPostgresql()
+    {
+        $this->query
+            ->columns([
+                'division' => 'di.name',
+                'department' => 'de.name',
+                'employees' => 'COUNT(e.id)'
+            ])
+            ->from(['e' => 'employee'])
+            ->joinRight('department de', 'de.id = e.department')
+            ->joinRight('division di', 'di.id = de.division')
+            ->groupBy(['ROLLUP (di.id, de.id)']);
+
+        $this->assertCorrectStatementAndValues(
+            'SELECT di.name AS division, de.name AS department, COUNT(e.id) AS employees'
+                . ' FROM employee e'
+                . ' RIGHT JOIN department de ON de.id = e.department'
+                . ' RIGHT JOIN division di ON di.id = de.division'
+                . ' GROUP BY ROLLUP (di.id, de.id)',
+            []
+        );
+    }
+
     protected function assertCorrectStatementAndValues($statement, $values)
     {
         list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
