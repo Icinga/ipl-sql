@@ -21,14 +21,14 @@ trait WhereTrait
 
     public function where($condition, $operator = Sql::ALL)
     {
-        $this->mergeCondition($this->buildCondition($condition, $operator), Sql::ALL);
+        $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ALL);
 
         return $this;
     }
 
     public function orWhere($condition, $operator = Sql::ALL)
     {
-        $this->mergeCondition($this->buildCondition($condition, $operator), Sql::ANY);
+        $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ANY);
 
         return $this;
     }
@@ -59,18 +59,19 @@ trait WhereTrait
     /**
      * Merge the given condition with ours via the given operator
      *
+     * @param   mixed   $base       Our condition
      * @param   array   $condition  As returned by {@link buildCondition()}
      * @param   string  $operator
      */
-    protected function mergeCondition(array $condition, $operator)
+    protected function mergeCondition(& $base, array $condition, $operator)
     {
-        if ($this->where === null) {
-            $this->where = [$operator, $condition];
+        if ($base === null) {
+            $base = [$operator, $condition];
         } else {
-            if ($this->where[0] === $operator) {
-                $this->where[] = $condition;
+            if ($base[0] === $operator) {
+                $base[] = $condition;
             } else {
-                $this->where = [$operator, $this->where, $condition];
+                $base = [$operator, $base, $condition];
             }
         }
     }
