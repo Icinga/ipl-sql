@@ -397,6 +397,18 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
     }
 
     /**
+     * Reset the JOIN parts of the query
+     *
+     * @return  $this
+     */
+    public function resetJoin()
+    {
+        $this->join = null;
+
+        return $this;
+    }
+
+    /**
      * Reset the GROUP BY part of the query
      *
      * @return  $this
@@ -416,6 +428,18 @@ class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
     public function resetHaving()
     {
         $this->having = null;
+
+        return $this;
+    }
+
+    /**
+     * Reset the ORDER BY part of the query
+     *
+     * @return  $this
+     */
+    public function resetOrderBy()
+    {
+        $this->orderBy = null;
 
         return $this;
     }
