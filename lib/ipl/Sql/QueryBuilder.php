@@ -18,6 +18,7 @@ class QueryBuilder
         $values = [];
 
         $sql = array_filter([
+            $this->buildWith($delete->getWith(), $values),
             $this->buildDeleteFrom($delete->getFrom()),
             $this->buildWhere($delete->getWhere(), $values)
         ]);
@@ -39,6 +40,7 @@ class QueryBuilder
         $select = $insert->getSelect();
 
         $sql = array_filter([
+            $this->buildWith($insert->getWith(), $values),
             $this->buildInsertInto($insert->getInto()),
             $select
                 ? $this->buildInsertIntoSelect($insert->getColumns(), $select, $values)
@@ -59,6 +61,7 @@ class QueryBuilder
     public function assembleSelect(Select $select, array &$values = [])
     {
         $sql = array_filter([
+            $this->buildWith($select->getWith(), $values),
             $this->buildSelect($select->getColumns(), $select->getDistinct()),
             $this->buildFrom($select->getFrom(), $values),
             $this->buildJoin($select->getJoin()),
@@ -92,12 +95,43 @@ class QueryBuilder
 
 
         $sql = [
+            $this->buildWith($update->getWith(), $values),
             $this->buildUpdateTable($update->getTable()),
             $this->buildUpdateSet($update->getSet(), $values),
             $this->buildWhere($update->getWhere(), $values)
         ];
 
         return [implode($this->separator, $sql), $values];
+    }
+
+    /**
+     * Build the WITH part of a query
+     *
+     * @param   array   $with
+     * @oaram   array   $values
+     *
+     * @return  string  The WITH part of a query
+     */
+    public function buildWith(array $with, array &$values)
+    {
+        if (empty($with)) {
+            return '';
+        }
+
+        $ctes = [];
+        $hasRecursive = false;
+
+        foreach ($with as $cte) {
+            list($query, $alias, $recursive) = $cte;
+            list($cteSql, $cteValues) = $this->assembleSelect($query);
+
+            $ctes[] = "$alias AS ($cteSql)";
+
+            $values = array_merge($values, $cteValues);
+            $hasRecursive |= $recursive;
+        }
+
+        return ($hasRecursive ? 'WITH RECURSIVE ' : 'WITH ') . implode(', ', $ctes);
     }
 
     /**

@@ -5,8 +5,10 @@ namespace ipl\Sql;
 /**
  * SQL INSERT query
  */
-class Insert
+class Insert implements CommonTableExpressionInterface
 {
+    use CommonTableExpressionTrait;
+
     /**
      * The table to INSERT INTO
      *
