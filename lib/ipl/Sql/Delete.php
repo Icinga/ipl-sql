@@ -5,8 +5,9 @@ namespace ipl\Sql;
 /**
  * SQL DELETE query
  */
-class Delete implements WhereInterface
+class Delete implements CommonTableExpressionInterface, WhereInterface
 {
+    use CommonTableExpressionTrait;
     use WhereTrait;
 
     /**

@@ -5,8 +5,9 @@ namespace ipl\Sql;
 /**
  * SQL UPDATE query
  */
-class Update implements WhereInterface
+class Update implements CommonTableExpressionInterface, WhereInterface
 {
+    use CommonTableExpressionTrait;
     use WhereTrait;
 
     /**

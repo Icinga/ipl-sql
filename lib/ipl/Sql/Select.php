@@ -5,8 +5,9 @@ namespace ipl\Sql;
 /**
  * SQL SELECT query
  */
-class Select implements LimitOffsetInterface, OrderByInterface, WhereInterface
+class Select implements CommonTableExpressionInterface, LimitOffsetInterface, OrderByInterface, WhereInterface
 {
+    use CommonTableExpressionTrait;
     use LimitOffsetTrait;
     use OrderByTrait;
     use WhereTrait;
