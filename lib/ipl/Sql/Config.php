@@ -17,7 +17,7 @@ class Config
      */
     public function __construct($config)
     {
-        if (! is_array($config) || ! $config instanceof Traversable) {
+        if (! is_array($config) && ! $config instanceof Traversable) {
             throw new InvalidArgumentException('Config expects array or Traversable');
         }
 
