@@ -28,12 +28,54 @@ class SelectTest extends BaseTestCase
         $this->queryBuilder = new QueryBuilder();
     }
 
+    public function testDistinct()
+    {
+        $this->query
+            ->distinct()
+            ->columns('1');
+
+        $this->assertSame(true, $this->query->getDistinct());
+        $this->assertCorrectStatementAndValues('SELECT DISTINCT 1', []);
+    }
+
+    public function testColumns()
+    {
+        $this->query->columns('1');
+
+        $this->assertSame(['1'], $this->query->getColumns());
+        $this->assertCorrectStatementAndValues('SELECT 1', []);
+    }
+
+    public function testColumnsWithAlias()
+    {
+        $this->query->columns('1 AS one');
+
+        $this->assertSame(['1 AS one'], $this->query->getColumns());
+        $this->assertCorrectStatementAndValues('SELECT 1 AS one', []);
+    }
+
+    public function testColumnsWithArray()
+    {
+        $this->query->columns(['1', '2']);
+
+        $this->assertSame(['1', '2'], $this->query->getColumns());
+        $this->assertCorrectStatementAndValues('SELECT 1, 2', []);
+    }
+
+    public function testColumnsWithArrayAndAlias()
+    {
+        $this->query->columns(['one' => '1', '2']);
+
+        $this->assertSame(['one' => '1', '2'], $this->query->getColumns());
+        $this->assertCorrectStatementAndValues('SELECT 1 AS one, 2', []);
+    }
+
     public function testFrom()
     {
         $this->query->from('table');
 
         $this->assertSame(['table'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('SELECT FROM table', []);
+        $this->assertCorrectStatementAndValues('FROM table', []);
     }
 
     public function testFromWithAlias()
@@ -41,7 +83,7 @@ class SelectTest extends BaseTestCase
         $this->query->from('table t1');
 
         $this->assertSame(['table t1'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('SELECT FROM table t1', []);
+        $this->assertCorrectStatementAndValues('FROM table t1', []);
     }
 
     public function testFromWithArray()
@@ -49,10 +91,138 @@ class SelectTest extends BaseTestCase
         $this->query->from(['t1' => 'table']);
 
         $this->assertSame(['t1' => 'table'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('SELECT FROM table t1', []);
+        $this->assertCorrectStatementAndValues('FROM table t1', []);
     }
 
-    public function testComplexQuery()
+    public function testInnerJoin()
+    {
+        $this->query->join('table2', 'table2.table1_id = table1.id');
+
+        $this->assertSame([['INNER', 'table2', 'table2.table1_id = table1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('INNER JOIN table2 ON table2.table1_id = table1.id', []);
+    }
+
+    public function testInnerJoinWithAlias()
+    {
+        $this->query->join('table2 t2', 't2.table1_id = t1.id');
+
+        $this->assertSame([['INNER', 'table2 t2', 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testInnerJoinWithArray()
+    {
+        $this->query->join(['t2', 'table2'], 't2.table1_id = t1.id');
+
+        $this->assertSame([['INNER', ['t2', 'table2'], 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testLeftJoin()
+    {
+        $this->query->joinLeft('table2', 'table2.table1_id = table1.id');
+
+        $this->assertSame([['LEFT', 'table2', 'table2.table1_id = table1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON table2.table1_id = table1.id', []);
+    }
+
+    public function testLeftJoinWithAlias()
+    {
+        $this->query->joinLeft('table2 t2', 't2.table1_id = t1.id');
+
+        $this->assertSame([['LEFT', 'table2 t2', 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testLeftJoinWithArray()
+    {
+        $this->query->joinLeft(['t2', 'table2'], 't2.table1_id = t1.id');
+
+        $this->assertSame([['LEFT', ['t2', 'table2'], 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testRightJoin()
+    {
+        $this->query->joinRight('table2', 'table2.table1_id = table1.id');
+
+        $this->assertSame([['RIGHT', 'table2', 'table2.table1_id = table1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON table2.table1_id = table1.id', []);
+    }
+
+    public function testRightJoinWithAlias()
+    {
+        $this->query->joinRight('table2 t2', 't2.table1_id = t1.id');
+
+        $this->assertSame([['RIGHT', 'table2 t2', 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testRightJoinWithArray()
+    {
+        $this->query->joinRight(['t2', 'table2'], 't2.table1_id = t1.id');
+
+        $this->assertSame([['RIGHT', ['t2', 'table2'], 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testGroupBy()
+    {
+        $this->query->groupBy(['a', 'b']);
+
+        $this->assertSame(['a', 'b'], $this->query->getGroupBy());
+        $this->assertCorrectStatementAndValues('GROUP BY a, b', []);
+    }
+
+    public function testGroupByWithAlias()
+    {
+        $this->query->groupBy(['t.a', 't.b']);
+
+        $this->assertSame(['t.a', 't.b'], $this->query->getGroupBy());
+        $this->assertCorrectStatementAndValues('GROUP BY t.a, t.b', []);
+    }
+
+    public function testUnion()
+    {
+        $unionQuery = (new Select())
+            ->columns('a')
+            ->from('table2')
+            ->where(['b < ?' => 2]);
+
+        $this->query
+            ->columns('a')
+            ->from('table1')
+            ->where(['b > ?' => 1])
+            ->union($unionQuery);
+
+        $this->assertSame([[$unionQuery, false]], $this->query->getUnion());
+        $this->assertCorrectStatementAndValues(
+            '(SELECT a FROM table1 WHERE b > ?) UNION (SELECT a FROM table2 WHERE b < ?)',
+            [1, 2]
+        );
+    }
+
+    public function testUnionAll()
+    {
+        $unionQuery = (new Select())
+            ->columns('a')
+            ->from('table2')
+            ->where(['b < ?' => 2]);
+
+        $this->query
+            ->columns('a')
+            ->from('table1')
+            ->where(['b > ?' => 1])
+            ->unionAll($unionQuery);
+
+        $this->assertSame([[$unionQuery, true]], $this->query->getUnion());
+        $this->assertCorrectStatementAndValues(
+            '(SELECT a FROM table1 WHERE b > ?) UNION ALL (SELECT a FROM table2 WHERE b < ?)',
+            [1, 2]
+        );
+    }
+
+    public function testElementOrder()
     {
         $this->query
             ->distinct()
@@ -67,37 +237,8 @@ class SelectTest extends BaseTestCase
             ->orderBy(['COUNT(o.customer)', 'c.name'])
             ->offset(75)
             ->limit(25)
-            ->unionAll(
-                (clone $this->query)
-                    ->resetDistinct()
-                    ->resetColumns()
-                    ->resetFrom()
-                    ->resetJoin()
-                    ->resetWhere()
-                    ->resetGroupBy()
-                    ->resetHaving()
-                    ->resetOrderBy()
-                    ->resetOffset()
-                    ->resetLimit()
-                    ->columns(['id' => -1, 'name' => "''", 'orders' => -1])
-            );
+            ->unionAll((new Select())->columns(['id' => -1, 'name' => "''", 'orders' => -1]));
 
-        $this->assertSame(true, $this->query->getDistinct());
-        $this->assertSame(['c.id', 'c.name', 'orders' => 'COUNT(o.customer)'], $this->query->getColumns());
-        $this->assertSame(['c' => 'customer'], $this->query->getFrom());
-        $this->assertSame([['LEFT', 'order o', 'o.customer = c.id']], $this->query->getJoin());
-        $this->assertSame(
-            ['OR', ['AND', ['AND', 'c.name LIKE ?' => '%Doe%']], ['AND', 'c.name LIKE ?' => '%Deo%']],
-            $this->query->getWhere()
-        );
-        $this->assertSame(['c.id'], $this->query->getGroupBy());
-        $this->assertSame(
-            ['OR', ['AND', ['AND', 'COUNT(o.customer) >= ?' => 42]], ['AND', 'COUNT(o.customer) <= ?' => 3]],
-            $this->query->getHaving()
-        );
-        $this->assertSame(['COUNT(o.customer)', 'c.name'], $this->query->getOrderBy());
-        $this->assertSame(75, $this->query->getOffset());
-        $this->assertSame(25, $this->query->getLimit());
         $this->assertCorrectStatementAndValues(
             "(SELECT DISTINCT c.id, c.name, COUNT(o.customer) AS orders"
                 . " FROM customer c LEFT JOIN order o ON o.customer = c.id"
