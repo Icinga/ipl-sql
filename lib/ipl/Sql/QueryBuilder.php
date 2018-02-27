@@ -93,13 +93,12 @@ class QueryBuilder
     {
         $values = [];
 
-
-        $sql = [
+        $sql = array_filter([
             $this->buildWith($update->getWith(), $values),
             $this->buildUpdateTable($update->getTable()),
             $this->buildUpdateSet($update->getSet(), $values),
             $this->buildWhere($update->getWhere(), $values)
-        ];
+        ]);
 
         return [implode($this->separator, $sql), $values];
     }
