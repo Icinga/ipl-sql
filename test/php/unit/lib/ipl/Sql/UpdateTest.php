@@ -32,23 +32,23 @@ class UpdateTest extends BaseTestCase
     {
         $this->assertSame(null, $this->query->getTable());
         $this->assertSame([], $this->query->getSet());
-        $this->assertCorrectStatementAndValues(' SET  ', []);
+        $this->assertCorrectStatementAndValues('SET ', []);
     }
 
     public function testTableSpecification()
     {
         $this->query->table('table');
 
-        $this->assertSame('table', $this->query->getTable());
-        $this->assertCorrectStatementAndValues('UPDATE table SET  ', []);
+        $this->assertSame(['table'], $this->query->getTable());
+        $this->assertCorrectStatementAndValues('UPDATE table SET ', []);
     }
 
     public function testTableSpecificationWithSchema()
     {
         $this->query->table('schema.table');
 
-        $this->assertSame('schema.table', $this->query->getTable());
-        $this->assertCorrectStatementAndValues('UPDATE schema.table SET  ', []);
+        $this->assertSame(['schema.table'], $this->query->getTable());
+        $this->assertCorrectStatementAndValues('UPDATE schema.table SET ', []);
     }
 
     public function testSet()
@@ -56,7 +56,7 @@ class UpdateTest extends BaseTestCase
         $this->query->set(['c1' => 'v1', 'c2' => 'v2']);
 
         $this->assertSame(['c1' => 'v1', 'c2' => 'v2'], $this->query->getSet());
-        $this->assertCorrectStatementAndValues(' SET c1 = ?, c2 = ? ', ['v1', 'v2']);
+        $this->assertCorrectStatementAndValues('SET c1 = ?, c2 = ?', ['v1', 'v2']);
     }
 
     public function testUpdateStatementWithSet()
@@ -65,7 +65,7 @@ class UpdateTest extends BaseTestCase
             ->table('table')
             ->set(['c1' => 'v1', 'c2' => 'v2']);
 
-        $this->assertCorrectStatementAndValues('UPDATE table SET c1 = ?, c2 = ? ', ['v1', 'v2']);
+        $this->assertCorrectStatementAndValues('UPDATE table SET c1 = ?, c2 = ?', ['v1', 'v2']);
     }
 
     protected function assertCorrectStatementAndValues($statement, $values)
