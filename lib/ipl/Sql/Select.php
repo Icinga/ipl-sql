@@ -182,8 +182,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a INNER JOIN part to the query
      *
-     * @param   string  $table      The name of the table to be joined
-     * @param   string  $condition  The join condition, i.e. the ON part of the JOIN
+     * @param   string|array    $table      The table to be joined, can be any of the following:
+     *                                      'table'  'table alias'  ['alias' => 'table']
+     * @param   string          $condition  The join condition, i.e. the ON part of the JOIN
      *
      * @return  $this
      */
@@ -197,8 +198,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a LEFT JOIN part to the query
      *
-     * @param   string  $table      The name of the table to be joined
-     * @param   string  $condition  The join condition, i.e. the ON part of the JOIN
+     * @param   string|array    $table      The table to be joined, can be any of the following:
+     *                                      'table'  'table alias'  ['alias' => 'table']
+     * @param   string          $condition  The join condition, i.e. the ON part of the JOIN
      *
      * @return  $this
      */
@@ -212,8 +214,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a RIGHT JOIN part to the query
      *
-     * @param   string  $table      The name of the table to be joined
-     * @param   string  $condition  The join condition, i.e. the ON part of the JOIN
+     * @param   string|array    $table      The table to be joined, can be any of the following:
+     *                                      'table'  'table alias'  ['alias' => 'table']
+     * @param   string          $condition  The join condition, i.e. the ON part of the JOIN
      *
      * @return  $this
      */
