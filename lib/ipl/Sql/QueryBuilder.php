@@ -411,12 +411,17 @@ class QueryBuilder
         }
 
         $sql = [];
+        $tableName = null;
+        $alias = null;
 
         foreach ($joins as $join) {
             list($joinType, $table, $condition) = $join;
 
             if (is_array($table)) {
-                list($alias, $tableName) = $table;
+                foreach ($table as $alias => $tableName) {
+                    break;
+                }
+
                 $sql[] = "$joinType JOIN $tableName $alias ON $condition";
             } else {
                 $sql[] = "$joinType JOIN $table ON $condition";
