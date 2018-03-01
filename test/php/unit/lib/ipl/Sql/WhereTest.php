@@ -38,27 +38,19 @@ class WhereTest extends BaseTestCase
         $where = $this->query->getWhere();
 
         // Operator of the WHERE tree
-        $this->assertEquals(Sql::ALL, $where[0]);
+        $this->assertSame(Sql::ALL, $where[0]);
 
         // Operator of each condition
-        $this->assertEquals(Sql::ALL, $where[1][0]);
-        $this->assertEquals(Sql::ALL, $where[2][0]);
-        $this->assertEquals(Sql::ALL, $where[3][0]);
+        $this->assertSame(Sql::ALL, $where[1][0]);
+        $this->assertSame(Sql::ALL, $where[2][0]);
+        $this->assertSame(Sql::ALL, $where[3][0]);
 
         // Expressions
-        $this->assertEquals('c1 = x', $where[1][1]);
-        $this->assertEquals('c2 IS NULL', $where[2][1]);
-        $this->assertEquals('c3 IS NOT NULL', $where[3][1]);
+        $this->assertSame('c1 = x', $where[1][1]);
+        $this->assertSame('c2 IS NULL', $where[2][1]);
+        $this->assertSame('c3 IS NOT NULL', $where[3][1]);
 
-        list($stmt, $values) = $this->queryBuilder->assembleSelect($this->query);
-        $this->assertEquals(
-            'WHERE (c1 = x) AND (c2 IS NULL) AND (c3 IS NOT NULL)',
-            $stmt
-        );
-        $this->assertEquals(
-            [],
-            $values
-        );
+        $this->assertCorrectStatementAndValues('WHERE (c1 = x) AND (c2 IS NULL) AND (c3 IS NOT NULL)', []);
     }
 
     public function testWhereArrayFormat()
@@ -74,51 +66,54 @@ class WhereTest extends BaseTestCase
         $where = $this->query->getWhere();
 
         // Operator of the WHERE tree
-        $this->assertEquals(Sql::ALL, $where[0]);
+        $this->assertSame(Sql::ALL, $where[0]);
 
         // Operator of each condition
-        $this->assertEquals(Sql::ALL, $where[1][0]);
-        $this->assertEquals(Sql::ALL, $where[2][0]);
-        $this->assertEquals(Sql::ALL, $where[3][0]);
-        $this->assertEquals(Sql::ALL, $where[4][0]);
-        $this->assertEquals(Sql::ALL, $where[5][0]);
-        $this->assertEquals(Sql::ALL, $where[6][0]);
-        $this->assertEquals(Sql::ALL, $where[7][0]);
+        $this->assertSame(Sql::ALL, $where[1][0]);
+        $this->assertSame(Sql::ALL, $where[2][0]);
+        $this->assertSame(Sql::ALL, $where[3][0]);
+        $this->assertSame(Sql::ALL, $where[4][0]);
+        $this->assertSame(Sql::ALL, $where[5][0]);
+        $this->assertSame(Sql::ALL, $where[6][0]);
+        $this->assertSame(Sql::ALL, $where[7][0]);
 
         // Expressions and values
-        $this->assertEquals('c1 = x', $where[1][1]);
-        $this->assertEquals(1, $where[2]['c2 = ?']);
-        $this->assertEquals(1, $where[3]['c3 > ?']);
-        $this->assertEquals('c4 IS NULL', $where[4][1]);
-        $this->assertEquals('c5 IS NOT NULL', $where[5][1]);
-        $this->assertEquals([1, 2, 3], $where[6]['c6 IN (?)']);
-        $this->assertEquals(1, $where[7]['c7 = ?']);
-        $this->assertEquals(1, $where[7]['c8 = ?']);
+        $this->assertSame('c1 = x', $where[1][1]);
+        $this->assertSame(1, $where[2]['c2 = ?']);
+        $this->assertSame(1, $where[3]['c3 > ?']);
+        $this->assertSame('c4 IS NULL', $where[4][1]);
+        $this->assertSame('c5 IS NOT NULL', $where[5][1]);
+        $this->assertSame([1, 2, 3], $where[6]['c6 IN (?)']);
+        $this->assertSame(1, $where[7]['c7 = ?']);
+        $this->assertSame(1, $where[7]['c8 = ?']);
 
-        list($stmt, $values) = $this->queryBuilder->assembleSelect($this->query);
-        $this->assertEquals(
+        $this->assertCorrectStatementAndValues(
             'WHERE (c1 = x) AND (c2 = ?) AND (c3 > ?) AND (c4 IS NULL)'
-            . ' AND (c5 IS NOT NULL) AND (c6 IN (?, ?, ?)) AND ((c7 = ?) AND (c8 = ?))',
-            $stmt
-        );
-        $this->assertEquals(
-            [1, 1, 1, 2, 3, 1, 1],
-            $values
+                . ' AND (c5 IS NOT NULL) AND (c6 IN (?, ?, ?)) AND ((c7 = ?) AND (c8 = ?))',
+            [1, 1, 1, 2, 3, 1, 1]
         );
     }
 
     public function testResetWhere()
     {
         $this->query->where('c1 = x');
-        $this->assertEquals(
+        $this->assertSame(
             ['AND', ['AND', 'c1 = x']],
             $this->query->getWhere()
         );
 
         $this->query->resetWhere();
-        $this->assertEquals(
+        $this->assertSame(
             null,
             $this->query->getWhere()
         );
+    }
+
+    protected function assertCorrectStatementAndValues($statement, $values)
+    {
+        list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
+
+        $this->assertSame($statement, $actualStatement);
+        $this->assertSame($values, $actualValues);
     }
 }
