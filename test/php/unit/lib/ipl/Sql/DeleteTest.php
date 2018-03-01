@@ -31,57 +31,29 @@ class DeleteTest extends BaseTestCase
     public function testFrom()
     {
         $this->query->from('table');
-        $this->assertEquals(
-            ['table'],
-            $this->query->getFrom()
-        );
-
-        list($stmt, $values) = $this->queryBuilder->assembleDelete($this->query);
-        $this->assertEquals(
-            'DELETE FROM table',
-            $stmt
-        );
-        $this->assertEquals(
-            [],
-            $values
-        );
+        $this->assertSame(['table'], $this->query->getFrom());
+        $this->assertCorrectStatementAndValues('DELETE FROM table', []);
     }
 
     public function testFromWithAlias()
     {
         $this->query->from('table t1');
-        $this->assertEquals(
-            ['table t1'],
-            $this->query->getFrom()
-        );
-
-        list($stmt, $values) = $this->queryBuilder->assembleDelete($this->query);
-        $this->assertEquals(
-            'DELETE FROM table t1',
-            $stmt
-        );
-        $this->assertEquals(
-            [],
-            $values
-        );
+        $this->assertSame(['table t1'], $this->query->getFrom());
+        $this->assertCorrectStatementAndValues('DELETE FROM table t1', []);
     }
 
     public function testFromWithArray()
     {
         $this->query->from(['t1' => 'table']);
-        $this->assertEquals(
-            ['t1' => 'table'],
-            $this->query->getFrom()
-        );
+        $this->assertSame(['t1' => 'table'], $this->query->getFrom());
+        $this->assertCorrectStatementAndValues('DELETE FROM table t1', []);
+    }
 
-        list($stmt, $values) = $this->queryBuilder->assembleDelete($this->query);
-        $this->assertEquals(
-            'DELETE FROM table t1',
-            $stmt
-        );
-        $this->assertEquals(
-            [],
-            $values
-        );
+    protected function assertCorrectStatementAndValues($statement, $values)
+    {
+        list($actualStatement, $actualValues) = $this->queryBuilder->assembleDelete($this->query);
+
+        $this->assertSame($statement, $actualStatement);
+        $this->assertSame($values, $actualValues);
     }
 }
