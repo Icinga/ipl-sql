@@ -4,6 +4,7 @@ namespace ipl\Tests\Sql;
 
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
+use ipl\Sql\Sql;
 use ipl\Test\BaseTestCase;
 
 class SelectTest extends BaseTestCase
@@ -98,7 +99,7 @@ class SelectTest extends BaseTestCase
     {
         $this->query->join('table2', 'table2.table1_id = table1.id');
 
-        $this->assertSame([['INNER', 'table2', 'table2.table1_id = table1.id']], $this->query->getJoin());
+        $this->assertSame([['INNER', 'table2', [Sql::ALL, 'table2.table1_id = table1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('INNER JOIN table2 ON table2.table1_id = table1.id', []);
     }
 
@@ -106,23 +107,83 @@ class SelectTest extends BaseTestCase
     {
         $this->query->join('table2 t2', 't2.table1_id = t1.id');
 
-        $this->assertSame([['INNER', 'table2 t2', 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertSame([['INNER', 'table2 t2', [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
     }
 
     public function testInnerJoinWithArray()
     {
-        $this->query->join(['t2', 'table2'], 't2.table1_id = t1.id');
+        $this->query->join(['t2' => 'table2'], 't2.table1_id = t1.id');
 
-        $this->assertSame([['INNER', ['t2', 'table2'], 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertSame([['INNER', ['t2' => 'table2'], [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testInnerJoinWithComplexCondition()
+    {
+        $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
+
+        $this->assertSame(
+            [['INNER', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testInnerJoinWithOperatorAll()
+    {
+        $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
+
+        $this->assertSame(
+            [['INNER', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testInnerJoinWithOperatorAny()
+    {
+        $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
+
+        $this->assertSame(
+            [['INNER', 'table2', [Sql::ANY, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN table2 ON (table2.table1_id = table1.id) OR (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testInnerJoinWithParametrizedCondition()
+    {
+        $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
+
+        $this->assertSame(
+            [['INNER', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
+            [42]
+        );
     }
 
     public function testLeftJoin()
     {
         $this->query->joinLeft('table2', 'table2.table1_id = table1.id');
 
-        $this->assertSame([['LEFT', 'table2', 'table2.table1_id = table1.id']], $this->query->getJoin());
+        $this->assertSame([['LEFT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON table2.table1_id = table1.id', []);
     }
 
@@ -130,23 +191,83 @@ class SelectTest extends BaseTestCase
     {
         $this->query->joinLeft('table2 t2', 't2.table1_id = t1.id');
 
-        $this->assertSame([['LEFT', 'table2 t2', 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertSame([['LEFT', 'table2 t2', [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
     }
 
     public function testLeftJoinWithArray()
     {
-        $this->query->joinLeft(['t2', 'table2'], 't2.table1_id = t1.id');
+        $this->query->joinLeft(['t2' => 'table2'], 't2.table1_id = t1.id');
 
-        $this->assertSame([['LEFT', ['t2', 'table2'], 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertSame([['LEFT', ['t2' => 'table2'], [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testLeftJoinWithComplexCondition()
+    {
+        $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
+
+        $this->assertSame(
+            [['LEFT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testLeftJoinWithOperatorAll()
+    {
+        $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
+
+        $this->assertSame(
+            [['LEFT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testLeftJoinWithOperatorAny()
+    {
+        $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
+
+        $this->assertSame(
+            [['LEFT', 'table2', [Sql::ANY, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN table2 ON (table2.table1_id = table1.id) OR (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testLeftJoinWithParametrizedCondition()
+    {
+        $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
+
+        $this->assertSame(
+            [['LEFT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
+            [42]
+        );
     }
 
     public function testRightJoin()
     {
         $this->query->joinRight('table2', 'table2.table1_id = table1.id');
 
-        $this->assertSame([['RIGHT', 'table2', 'table2.table1_id = table1.id']], $this->query->getJoin());
+        $this->assertSame([['RIGHT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON table2.table1_id = table1.id', []);
     }
 
@@ -154,16 +275,76 @@ class SelectTest extends BaseTestCase
     {
         $this->query->joinRight('table2 t2', 't2.table1_id = t1.id');
 
-        $this->assertSame([['RIGHT', 'table2 t2', 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertSame([['RIGHT', 'table2 t2', [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
     }
 
     public function testRightJoinWithArray()
     {
-        $this->query->joinRight(['t2', 'table2'], 't2.table1_id = t1.id');
+        $this->query->joinRight(['t2' => 'table2'], 't2.table1_id = t1.id');
 
-        $this->assertSame([['RIGHT', ['t2', 'table2'], 't2.table1_id = t1.id']], $this->query->getJoin());
+        $this->assertSame([['RIGHT', ['t2' => 'table2'], [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+    }
+
+    public function testRightJoinWithComplexCondition()
+    {
+        $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
+
+        $this->assertSame(
+            [['RIGHT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testRightJoinWithOperatorAll()
+    {
+        $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
+
+        $this->assertSame(
+            [['RIGHT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testRightJoinWithOperatorAny()
+    {
+        $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
+
+        $this->assertSame(
+            [['RIGHT', 'table2', [Sql::ANY, 'table2.table1_id = table1.id', 'table2.table3_id = 42']]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN table2 ON (table2.table1_id = table1.id) OR (table2.table3_id = 42)',
+            []
+        );
+    }
+
+    public function testRightJoinWithParametrizedCondition()
+    {
+        $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
+
+        $this->assertSame(
+            [['RIGHT', 'table2', [Sql::ALL, 'table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]]],
+            $this->query->getJoin()
+        );
+
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
+            [42]
+        );
     }
 
     public function testGroupBy()

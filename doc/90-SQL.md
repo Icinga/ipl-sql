@@ -152,28 +152,32 @@ Select the name of one customer:
 SELECT name FROM customer WHERE id = 42
 ```
 
-Select the ID, the name and the amount of orders of all customers whose name 
-contains "Doe" and with at least 42 orders. Order the data by name and amount of
-orders, skip the first 75 rows and limit to 25 rows: 
+Select the ID, the name and the amount of resolved orders (3, 5, 7) of all
+customers (4) whose name contains "Doe" (6) and with at least 42 orders (8).
+Order the data by amount of orders and customer name (9), skip the first 75 rows
+(10) and limit to 25 rows (11):
 
 ```php
-(new Select())
-    ->distinct()
-    ->columns(['c.id', 'c.name', 'orders' => 'COUNT(o.customer)'])
-    ->from('customer c')
-    ->joinLeft('order o', 'o.customer = c.id')
-    ->where(['c.name LIKE ?' => '%Doe%'])
-    ->groupBy(['c.id'])
-    ->having(['COUNT(o.customer) >= ?' => 42])
-    ->orderBy(['COUNT(o.customer)', 'c.name'])
-    ->offset(75)
-    ->limit(25)
+(new Select())                                                     // (1)
+    ->distinct()                                                   // (2)
+    ->columns(['c.id', 'c.name', 'orders' => 'COUNT(o.customer)']) // (3)
+    ->from('customer c')                                           // (4)
+    ->joinLeft(                                                    // (5.1)
+        'order o',                                                 // (5.2)
+        ['o.customer = c.id', 'o.state = ?' => 'resolved']         // (5.3)
+    )                                                              // (5.4)
+    ->where(['c.name LIKE ?' => '%Doe%'])                          // (6)
+    ->groupBy(['c.id'])                                            // (7)
+    ->having(['COUNT(o.customer) >= ?' => 42])                     // (8)
+    ->orderBy(['COUNT(o.customer)', 'c.name'])                     // (9)
+    ->offset(75)                                                   // (10)
+    ->limit(25)                                                    // (11)
 ```
 
 ```mysql
 SELECT DISTINCT c.id, c.name, COUNT(o.customer) AS orders 
 FROM customer c 
-LEFT JOIN order o ON o.customer = c.id
+LEFT JOIN order o ON o.customer = c.id AND o.state = 'resolved'
 WHERE c.name LIKE '%Doe%'
 GROUP BY c.id 
 HAVING COUNT(o.customer) >= 42
