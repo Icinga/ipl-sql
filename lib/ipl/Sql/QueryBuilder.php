@@ -518,22 +518,17 @@ class QueryBuilder
 
         $sql = [];
 
-        foreach ($orderBy as $column => $direction) {
-            if (is_int($column)) {
-                if ($direction instanceof ExpressionInterface) {
-                    $values = array_merge($values, $direction->getValues());
-                    $direction = $direction->getStatement();
-                } elseif ($direction instanceof Select) {
-                    $direction = "({$this->assembleSelect($direction, $values)[0]})";
-                }
+        foreach ($orderBy as $column) {
+            list($column, $direction) = $column;
 
-                $sql[] = $direction;
-            } else {
-                if (is_int($direction)) {
-                    $direction = $direction === SORT_ASC ? 'ASC' : 'DESC';
-                }
-                $sql[] = "$column $direction";
+            if ($column instanceof ExpressionInterface) {
+                $values = array_merge($values, $column->getValues());
+                $column = $column->getStatement();
+            } elseif ($column instanceof Select) {
+                $column = "({$this->assembleSelect($column, $values)[0]})";
             }
+
+            $sql[] = "$column $direction";
         }
 
         return 'ORDER BY ' . implode(', ', $sql);
