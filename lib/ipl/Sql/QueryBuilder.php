@@ -425,17 +425,29 @@ class QueryBuilder
         foreach ($joins as $join) {
             list($joinType, $table, $condition) = $join;
 
-            if (is_array($condition)) {
-                $condition = $this->buildCondition($condition, $values);
-            }
-
             if (is_array($table)) {
                 foreach ($table as $alias => $tableName) {
                     break;
                 }
 
+                if ($tableName instanceof Select) {
+                    $tableName = "({$this->assembleSelect($tableName, $values)[0]})";
+                }
+
+                if (is_array($condition)) {
+                    $condition = $this->buildCondition($condition, $values);
+                }
+
                 $sql[] = "$joinType JOIN $tableName $alias ON $condition";
             } else {
+                if ($table instanceof Select) {
+                    $table = "({$this->assembleSelect($table, $values)[0]})";
+                }
+
+                if (is_array($condition)) {
+                    $condition = $this->buildCondition($condition, $values);
+                }
+
                 $sql[] = "$joinType JOIN $table ON $condition";
             }
         }

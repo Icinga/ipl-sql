@@ -220,6 +220,18 @@ class SelectTest extends BaseTestCase
         );
     }
 
+    public function testInnerJoinWithSelect()
+    {
+        $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
+        $this->query->join($table2, 't2.table1_id = t1.id');
+
+        $this->assertSame([['INNER', $table2, [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            [1]
+        );
+    }
+
     public function testLeftJoin()
     {
         $this->query->joinLeft('table2', 'table2.table1_id = table1.id');
@@ -304,6 +316,18 @@ class SelectTest extends BaseTestCase
         );
     }
 
+    public function testLeftJoinWithSelect()
+    {
+        $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
+        $this->query->joinLeft($table2, 't2.table1_id = t1.id');
+
+        $this->assertSame([['LEFT', $table2, [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            [1]
+        );
+    }
+
     public function testRightJoin()
     {
         $this->query->joinRight('table2', 'table2.table1_id = table1.id');
@@ -385,6 +409,18 @@ class SelectTest extends BaseTestCase
         $this->assertCorrectStatementAndValues(
             'RIGHT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
             [42]
+        );
+    }
+
+    public function testRightJoinWithSelect()
+    {
+        $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
+        $this->query->joinRight($table2, 't2.table1_id = t1.id');
+
+        $this->assertSame([['RIGHT', $table2, [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            [1]
         );
     }
 
