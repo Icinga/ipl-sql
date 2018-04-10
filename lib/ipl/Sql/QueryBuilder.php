@@ -62,13 +62,13 @@ class QueryBuilder
     {
         $sql = array_filter([
             $this->buildWith($select->getWith(), $values),
-            $this->buildSelect($select->getColumns(), $select->getDistinct()),
+            $this->buildSelect($select->getColumns(), $select->getDistinct(), $values),
             $this->buildFrom($select->getFrom(), $values),
             $this->buildJoin($select->getJoin(), $values),
             $this->buildWhere($select->getWhere(), $values),
-            $this->buildGroupBy($select->getGroupBy()),
+            $this->buildGroupBy($select->getGroupBy(), $values),
             $this->buildHaving($select->getHaving(), $values),
-            $this->buildOrderBy($select->getOrderBy()),
+            $this->buildOrderBy($select->getOrderBy(), $values),
             $this->buildLimitOffset($select->getLimit(), $select->getOffset())
         ]);
 
@@ -235,6 +235,8 @@ class QueryBuilder
                 if ($value instanceof ExpressionInterface) {
                     $sql[] = $value->getStatement();
                     $values = array_merge($values, $value->getValues());
+                } elseif ($value instanceof Select) {
+                    $sql[] = $this->assembleSelect($value, $values)[0];
                 } elseif (is_int($expression)) {
                     $sql[] = $value;
                 } else {
@@ -244,7 +246,9 @@ class QueryBuilder
             }
         }
 
-        return (count($sql) === 1 ? $sql[0] : '(' . implode(") $operator (", $sql) . ')');
+        return count($sql) === 1 && ! ($value instanceof Select)
+            ? $sql[0]
+            : '(' . implode(") $operator (", $sql) . ')';
     }
 
     /**
@@ -333,10 +337,11 @@ class QueryBuilder
      *
      * @param   array   $columns
      * @param   bool    $distinct
+     * @param   array   $values
      *
      * @return  string  The SELECT part of the query
      */
-    public function buildSelect(array $columns, $distinct = false)
+    public function buildSelect(array $columns, $distinct, array &$values)
     {
         if (empty($columns)) {
             return '';
@@ -355,6 +360,13 @@ class QueryBuilder
         $sql = [];
 
         foreach ($columns as $alias => $column) {
+            if ($column instanceof ExpressionInterface) {
+                $values = array_merge($values, $column->getValues());
+                $column = "({$column->getStatement()})";
+            } elseif ($column instanceof Select) {
+                $column = "({$this->assembleSelect($column, $values)[0]})";
+            }
+
             if (is_int($alias)) {
                 $sql[] = $column;
             } else {
@@ -383,9 +395,9 @@ class QueryBuilder
 
         foreach ($from as $alias => $table) {
             if ($table instanceof Select) {
-                list($stmt, $values) = $this->assembleSelect($table);
-                $table = "($stmt)";
+                $table = "({$this->assembleSelect($table, $values)[0]})";
             }
+
             if (is_int($alias)) {
                 $sql[] = $table;
             } else {
@@ -417,17 +429,29 @@ class QueryBuilder
         foreach ($joins as $join) {
             list($joinType, $table, $condition) = $join;
 
-            if (is_array($condition)) {
-                $condition = $this->buildCondition($condition, $values);
-            }
-
             if (is_array($table)) {
                 foreach ($table as $alias => $tableName) {
                     break;
                 }
 
+                if ($tableName instanceof Select) {
+                    $tableName = "({$this->assembleSelect($tableName, $values)[0]})";
+                }
+
+                if (is_array($condition)) {
+                    $condition = $this->buildCondition($condition, $values);
+                }
+
                 $sql[] = "$joinType JOIN $tableName $alias ON $condition";
             } else {
+                if ($table instanceof Select) {
+                    $table = "({$this->assembleSelect($table, $values)[0]})";
+                }
+
+                if (is_array($condition)) {
+                    $condition = $this->buildCondition($condition, $values);
+                }
+
                 $sql[] = "$joinType JOIN $table ON $condition";
             }
         }
@@ -439,13 +463,23 @@ class QueryBuilder
      * Build the GROUP BY part of a query
      *
      * @param   array   $groupBy
+     * @param   array   $values
      *
      * @return  string  The GROUP BY part of the query
      */
-    public function buildGroupBy(array $groupBy = null)
+    public function buildGroupBy(array $groupBy = null, array &$values)
     {
         if ($groupBy === null) {
             return '';
+        }
+
+        foreach ($groupBy as &$column) {
+            if ($column instanceof ExpressionInterface) {
+                $values = array_merge($values, $column->getValues());
+                $column = $column->getStatement();
+            } elseif ($column instanceof Select) {
+                $column = "({$this->assembleSelect($column, $values)[0]})";
+            }
         }
 
         return 'GROUP BY ' . implode(', ', $groupBy);
@@ -472,10 +506,11 @@ class QueryBuilder
      * Build the ORDER BY part of a query
      *
      * @param   array   $orderBy
+     * @param   array   $values
      *
      * @return  string  The ORDER BY part of the query
      */
-    public function buildOrderBy(array $orderBy = null)
+    public function buildOrderBy(array $orderBy = null, array &$values)
     {
         if ($orderBy === null) {
             return '';
@@ -483,15 +518,17 @@ class QueryBuilder
 
         $sql = [];
 
-        foreach ($orderBy as $column => $direction) {
-            if (is_int($column)) {
-                $sql[] = $direction;
-            } else {
-                if (is_int($direction)) {
-                    $direction = $direction === SORT_ASC ? 'ASC' : 'DESC';
-                }
-                $sql[] = "$column $direction";
+        foreach ($orderBy as $column) {
+            list($column, $direction) = $column;
+
+            if ($column instanceof ExpressionInterface) {
+                $values = array_merge($values, $column->getValues());
+                $column = $column->getStatement();
+            } elseif ($column instanceof Select) {
+                $column = "({$this->assembleSelect($column, $values)[0]})";
             }
+
+            $sql[] = "$column $direction";
         }
 
         return 'ORDER BY ' . implode(', ', $sql);

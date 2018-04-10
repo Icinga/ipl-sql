@@ -15,7 +15,7 @@ interface OrderByInterface
     public function getOrderBy();
 
     /**
-     * Set the ORDER BY part of the query
+     * Set the ORDER BY part of the query - either plain columns or expressions or scalar subqueries
      *
      * Note that this method does not override an already set ORDER BY part. Instead, each call to this function
      * appends the specified ORDER BY part to an already existing one.
@@ -27,9 +27,11 @@ interface OrderByInterface
      * {@link Sql::quoteIdentifier()} as well.
      *
      * @param   string|array    $orderBy    The ORDER BY part. The items can be in any format of the following:
-     *                                      ['column', 'column DESC', 'column' => 'DESC', 'column' => SORT_DESC]
+     *                                      ['column', 'column' => 'DESC', 'column' => SORT_DESC]
+     * @param   string|int      $direction  The default direction. Can be any of the following:
+     *                                      'ASC', 'DESC', SORT_ASC, SORT_DESC
      *
      * @return  $this
      */
-    public function orderBy($orderBy);
+    public function orderBy($orderBy, $direction = 'ASC');
 }
