@@ -182,13 +182,14 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a INNER JOIN part to the query
      *
-     * @param   string|Select|array $table      The table to be joined, can be any of the following:
-     *                                          'table'  'table alias'  ['alias' => 'table']
-     * @param   string|array        $condition  The join condition, i.e. the ON part of the JOIN.
-     *                                          Please see {@link WhereInterface::where()} for the supported formats and
-     *                                          restrictions regarding quoting of the field names.
-     * @param   string              $operator   The operator to combine multiple conditions with,
-     *                                          if the condition is in the array format
+     * @param   string|Select|array                     $table      The table to be joined, can be any of the following:
+     *                                                              'table'  'table alias'  ['alias' => 'table']
+     * @param   string|ExpressionInterface|Select|array $condition  The join condition, i.e. the ON part of the JOIN.
+     *                                                              Please see {@link WhereInterface::where()}
+     *                                                              for the supported formats and
+     *                                                              restrictions regarding quoting of the field names.
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
      *
      * @return  $this
      */
@@ -202,13 +203,14 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a LEFT JOIN part to the query
      *
-     * @param   string|Select|array $table      The table to be joined, can be any of the following:
-     *                                          'table'  'table alias'  ['alias' => 'table']
-     * @param   string|array        $condition  The join condition, i.e. the ON part of the JOIN.
-     *                                          Please see {@link WhereInterface::where()} for the supported formats and
-     *                                          restrictions regarding quoting of the field names.
-     * @param   string              $operator   The operator to combine multiple conditions with,
-     *                                          if the condition is in the array format
+     * @param   string|Select|array                     $table      The table to be joined, can be any of the following:
+     *                                                              'table'  'table alias'  ['alias' => 'table']
+     * @param   string|ExpressionInterface|Select|array $condition  The join condition, i.e. the ON part of the JOIN.
+     *                                                              Please see {@link WhereInterface::where()}
+     *                                                              for the supported formats and
+     *                                                              restrictions regarding quoting of the field names.
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
      *
      * @return  $this
      */
@@ -222,13 +224,14 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a RIGHT JOIN part to the query
      *
-     * @param   string|Select|array $table      The table to be joined, can be any of the following:
-     *                                          'table'  'table alias'  ['alias' => 'table']
-     * @param   string|array        $condition  The join condition, i.e. the ON part of the JOIN.
-     *                                          Please see {@link WhereInterface::where()} for the supported formats and
-     *                                          restrictions regarding quoting of the field names.
-     * @param   string              $operator   The operator to combine multiple conditions with,
-     *                                          if the condition is in the array format
+     * @param   string|Select|array                     $table      The table to be joined, can be any of the following:
+     *                                                              'table'  'table alias'  ['alias' => 'table']
+     * @param   string|ExpressionInterface|Select|array $condition  The join condition, i.e. the ON part of the JOIN.
+     *                                                              Please see {@link WhereInterface::where()}
+     *                                                              for the supported formats and
+     *                                                              restrictions regarding quoting of the field names.
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
      *
      * @return  $this
      */
@@ -298,9 +301,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * Note that this method does not override an already set HAVING part. Instead, multiple calls to this function add
      * the specified HAVING part using the AND operator.
      *
-     * @param   string|array    $condition  The HAVING condition
-     * @param   string          $operator   The operator to combine multiple conditions with, if the condition is in the
-     *                                      array format
+     * @param   string|ExpressionInterface|Select|array $condition  The HAVING condition
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
      *
      * @return  $this
      */
@@ -316,9 +319,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * Please see {@link having()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param   string|array    $condition  The HAVING condition
-     * @param   string          $operator   The operator to combine multiple conditions with, if the condition is in the
-     *                                      array format
+     * @param   string|ExpressionInterface|Select|array $condition  The HAVING condition
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
      *
      * @return  $this
      */
