@@ -30,9 +30,9 @@ interface WhereInterface
      * Note that this method does not override an already set WHERE part. Instead, multiple calls to this function add
      * the specified WHERE part using the AND operator.
      *
-     * @param   string|array    $condition  The WHERE condition
-     * @param   string          $operator   The operator to combine multiple conditions with, if the condition is in the
-     *                                      array format
+     * @param   string|ExpressionInterface|Select|array $condition  The WHERE condition
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
      *
      * @return  $this
      */
@@ -43,9 +43,9 @@ interface WhereInterface
      *
      * Please see {@link where()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param   string|array    $condition  The WHERE condition
-     * @param   string          $operator   The operator to combine multiple conditions with, if the condition is in the
-     *                                      array format
+     * @param   string|ExpressionInterface|Select|array $condition  The WHERE condition
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
      *
      * @return  $this
      */

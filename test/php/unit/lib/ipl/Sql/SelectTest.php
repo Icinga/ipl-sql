@@ -232,6 +232,27 @@ class SelectTest extends BaseTestCase
         );
     }
 
+    public function testInnerJoinWithExpressionCondition()
+    {
+        $condition = new Expression('t2.table1_id = ?', 1);
+        $this->query->join('table2', $condition);
+
+        $this->assertSame([['INNER', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('INNER JOIN table2 ON t2.table1_id = ?', [1]);
+    }
+
+    public function testInnerJoinWithSelectCondition()
+    {
+        $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->join('table2', $condition);
+
+        $this->assertSame([['INNER', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            [1]
+        );
+    }
+
     public function testLeftJoin()
     {
         $this->query->joinLeft('table2', 'table2.table1_id = table1.id');
@@ -328,6 +349,27 @@ class SelectTest extends BaseTestCase
         );
     }
 
+    public function testLeftJoinWithExpressionCondition()
+    {
+        $condition = new Expression('t2.table1_id = ?', 1);
+        $this->query->joinLeft('table2', $condition);
+
+        $this->assertSame([['LEFT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON t2.table1_id = ?', [1]);
+    }
+
+    public function testLeftJoinWithSelectCondition()
+    {
+        $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->joinLeft('table2', $condition);
+
+        $this->assertSame([['LEFT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            [1]
+        );
+    }
+
     public function testRightJoin()
     {
         $this->query->joinRight('table2', 'table2.table1_id = table1.id');
@@ -420,6 +462,27 @@ class SelectTest extends BaseTestCase
         $this->assertSame([['RIGHT', $table2, [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
         $this->assertCorrectStatementAndValues(
             'RIGHT JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            [1]
+        );
+    }
+
+    public function testRightJoinWithExpressionCondition()
+    {
+        $condition = new Expression('t2.table1_id = ?', 1);
+        $this->query->joinRight('table2', $condition);
+
+        $this->assertSame([['RIGHT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON t2.table1_id = ?', [1]);
+    }
+
+    public function testRightJoinWithSelectCondition()
+    {
+        $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->joinRight('table2', $condition);
+
+        $this->assertSame([['RIGHT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
             [1]
         );
     }
