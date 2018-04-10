@@ -15,10 +15,9 @@ cache:
 matrix:
   fast_finish: true
   allow_failures:
-    - php:
-      - '5.4'
-      - '5.5'
-      - nightly
+    - php: '5.4'
+    - php: '5.5'
+    - php: nightly
 
 before_script:
   - ./test/setup_vendor.sh
