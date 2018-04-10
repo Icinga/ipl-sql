@@ -2,6 +2,7 @@
 
 namespace ipl\Tests\Sql;
 
+use ipl\Sql\Expression;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Sql;
@@ -92,6 +93,24 @@ class HavingTest extends BaseTestCase
                 . ' AND (c5 IS NOT NULL) AND (c6 IN (?, ?, ?)) AND ((c7 = ?) AND (c8 = ?))',
             [1, 1, 1, 2, 3, 1, 1]
         );
+    }
+
+    public function testWhereWithExpression()
+    {
+        $expression = new Expression('c2 = ?', 1);
+        $this->query->having($expression);
+
+        $this->assertSame([Sql::ALL, [Sql::ALL, $expression]], $this->query->getHaving());
+        $this->assertCorrectStatementAndValues('HAVING c2 = ?', [1]);
+    }
+
+    public function testWhereWithSelect()
+    {
+        $select = (new Select())->columns('COUNT(*)')->from('t1')->where(['c2 = ?' => 1]);
+        $this->query->having($select);
+
+        $this->assertSame([Sql::ALL, [Sql::ALL, $select]], $this->query->getHaving());
+        $this->assertCorrectStatementAndValues('HAVING (SELECT COUNT(*) FROM t1 WHERE c2 = ?)', [1]);
     }
 
     public function testResetHaving()

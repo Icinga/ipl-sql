@@ -2,6 +2,7 @@
 
 namespace ipl\Tests\Sql;
 
+use ipl\Sql\Expression;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Sql;
@@ -71,6 +72,33 @@ class SelectTest extends BaseTestCase
         $this->assertCorrectStatementAndValues('SELECT 1 AS one, 2', []);
     }
 
+    public function testColumnsWithExpression()
+    {
+        $columns = ['three' => new Expression('? + ?', 1, 2)];
+        $this->query->columns($columns);
+
+        $this->assertSame($columns, $this->query->getColumns());
+        $this->assertCorrectStatementAndValues('SELECT (? + ?) AS three', [1, 2]);
+    }
+
+    public function testColumnsWithSelect()
+    {
+        $columns = [
+            'customers' => (new Select())
+                ->columns('COUNT(*)')
+                ->from('customers')
+                ->where(['ctime > ?' => 1234567890])
+        ];
+
+        $this->query->columns($columns);
+
+        $this->assertSame($columns, $this->query->getColumns());
+        $this->assertCorrectStatementAndValues(
+            'SELECT (SELECT COUNT(*) FROM customers WHERE ctime > ?) AS customers',
+            [1234567890]
+        );
+    }
+
     public function testFrom()
     {
         $this->query->from('table');
@@ -93,6 +121,19 @@ class SelectTest extends BaseTestCase
 
         $this->assertSame(['t1' => 'table'], $this->query->getFrom());
         $this->assertCorrectStatementAndValues('FROM table t1', []);
+    }
+
+    public function testFromWithSelect()
+    {
+        $from = ['t1' => (new Select())
+            ->columns('*')
+            ->from('table')
+            ->where(['ctime > ?' => 1234567890])];
+
+        $this->query->from($from);
+
+        $this->assertSame($from, $this->query->getFrom());
+        $this->assertCorrectStatementAndValues('FROM (SELECT * FROM table WHERE ctime > ?) t1', [1234567890]);
     }
 
     public function testInnerJoin()
@@ -176,6 +217,39 @@ class SelectTest extends BaseTestCase
         $this->assertCorrectStatementAndValues(
             'INNER JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
             [42]
+        );
+    }
+
+    public function testInnerJoinWithSelect()
+    {
+        $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
+        $this->query->join($table2, 't2.table1_id = t1.id');
+
+        $this->assertSame([['INNER', $table2, [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            [1]
+        );
+    }
+
+    public function testInnerJoinWithExpressionCondition()
+    {
+        $condition = new Expression('t2.table1_id = ?', 1);
+        $this->query->join('table2', $condition);
+
+        $this->assertSame([['INNER', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('INNER JOIN table2 ON t2.table1_id = ?', [1]);
+    }
+
+    public function testInnerJoinWithSelectCondition()
+    {
+        $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->join('table2', $condition);
+
+        $this->assertSame([['INNER', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'INNER JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            [1]
         );
     }
 
@@ -263,6 +337,39 @@ class SelectTest extends BaseTestCase
         );
     }
 
+    public function testLeftJoinWithSelect()
+    {
+        $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
+        $this->query->joinLeft($table2, 't2.table1_id = t1.id');
+
+        $this->assertSame([['LEFT', $table2, [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            [1]
+        );
+    }
+
+    public function testLeftJoinWithExpressionCondition()
+    {
+        $condition = new Expression('t2.table1_id = ?', 1);
+        $this->query->joinLeft('table2', $condition);
+
+        $this->assertSame([['LEFT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON t2.table1_id = ?', [1]);
+    }
+
+    public function testLeftJoinWithSelectCondition()
+    {
+        $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->joinLeft('table2', $condition);
+
+        $this->assertSame([['LEFT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'LEFT JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            [1]
+        );
+    }
+
     public function testRightJoin()
     {
         $this->query->joinRight('table2', 'table2.table1_id = table1.id');
@@ -347,6 +454,39 @@ class SelectTest extends BaseTestCase
         );
     }
 
+    public function testRightJoinWithSelect()
+    {
+        $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
+        $this->query->joinRight($table2, 't2.table1_id = t1.id');
+
+        $this->assertSame([['RIGHT', $table2, [Sql::ALL, 't2.table1_id = t1.id']]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            [1]
+        );
+    }
+
+    public function testRightJoinWithExpressionCondition()
+    {
+        $condition = new Expression('t2.table1_id = ?', 1);
+        $this->query->joinRight('table2', $condition);
+
+        $this->assertSame([['RIGHT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON t2.table1_id = ?', [1]);
+    }
+
+    public function testRightJoinWithSelectCondition()
+    {
+        $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->joinRight('table2', $condition);
+
+        $this->assertSame([['RIGHT', 'table2', [Sql::ALL, $condition]]], $this->query->getJoin());
+        $this->assertCorrectStatementAndValues(
+            'RIGHT JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            [1]
+        );
+    }
+
     public function testGroupBy()
     {
         $this->query->groupBy(['a', 'b']);
@@ -361,6 +501,50 @@ class SelectTest extends BaseTestCase
 
         $this->assertSame(['t.a', 't.b'], $this->query->getGroupBy());
         $this->assertCorrectStatementAndValues('GROUP BY t.a, t.b', []);
+    }
+
+    public function testGroupByWithExpression()
+    {
+        $column = new Expression('x = ?', 1);
+        $this->query->groupBy([$column]);
+
+        $this->assertSame([$column], $this->query->getGroupBy());
+        $this->assertCorrectStatementAndValues('GROUP BY x = ?', [1]);
+    }
+
+    public function testGroupByWithSelect()
+    {
+        $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->groupBy([$column]);
+
+        $this->assertSame([$column], $this->query->getGroupBy());
+        $this->assertCorrectStatementAndValues('GROUP BY (SELECT COUNT(*) FROM table2 WHERE active = ?)', [1]);
+    }
+
+    public function testOrderBy()
+    {
+        $this->query->orderBy(['a', 'b' => 'ASC'], 'DESC');
+
+        $this->assertSame([['a', 'DESC'], ['b', 'ASC']], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY a DESC, b ASC', []);
+    }
+
+    public function testOrderByWithExpression()
+    {
+        $column = new Expression('x = ?', 1);
+        $this->query->orderBy($column, 'DESC');
+
+        $this->assertSame([[$column, 'DESC']], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);
+    }
+
+    public function testOrderByWithSelect()
+    {
+        $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->orderBy($column, 'DESC');
+
+        $this->assertSame([[$column, 'DESC']], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?) DESC', [1]);
     }
 
     public function testUnion()
@@ -425,7 +609,7 @@ class SelectTest extends BaseTestCase
                 . " FROM customer c LEFT JOIN order o ON o.customer = c.id"
                 . " WHERE (c.name LIKE ?) OR (c.name LIKE ?)"
                 . " GROUP BY c.id HAVING (COUNT(o.customer) >= ?) OR (COUNT(o.customer) <= ?)"
-                . " ORDER BY COUNT(o.customer), c.name LIMIT 25 OFFSET 75)"
+                . " ORDER BY COUNT(o.customer) ASC, c.name ASC LIMIT 25 OFFSET 75)"
                 . " UNION ALL (SELECT -1 AS id, '' AS name, -1 AS orders)",
             ['%Doe%', '%Deo%', 42, 3]
         );

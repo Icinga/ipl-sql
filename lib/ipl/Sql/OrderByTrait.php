@@ -19,13 +19,26 @@ trait OrderByTrait
         return $this->orderBy;
     }
 
-    public function orderBy($orderBy)
+    public function orderBy($orderBy, $direction = 'ASC')
     {
         if (! is_array($orderBy)) {
             $orderBy = [$orderBy];
         }
 
-        $this->orderBy = array_merge($this->orderBy !== null ? $this->orderBy : [], $orderBy);
+        foreach ($orderBy as $column => $dir) {
+            if (is_int($column)) {
+                $column = $dir;
+                $dir = $direction;
+            }
+
+            if ($dir === SORT_ASC) {
+                $dir = 'ASC';
+            } elseif ($dir === SORT_DESC) {
+                $dir = 'DESC';
+            }
+
+            $this->orderBy[] = [$column, $dir];
+        }
 
         return $this;
     }
