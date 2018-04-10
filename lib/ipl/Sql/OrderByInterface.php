@@ -15,7 +15,7 @@ interface OrderByInterface
     public function getOrderBy();
 
     /**
-     * Set the ORDER BY part of the query
+     * Set the ORDER BY part of the query - either plain columns or expressions or scalar subqueries
      *
      * Note that this method does not override an already set ORDER BY part. Instead, each call to this function
      * appends the specified ORDER BY part to an already existing one.
