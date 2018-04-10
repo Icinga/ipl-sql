@@ -391,9 +391,9 @@ class QueryBuilder
 
         foreach ($from as $alias => $table) {
             if ($table instanceof Select) {
-                list($stmt, $values) = $this->assembleSelect($table);
-                $table = "($stmt)";
+                $table = "({$this->assembleSelect($table, $values)[0]})";
             }
+
             if (is_int($alias)) {
                 $sql[] = $table;
             } else {
