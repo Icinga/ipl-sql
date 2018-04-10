@@ -153,8 +153,8 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   string|array    $tables The table(s) to add to the FROM part. The items can be any mix of the
-     *                                  following: ['table', 'table alias', 'alias' => 'table']
+     * @param   string|Select|array $tables The table(s) to add to the FROM part. The items can be any mix of the
+     *                                      following: ['table', 'table alias', 'alias' => 'table']
      *
      * @return  $this
      */

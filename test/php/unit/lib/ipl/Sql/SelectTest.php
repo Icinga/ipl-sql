@@ -123,6 +123,19 @@ class SelectTest extends BaseTestCase
         $this->assertCorrectStatementAndValues('FROM table t1', []);
     }
 
+    public function testFromWithSelect()
+    {
+        $from = ['t1' => (new Select())
+            ->columns('*')
+            ->from('table')
+            ->where(['ctime > ?' => 1234567890])];
+
+        $this->query->from($from);
+
+        $this->assertSame($from, $this->query->getFrom());
+        $this->assertCorrectStatementAndValues('FROM (SELECT * FROM table WHERE ctime > ?) t1', [1234567890]);
+    }
+
     public function testInnerJoin()
     {
         $this->query->join('table2', 'table2.table1_id = table1.id');
