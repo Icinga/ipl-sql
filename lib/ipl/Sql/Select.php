@@ -253,7 +253,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
-     * Add a GROUP BY part to the query
+     * Add a GROUP BY part to the query - either plain columns or expressions or scalar subqueries
      *
      * This method does NOT quote the columns you specify for the GROUP BY.
      * If you allow user input here, you must protected yourself against SQL injection using

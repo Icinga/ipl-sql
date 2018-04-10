@@ -66,7 +66,7 @@ class QueryBuilder
             $this->buildFrom($select->getFrom(), $values),
             $this->buildJoin($select->getJoin(), $values),
             $this->buildWhere($select->getWhere(), $values),
-            $this->buildGroupBy($select->getGroupBy()),
+            $this->buildGroupBy($select->getGroupBy(), $values),
             $this->buildHaving($select->getHaving(), $values),
             $this->buildOrderBy($select->getOrderBy()),
             $this->buildLimitOffset($select->getLimit(), $select->getOffset())
@@ -463,13 +463,23 @@ class QueryBuilder
      * Build the GROUP BY part of a query
      *
      * @param   array   $groupBy
+     * @param   array   $values
      *
      * @return  string  The GROUP BY part of the query
      */
-    public function buildGroupBy(array $groupBy = null)
+    public function buildGroupBy(array $groupBy = null, array &$values)
     {
         if ($groupBy === null) {
             return '';
+        }
+
+        foreach ($groupBy as &$column) {
+            if ($column instanceof ExpressionInterface) {
+                $values = array_merge($values, $column->getValues());
+                $column = $column->getStatement();
+            } elseif ($column instanceof Select) {
+                $column = "({$this->assembleSelect($column, $values)[0]})";
+            }
         }
 
         return 'GROUP BY ' . implode(', ', $groupBy);

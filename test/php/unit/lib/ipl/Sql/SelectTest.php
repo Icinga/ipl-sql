@@ -503,6 +503,24 @@ class SelectTest extends BaseTestCase
         $this->assertCorrectStatementAndValues('GROUP BY t.a, t.b', []);
     }
 
+    public function testGroupByWithExpression()
+    {
+        $column = new Expression('x = ?', 1);
+        $this->query->groupBy([$column]);
+
+        $this->assertSame([$column], $this->query->getGroupBy());
+        $this->assertCorrectStatementAndValues('GROUP BY x = ?', [1]);
+    }
+
+    public function testGroupByWithSelect()
+    {
+        $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->groupBy([$column]);
+
+        $this->assertSame([$column], $this->query->getGroupBy());
+        $this->assertCorrectStatementAndValues('GROUP BY (SELECT COUNT(*) FROM table2 WHERE active = ?)', [1]);
+    }
+
     public function testUnion()
     {
         $unionQuery = (new Select())
