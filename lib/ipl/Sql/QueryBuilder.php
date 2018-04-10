@@ -64,7 +64,7 @@ class QueryBuilder
             $this->buildWith($select->getWith(), $values),
             $this->buildSelect($select->getColumns(), $select->getDistinct()),
             $this->buildFrom($select->getFrom(), $values),
-            $this->buildJoin($select->getJoin()),
+            $this->buildJoin($select->getJoin(), $values),
             $this->buildWhere($select->getWhere(), $values),
             $this->buildGroupBy($select->getGroupBy()),
             $this->buildHaving($select->getHaving(), $values),
@@ -400,10 +400,11 @@ class QueryBuilder
      * Build the JOIN part(s) of a query
      *
      * @param   array   $joins
+     * @oaram   array   $values
      *
      * @return  string  The JOIN part(s) of the query
      */
-    public function buildJoin(array $joins = null)
+    public function buildJoin($joins, array &$values)
     {
         if ($joins === null) {
             return '';
@@ -415,6 +416,10 @@ class QueryBuilder
 
         foreach ($joins as $join) {
             list($joinType, $table, $condition) = $join;
+
+            if (is_array($condition)) {
+                $condition = $this->buildCondition($condition, $values);
+            }
 
             if (is_array($table)) {
                 foreach ($table as $alias => $tableName) {

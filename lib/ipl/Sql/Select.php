@@ -184,13 +184,17 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @param   string|array    $table      The table to be joined, can be any of the following:
      *                                      'table'  'table alias'  ['alias' => 'table']
-     * @param   string          $condition  The join condition, i.e. the ON part of the JOIN
+     * @param   string|array    $condition  The join condition, i.e. the ON part of the JOIN.
+     *                                      Please see {@link WhereInterface::where()} for the supported formats and
+     *                                      restrictions regarding quoting of the field names.
+     * @param   string          $operator   The operator to combine multiple conditions with, if the condition is in the
+     *                                      array format
      *
      * @return  $this
      */
-    public function join($table, $condition)
+    public function join($table, $condition, $operator = Sql::ALL)
     {
-        $this->join[] = ['INNER', $table, $condition];
+        $this->join[] = ['INNER', $table, $this->buildCondition($condition, $operator)];
 
         return $this;
     }
@@ -200,13 +204,17 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @param   string|array    $table      The table to be joined, can be any of the following:
      *                                      'table'  'table alias'  ['alias' => 'table']
-     * @param   string          $condition  The join condition, i.e. the ON part of the JOIN
+     * @param   string|array    $condition  The join condition, i.e. the ON part of the JOIN.
+     *                                      Please see {@link WhereInterface::where()} for the supported formats and
+     *                                      restrictions regarding quoting of the field names.
+     * @param   string          $operator   The operator to combine multiple conditions with, if the condition is in the
+     *                                      array format
      *
      * @return  $this
      */
-    public function joinLeft($table, $condition)
+    public function joinLeft($table, $condition, $operator = Sql::ALL)
     {
-        $this->join[] = ['LEFT', $table, $condition];
+        $this->join[] = ['LEFT', $table, $this->buildCondition($condition, $operator)];
 
         return $this;
     }
@@ -216,13 +224,17 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @param   string|array    $table      The table to be joined, can be any of the following:
      *                                      'table'  'table alias'  ['alias' => 'table']
-     * @param   string          $condition  The join condition, i.e. the ON part of the JOIN
+     * @param   string|array    $condition  The join condition, i.e. the ON part of the JOIN.
+     *                                      Please see {@link WhereInterface::where()} for the supported formats and
+     *                                      restrictions regarding quoting of the field names.
+     * @param   string          $operator   The operator to combine multiple conditions with, if the condition is in the
+     *                                      array format
      *
      * @return  $this
      */
-    public function joinRight($table, $condition)
+    public function joinRight($table, $condition, $operator = Sql::ALL)
     {
-        $this->join[] = ['RIGHT', $table, $condition];
+        $this->join[] = ['RIGHT', $table, $this->buildCondition($condition, $operator)];
 
         return $this;
     }
