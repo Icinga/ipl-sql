@@ -521,6 +521,32 @@ class SelectTest extends BaseTestCase
         $this->assertCorrectStatementAndValues('GROUP BY (SELECT COUNT(*) FROM table2 WHERE active = ?)', [1]);
     }
 
+    public function testOrderBy()
+    {
+        $this->query->orderBy(['a', 'b']);
+
+        $this->assertSame(['a', 'b'], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY a, b', []);
+    }
+
+    public function testOrderByWithExpression()
+    {
+        $column = new Expression('x = ?', 1);
+        $this->query->orderBy([$column]);
+
+        $this->assertSame([$column], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY x = ?', [1]);
+    }
+
+    public function testOrderByWithSelect()
+    {
+        $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->orderBy([$column]);
+
+        $this->assertSame([$column], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?)', [1]);
+    }
+
     public function testUnion()
     {
         $unionQuery = (new Select())

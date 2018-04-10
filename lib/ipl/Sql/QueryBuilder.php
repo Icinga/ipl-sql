@@ -68,7 +68,7 @@ class QueryBuilder
             $this->buildWhere($select->getWhere(), $values),
             $this->buildGroupBy($select->getGroupBy(), $values),
             $this->buildHaving($select->getHaving(), $values),
-            $this->buildOrderBy($select->getOrderBy()),
+            $this->buildOrderBy($select->getOrderBy(), $values),
             $this->buildLimitOffset($select->getLimit(), $select->getOffset())
         ]);
 
@@ -506,10 +506,11 @@ class QueryBuilder
      * Build the ORDER BY part of a query
      *
      * @param   array   $orderBy
+     * @param   array   $values
      *
      * @return  string  The ORDER BY part of the query
      */
-    public function buildOrderBy(array $orderBy = null)
+    public function buildOrderBy(array $orderBy = null, array &$values)
     {
         if ($orderBy === null) {
             return '';
@@ -519,6 +520,13 @@ class QueryBuilder
 
         foreach ($orderBy as $column => $direction) {
             if (is_int($column)) {
+                if ($direction instanceof ExpressionInterface) {
+                    $values = array_merge($values, $direction->getValues());
+                    $direction = $direction->getStatement();
+                } elseif ($direction instanceof Select) {
+                    $direction = "({$this->assembleSelect($direction, $values)[0]})";
+                }
+
                 $sql[] = $direction;
             } else {
                 if (is_int($direction)) {
