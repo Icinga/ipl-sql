@@ -2,6 +2,7 @@
 
 namespace ipl\Tests\Sql;
 
+use ipl\Sql\Expression;
 use ipl\Sql\Insert;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
@@ -70,6 +71,26 @@ class InsertTest extends BaseTestCase
         $this->assertSame(['c1'], $this->query->getColumns());
         $this->assertSame(['v1'], $this->query->getValues());
         $this->assertCorrectStatementAndValues('(c1) VALUES(?)', ['v1']);
+    }
+
+    public function testExpressionValue()
+    {
+        $value = new Expression('x = ?', 1);
+        $this->query->values(['c1' => $value]);
+
+        $this->assertSame(['c1'], $this->query->getColumns());
+        $this->assertSame([$value], $this->query->getValues());
+        $this->assertCorrectStatementAndValues('(c1) VALUES(x = ?)', [1]);
+    }
+
+    public function testSelectValue()
+    {
+        $value = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->values(['c1' => $value]);
+
+        $this->assertSame(['c1'], $this->query->getColumns());
+        $this->assertSame([$value], $this->query->getValues());
+        $this->assertCorrectStatementAndValues('(c1) VALUES((SELECT COUNT(*) FROM table2 WHERE active = ?))', [1]);
     }
 
     public function testColumnsAndValues()
