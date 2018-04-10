@@ -523,28 +523,28 @@ class SelectTest extends BaseTestCase
 
     public function testOrderBy()
     {
-        $this->query->orderBy(['a', 'b']);
+        $this->query->orderBy(['a', 'b' => 'ASC'], 'DESC');
 
-        $this->assertSame(['a', 'b'], $this->query->getOrderBy());
-        $this->assertCorrectStatementAndValues('ORDER BY a, b', []);
+        $this->assertSame([['a', 'DESC'], ['b', 'ASC']], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY a DESC, b ASC', []);
     }
 
     public function testOrderByWithExpression()
     {
         $column = new Expression('x = ?', 1);
-        $this->query->orderBy([$column]);
+        $this->query->orderBy($column, 'DESC');
 
-        $this->assertSame([$column], $this->query->getOrderBy());
-        $this->assertCorrectStatementAndValues('ORDER BY x = ?', [1]);
+        $this->assertSame([[$column, 'DESC']], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);
     }
 
     public function testOrderByWithSelect()
     {
         $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
-        $this->query->orderBy([$column]);
+        $this->query->orderBy($column, 'DESC');
 
-        $this->assertSame([$column], $this->query->getOrderBy());
-        $this->assertCorrectStatementAndValues('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?)', [1]);
+        $this->assertSame([[$column, 'DESC']], $this->query->getOrderBy());
+        $this->assertCorrectStatementAndValues('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?) DESC', [1]);
     }
 
     public function testUnion()
@@ -609,7 +609,7 @@ class SelectTest extends BaseTestCase
                 . " FROM customer c LEFT JOIN order o ON o.customer = c.id"
                 . " WHERE (c.name LIKE ?) OR (c.name LIKE ?)"
                 . " GROUP BY c.id HAVING (COUNT(o.customer) >= ?) OR (COUNT(o.customer) <= ?)"
-                . " ORDER BY COUNT(o.customer), c.name LIMIT 25 OFFSET 75)"
+                . " ORDER BY COUNT(o.customer) ASC, c.name ASC LIMIT 25 OFFSET 75)"
                 . " UNION ALL (SELECT -1 AS id, '' AS name, -1 AS orders)",
             ['%Doe%', '%Deo%', 42, 3]
         );

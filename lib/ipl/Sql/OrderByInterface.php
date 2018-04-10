@@ -27,9 +27,11 @@ interface OrderByInterface
      * {@link Sql::quoteIdentifier()} as well.
      *
      * @param   string|array    $orderBy    The ORDER BY part. The items can be in any format of the following:
-     *                                      ['column', 'column DESC', 'column' => 'DESC', 'column' => SORT_DESC]
+     *                                      ['column', 'column' => 'DESC', 'column' => SORT_DESC]
+     * @param   string|int      $direction  The default direction. Can be any of the following:
+     *                                      'ASC', 'DESC', SORT_ASC, SORT_DESC
      *
      * @return  $this
      */
-    public function orderBy($orderBy);
+    public function orderBy($orderBy, $direction = 'ASC');
 }
