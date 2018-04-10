@@ -120,7 +120,7 @@ class Insert implements CommonTableExpressionInterface
     }
 
     /**
-     * Set the values to INSERT INTO
+     * Set the values to INSERT INTO - either plain values or expressions or scalar subqueries
      *
      * If you do not set the columns for which the query provides values using {@link columns()}, you must specify
      * the values in terms of column-value pairs in order to provide the column names. Please note that the same
