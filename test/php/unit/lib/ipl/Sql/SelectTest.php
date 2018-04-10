@@ -2,6 +2,7 @@
 
 namespace ipl\Tests\Sql;
 
+use ipl\Sql\Expression;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Sql;
@@ -69,6 +70,33 @@ class SelectTest extends BaseTestCase
 
         $this->assertSame(['one' => '1', '2'], $this->query->getColumns());
         $this->assertCorrectStatementAndValues('SELECT 1 AS one, 2', []);
+    }
+
+    public function testColumnsWithExpression()
+    {
+        $columns = ['three' => new Expression('? + ?', 1, 2)];
+        $this->query->columns($columns);
+
+        $this->assertSame($columns, $this->query->getColumns());
+        $this->assertCorrectStatementAndValues('SELECT (? + ?) AS three', [1, 2]);
+    }
+
+    public function testColumnsWithSelect()
+    {
+        $columns = [
+            'customers' => (new Select())
+                ->columns('COUNT(*)')
+                ->from('customers')
+                ->where(['ctime > ?' => 1234567890])
+        ];
+
+        $this->query->columns($columns);
+
+        $this->assertSame($columns, $this->query->getColumns());
+        $this->assertCorrectStatementAndValues(
+            'SELECT (SELECT COUNT(*) FROM customers WHERE ctime > ?) AS customers',
+            [1234567890]
+        );
     }
 
     public function testFrom()
