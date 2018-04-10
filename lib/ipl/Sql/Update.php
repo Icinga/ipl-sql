@@ -66,7 +66,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     }
 
     /**
-     * Set the columns for which the statement provides values
+     * Set the columns for which the statement provides values - either plain values or expressions or scalar subqueries
      *
      * Note that this method does NOT quote the columns you specify for the UPDATE.
      * If you allow user input here, you must protected yourself against SQL injection using
