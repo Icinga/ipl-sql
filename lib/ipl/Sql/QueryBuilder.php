@@ -62,7 +62,7 @@ class QueryBuilder
     {
         $sql = array_filter([
             $this->buildWith($select->getWith(), $values),
-            $this->buildSelect($select->getColumns(), $select->getDistinct()),
+            $this->buildSelect($select->getColumns(), $select->getDistinct(), $values),
             $this->buildFrom($select->getFrom(), $values),
             $this->buildJoin($select->getJoin(), $values),
             $this->buildWhere($select->getWhere(), $values),
@@ -333,10 +333,11 @@ class QueryBuilder
      *
      * @param   array   $columns
      * @param   bool    $distinct
+     * @param   array   $values
      *
      * @return  string  The SELECT part of the query
      */
-    public function buildSelect(array $columns, $distinct = false)
+    public function buildSelect(array $columns, $distinct, array &$values)
     {
         if (empty($columns)) {
             return '';
@@ -355,6 +356,13 @@ class QueryBuilder
         $sql = [];
 
         foreach ($columns as $alias => $column) {
+            if ($column instanceof ExpressionInterface) {
+                $values = array_merge($values, $column->getValues());
+                $column = "({$column->getStatement()})";
+            } elseif ($column instanceof Select) {
+                $column = "({$this->assembleSelect($column, $values)[0]})";
+            }
+
             if (is_int($alias)) {
                 $sql[] = $column;
             } else {

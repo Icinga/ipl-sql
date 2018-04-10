@@ -116,8 +116,8 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   string|array    $columns    The column(s) to add to the SELECT. The items can be any mix of the
-     *                                      following: 'column', 'column as alias', ['alias' => 'column']
+     * @param   string|ExpressionInterface|Select|array     $columns    The column(s) to add to the SELECT.
+     *  The items can be any mix of the following: 'column', 'column as alias', ['alias' => 'column']
      *
      * @return  $this
      */
