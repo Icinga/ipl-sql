@@ -526,6 +526,69 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
 
         return $countQuery;
     }
+
+    public function __clone()
+    {
+        $this->cloneCte();
+        $this->cloneOrderBy();
+        $this->cloneWhere();
+
+        if ($this->columns !== null) {
+            foreach ($this->columns as &$value) {
+                if ($value instanceof ExpressionInterface || $value instanceof Select) {
+                    $value = clone $value;
+                }
+            }
+            unset($value);
+        }
+
+        if ($this->from !== null) {
+            foreach ($this->from as &$from) {
+                if ($from instanceof Select) {
+                    $from = clone $from;
+                }
+            }
+            unset($from);
+        }
+
+        if ($this->join !== null) {
+            foreach ($this->join as &$join) {
+                if (is_array($join[1])) {
+                    foreach ($join[1] as &$table) {
+                        if ($table instanceof Select) {
+                            $table = clone $table;
+                        }
+                    }
+                    unset($table);
+                } elseif ($join[1] instanceof Select) {
+                    $join[1] = clone $join[1];
+                }
+
+                $this->cloneCondition($join[2]);
+            }
+            unset($join);
+        }
+
+        if ($this->groupBy !== null) {
+            foreach ($this->groupBy as &$value) {
+                if ($value instanceof ExpressionInterface || $value instanceof Select) {
+                    $value = clone $value;
+                }
+            }
+            unset($value);
+        }
+
+        if ($this->having !== null) {
+            $this->cloneCondition($this->having);
+        }
+
+        if ($this->union !== null) {
+            foreach ($this->union as &$union) {
+                $union[0] = clone $union[0];
+            }
+            unset($union);
+        }
+    }
 }
 
 //$x = new Select();

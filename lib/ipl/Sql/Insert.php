@@ -161,4 +161,22 @@ class Insert implements CommonTableExpressionInterface
     {
         return $this->select;
     }
+
+    public function __clone()
+    {
+        $this->cloneCte();
+
+        if ($this->values !== null) {
+            foreach ($this->values as &$value) {
+                if ($value instanceof ExpressionInterface || $value instanceof Select) {
+                    $value = clone $value;
+                }
+            }
+            unset($value);
+        }
+
+        if ($this->select !== null) {
+            $this->select = clone $this->select;
+        }
+    }
 }

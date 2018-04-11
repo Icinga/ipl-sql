@@ -84,4 +84,17 @@ class Update implements CommonTableExpressionInterface, WhereInterface
 
         return $this;
     }
+
+    public function __clone()
+    {
+        $this->cloneCte();
+        $this->cloneWhere();
+
+        foreach ($this->set as &$value) {
+            if ($value instanceof ExpressionInterface || $value instanceof Select) {
+                $value = clone $value;
+            }
+        }
+        unset($value);
+    }
 }
