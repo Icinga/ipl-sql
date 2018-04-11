@@ -2,7 +2,9 @@
 
 namespace ipl\Tests\Sql;
 
+use ipl\Sql\Expression;
 use ipl\Sql\QueryBuilder;
+use ipl\Sql\Select;
 use ipl\Sql\Update;
 use ipl\Test\BaseTestCase;
 
@@ -57,6 +59,24 @@ class UpdateTest extends BaseTestCase
 
         $this->assertSame(['c1' => 'v1', 'c2' => 'v2'], $this->query->getSet());
         $this->assertCorrectStatementAndValues('SET c1 = ?, c2 = ?', ['v1', 'v2']);
+    }
+
+    public function testExpressionValue()
+    {
+        $value = new Expression('x = ?', 1);
+        $this->query->set(['c1' => $value]);
+
+        $this->assertSame(['c1' => $value], $this->query->getSet());
+        $this->assertCorrectStatementAndValues('SET c1 = x = ?', [1]);
+    }
+
+    public function testSelectValue()
+    {
+        $value = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
+        $this->query->set(['c1' => $value]);
+
+        $this->assertSame(['c1' => $value], $this->query->getSet());
+        $this->assertCorrectStatementAndValues('SET c1 = (SELECT COUNT(*) FROM table2 WHERE active = ?)', [1]);
     }
 
     public function testUpdateStatementWithSet()
