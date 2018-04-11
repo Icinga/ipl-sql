@@ -22,9 +22,6 @@ matrix:
 install:
   - composer install
 
-before_script:
-  - ./test/setup_vendor.sh
-
 script:
   - php vendor/phpcs.phar
   - php vendor/phpunit.phar --testdox || phpunit --verbose
