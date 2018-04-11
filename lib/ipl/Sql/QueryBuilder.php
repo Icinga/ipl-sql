@@ -321,6 +321,9 @@ class QueryBuilder
         foreach ($insertValues as $value) {
             if ($value instanceof ExpressionInterface) {
                 $preparedValues[] = $value->getStatement();
+                $values = array_merge($values, $value->getValues());
+            } elseif ($value instanceof Select) {
+                $preparedValues[] = "({$this->assembleSelect($value, $values)[0]})";
             } else {
                 $preparedValues[] = '?';
                 $values[] = $value;
@@ -633,6 +636,9 @@ class QueryBuilder
         foreach ($set as $column => $value) {
             if ($value instanceof ExpressionInterface) {
                 $sql[] = "$column = {$value->getStatement()}";
+                $values = array_merge($values, $value->getValues());
+            } elseif ($value instanceof Select) {
+                $sql[] = "$column = ({$this->assembleSelect($value, $values)[0]})";
             } else {
                 $sql[] = "$column = ?";
                 $values[] = $value;
