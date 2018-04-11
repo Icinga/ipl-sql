@@ -2,8 +2,8 @@
 <ruleset name="PHP_CodeSniffer">
     <description>ipl - PSR2 Coding Standard</description>
 
-    <file>lib/</file>
-    <file>test/</file>
+    <file>src/</file>
+    <file>tests/</file>
 
     <arg value="wps"/>
     <arg name="colors"/>

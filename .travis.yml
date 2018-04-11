@@ -19,8 +19,8 @@ matrix:
     - php: '5.5'
     - php: nightly
 
-before_script:
-  - ./test/setup_vendor.sh
+install:
+  - composer install
 
 script:
   - php vendor/phpcs.phar

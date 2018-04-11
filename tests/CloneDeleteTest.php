@@ -5,9 +5,9 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Expression;
 use ipl\Sql\Select;
 use ipl\Sql\Delete;
-use ipl\Test\BaseTestCase;
+use PHPUnit_Framework_TestCase;
 
-class CloneDeleteTest extends BaseTestCase
+class CloneDeleteTest extends PHPUnit_Framework_TestCase
 {
     public function testCte()
     {
