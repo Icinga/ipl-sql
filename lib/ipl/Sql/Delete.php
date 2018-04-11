@@ -47,4 +47,10 @@ class Delete implements CommonTableExpressionInterface, WhereInterface
 
         return $this;
     }
+
+    public function __clone()
+    {
+        $this->cloneCte();
+        $this->cloneWhere();
+    }
 }

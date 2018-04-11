@@ -42,4 +42,21 @@ trait OrderByTrait
 
         return $this;
     }
+
+    /**
+     * Clone the properties provided by this trait
+     *
+     * Shall be called by using classes in their __clone()
+     */
+    protected function cloneOrderBy()
+    {
+        if ($this->orderBy !== null) {
+            foreach ($this->orderBy as &$orderBy) {
+                if ($orderBy[0] instanceof ExpressionInterface || $orderBy[0] instanceof Select) {
+                    $orderBy[0] = clone $orderBy[0];
+                }
+            }
+            unset($orderBy);
+        }
+    }
 }
