@@ -1,15 +1,28 @@
-ipl - Icinga PHP Library
-========================
+# Icinga PHP Library - SQL abstraction layer
 
-This is a prototype for the new Icinga PHP library. Please do not use this for
-anything important yet, as all APIs, Interfaces and paths are still subject to
-change. Some of those changes (like splitting up the library in multiple
-repositories, changing the auto-loading mechanism) will take place very soon.
+[![Build Status](https://travis-ci.org/Icinga/ipl-sql.svg?branch=master)](https://travis-ci.org/Icinga/ipl-sql)
 
-Currently there are some light dependencies on Icinga Web 2, in future this
-should be inverted. We'll restructure the web frontend, so that it also works
-based on ipl components.
+The package `ipl\Sql` provides a [database connection
+abstraction](#sql-connection) and an [SQL query abstraction layer](#sql-queries)
+for building SQL queries via an OOP API.
 
-Please read on in our [documentation](doc/01-Introduction.md).
+For details please see the [features](doc/01-Features.md) description.
 
-[![Build Status](https://travis-ci.org/Icinga/ipl.svg?branch=master)](https://travis-ci.org/Icinga/ipl)
+## License
+
+This project is licensed under the terms of the GNU General Public License
+Version 2 (or later).
+
+This software is Copyright (C) 2018 by the
+[Icinga Development Team](https://github.com/Icinga).
+
+## Requirements
+
+* PHP >= v5.6
+* PDO extension
+
+## Installation
+
+```
+$ composer require ipl/sql
+```
