@@ -1,8 +1,4 @@
-# SQL <a id="sql"></a>
-
-The package `ipl\Sql` provides a [database connection
-abstraction](#sql-connection) and an [SQL query abstraction layer](#sql-queries) 
-for building SQL queries via an OOP API.
+# Features <a id="features"></a>
 
 ## Connection <a id="sql-connection"></a>
 
