@@ -34,7 +34,11 @@
   },
   "autoload": {
     "psr-4": {
-      "ipl\\Sql\\": "src",
+      "ipl\\Sql\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "ipl\\Tests\\Sql\\": "tests"
     }
   }
