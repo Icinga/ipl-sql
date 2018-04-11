@@ -6,9 +6,9 @@ use ipl\Sql\Expression;
 use ipl\Sql\Insert;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
-use ipl\Test\BaseTestCase;
+use PHPUnit_Framework_TestCase;
 
-class InsertTest extends BaseTestCase
+class InsertTest extends PHPUnit_Framework_TestCase
 {
     /**
      * The INSERT query to test

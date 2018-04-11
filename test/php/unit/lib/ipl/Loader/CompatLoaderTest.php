@@ -4,9 +4,9 @@ namespace test\ipl\Html;
 
 use Icinga\Application\Version;
 use ipl\Loader\CompatLoader;
-use ipl\Test\BaseTestCase;
+use PHPUnit_Framework_TestCase;
 
-class CompatLoaderTest extends BaseTestCase
+class CompatLoaderTest extends PHPUnit_Framework_TestCase
 {
     public function testIcingaWebClassCanBeLoaded()
     {
