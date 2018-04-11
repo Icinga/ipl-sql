@@ -264,13 +264,16 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * Note that this method does not override an already set GROUP BY part. Instead, multiple calls to this function
      * add the specified GROUP BY part.
      *
-     * @param   array   $groupBy
+     * @param   string|ExpressionInterface|Select|array $groupBy
      *
      * @return  $this
      */
-    public function groupBy(array $groupBy)
+    public function groupBy($groupBy)
     {
-        $this->groupBy = array_merge($this->groupBy !== null ? $this->groupBy : [], $groupBy);
+        $this->groupBy = array_merge(
+            $this->groupBy === null ? [] : $this->groupBy,
+            is_array($groupBy) ? $groupBy : [$groupBy]
+        );
 
         return $this;
     }
