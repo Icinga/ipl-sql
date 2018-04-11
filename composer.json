@@ -34,8 +34,8 @@
   },
   "autoload": {
     "psr-4": {
-      "ipl\\Sql\\": "lib/ipl/Sql",
-      "ipl\\Tests\\Sql\\": "test/php/unit/lib/ipl/Sql"
+      "ipl\\Sql\\": "src",
+      "ipl\\Tests\\Sql\\": "tests"
     }
   }
 }
