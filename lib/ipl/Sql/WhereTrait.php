@@ -75,4 +75,33 @@ trait WhereTrait
             }
         }
     }
+
+    /**
+     * Clone the properties provided by this trait
+     *
+     * Shall be called by using classes in their __clone()
+     */
+    protected function cloneWhere()
+    {
+        if ($this->where !== null) {
+            $this->cloneCondition($this->where);
+        }
+    }
+
+    /**
+     * Clone a condition in-place
+     *
+     * @param   array   $condition  As returned by {@link buildCondition()}
+     */
+    protected function cloneCondition(array &$condition)
+    {
+        foreach ($condition as &$subCondition) {
+            if (is_array($subCondition)) {
+                $this->cloneCondition($subCondition);
+            } elseif ($subCondition instanceof ExpressionInterface || $subCondition instanceof Select) {
+                $subCondition = clone $subCondition;
+            }
+        }
+        unset($subCondition);
+    }
 }

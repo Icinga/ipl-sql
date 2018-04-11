@@ -37,4 +37,17 @@ trait CommonTableExpressionTrait
 
         return $this;
     }
+
+    /**
+     * Clone the properties provided by this trait
+     *
+     * Shall be called by using classes in their __clone()
+     */
+    protected function cloneCte()
+    {
+        foreach ($this->with as &$cte) {
+            $cte[0] = clone $cte[0];
+        }
+        unset($cte);
+    }
 }
