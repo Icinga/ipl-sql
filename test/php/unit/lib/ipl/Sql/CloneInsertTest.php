@@ -5,9 +5,9 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Expression;
 use ipl\Sql\Select;
 use ipl\Sql\Insert;
-use ipl\Test\BaseTestCase;
+use PHPUnit_Framework_TestCase;
 
-class CloneInsertTest extends BaseTestCase
+class CloneInsertTest extends PHPUnit_Framework_TestCase
 {
     public function testCte()
     {
