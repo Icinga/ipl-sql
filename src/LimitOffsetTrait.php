@@ -25,6 +25,11 @@ trait LimitOffsetTrait
      */
     protected $offset;
 
+    public function hasLimit()
+    {
+        return $this->limit !== null;
+    }
+
     public function getLimit()
     {
         return $this->limit;
@@ -35,6 +40,11 @@ trait LimitOffsetTrait
         $this->limit = $limit !== null ? (int) $limit : null;
 
         return $this;
+    }
+
+    public function hasOffset()
+    {
+        return $this->offset !== null;
     }
 
     public function getOffset()

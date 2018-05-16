@@ -8,6 +8,13 @@ namespace ipl\Sql;
 interface LimitOffsetInterface
 {
     /**
+     * Get whether a limit is configured
+     *
+     * @return  bool
+     */
+    public function hasLimit();
+
+    /**
      * Get the limit
      *
      * @return  int|null
@@ -23,6 +30,13 @@ interface LimitOffsetInterface
      * @return  $this
      */
     public function limit($limit);
+
+    /**
+     * Get whether an offset is configured
+     *
+     * @return  bool
+     */
+    public function hasOffset();
 
     /**
      * Get the offset
