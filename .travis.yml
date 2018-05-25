@@ -23,5 +23,5 @@ install:
   - composer install
 
 script:
-  - php vendor/phpcs.phar
-  - php vendor/phpunit.phar --testdox || phpunit --verbose
+  - vendor/bin/phpcs
+  - vendor/bin/phpunit --testdox || vendor/bin/phpunit --verbose
