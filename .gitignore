@@ -7,5 +7,6 @@
 
 # Exclude build and packaging leftovers
 /debian
+/vendor
 build/*
 composer.lock
