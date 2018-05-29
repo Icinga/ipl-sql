@@ -8,6 +8,13 @@ namespace ipl\Sql;
 interface OrderByInterface
 {
     /**
+     * Get whether a ORDER BY part is configured
+     *
+     * @return  bool
+     */
+    public function hasOrderBy();
+
+    /**
      * Get the ORDER BY part of the query
      *
      * @return  array|null

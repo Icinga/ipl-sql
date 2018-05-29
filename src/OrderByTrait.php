@@ -14,6 +14,11 @@ trait OrderByTrait
      */
     protected $orderBy;
 
+    public function hasOrderBy()
+    {
+        return $this->orderBy !== null;
+    }
+
     public function getOrderBy()
     {
         return $this->orderBy;
