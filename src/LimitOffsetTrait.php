@@ -37,7 +37,14 @@ trait LimitOffsetTrait
 
     public function limit($limit)
     {
-        $this->limit = $limit !== null ? (int) $limit : null;
+        if ($limit !== null) {
+            $limit = (int) $limit;
+            if ($limit < 0) {
+                $limit = null;
+            }
+        }
+
+        $this->limit = $limit;
 
         return $this;
     }
@@ -54,7 +61,14 @@ trait LimitOffsetTrait
 
     public function offset($offset)
     {
-        $this->offset = $offset !== null ? (int) $offset : null;
+        if ($offset !== null) {
+            $offset = (int) $offset;
+            if ($offset <= 0) {
+                $offset = null;
+            }
+        }
+
+        $this->offset = $offset;
 
         return $this;
     }

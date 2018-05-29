@@ -49,7 +49,7 @@ interface LimitOffsetInterface
      * Set the offset
      *
      * @param   int|null    $offset Start result set after this many rows.
-     *                              If you want to disable the offset, use null or a negative value
+     *                              If you want to disable the offset, use null, 0, or a negative value
      *
      * @return  $this
      */
