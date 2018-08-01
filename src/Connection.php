@@ -125,7 +125,7 @@ class Connection
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         if ($this->config->charset !== null) {
-            $this->run('SET NAMES ?', [$this->config->charset]);
+            $this->exec('SET NAMES ?', [$this->config->charset]);
         }
 
         return $this;
@@ -153,7 +153,7 @@ class Connection
     public function ping($reconnect = true)
     {
         try {
-            $this->run('SELECT 1');
+            $this->exec('SELECT 1');
         } catch (Exception $e) {
             if (! $reconnect) {
                 return false;
@@ -175,7 +175,7 @@ class Connection
      *
      * @return  \PDOStatement
      */
-    public function run($stmt, array $values = null)
+    public function exec($stmt, array $values = null)
     {
         if (is_object($stmt)) {
             list($stmt, $values) = $this->getQueryBuilder()->assemble($stmt);
@@ -200,7 +200,7 @@ class Connection
     {
         list($stmt, $values) = $this->getQueryBuilder()->assembleSelect($select);
 
-        return $this->run($stmt, $values);
+        return $this->exec($stmt, $values);
     }
 
     /**
@@ -214,7 +214,7 @@ class Connection
     {
         list($stmt, $values) = $this->getQueryBuilder()->assembleUpdate($update);
 
-        return $this->run($stmt, $values);
+        return $this->exec($stmt, $values);
     }
 
     /**
@@ -228,7 +228,7 @@ class Connection
     {
         list($stmt, $values) = $this->getQueryBuilder()->assembleDelete($delete);
 
-        return $this->run($stmt, $values);
+        return $this->exec($stmt, $values);
     }
 
     /**
@@ -242,7 +242,7 @@ class Connection
     {
         list($stmt, $values) = $this->getQueryBuilder()->assembleInsert($insert);
 
-        return $this->run($stmt, $values);
+        return $this->exec($stmt, $values);
     }
 
     /**
