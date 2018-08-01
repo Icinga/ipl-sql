@@ -590,27 +590,3 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
         }
     }
 }
-
-//$x = new Select();
-//
-//$x->where(['foo <= ?' => '5;DELETE FROM FOO']);
-//$sub = new Select();
-//$sub->from('bla')->where('a BETWEEN ? AND ?', $array):
-//$sub->where(Sql::in('a', array()));
-//$x->where('uff in (?)', $sub);
-//
-//->where('INTERVAL(a, ?) < ?', [1, 3, 5, 6, 10], 3);
-//->where('a BETTEWWN ? AND ?' => [1, 2])
-//    ->where('a IN', [1,2]);
-//->where('a = 5');
-//
-//
-//
-//        $conn = new Connection(...);
-//
-//        $select = (new Select())
-//            ->from('noma_schedule')
-//            ->columns(['id', 'description', 'name'])
-//            ->orderBy('name');
-//
-//        $conn->select($select)->yieldAll();
