@@ -170,13 +170,17 @@ class Connection
     /**
      * Prepare and execute the given statement
      *
-     * @param   string  $stmt   The SQL statement to prepare and execute
-     * @param   array   $values Values to bind to the statement, if any
+     * @param   Delete|Insert|Select|Update|string  $stmt   The SQL statement to prepare and execute
+     * @param   array                               $values Values to bind to the statement, if any
      *
      * @return  \PDOStatement
      */
     public function run($stmt, array $values = null)
     {
+        if (is_object($stmt)) {
+            list($stmt, $values) = $this->getQueryBuilder()->assemble($stmt);
+        }
+
         $this->connect();
 
         $sth = $this->pdo->prepare($stmt);
