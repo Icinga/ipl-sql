@@ -7,6 +7,37 @@ class QueryBuilder
     protected $separator = " ";
 
     /**
+     * Assemble the given statement
+     *
+     * @param   Delete|Insert|Select|Update $stmt
+     *
+     * @return  array
+     *
+     * @throw   \InvalidArgumentException   If statement type is invalid
+     */
+    public function assemble($stmt)
+    {
+        switch (true) {
+            case $stmt instanceof Delete:
+
+                return $this->assembleDelete($stmt);
+            case $stmt instanceof Insert:
+
+                return $this->assembleInsert($stmt);
+            case $stmt instanceof Select:
+
+                return $this->assembleSelect($stmt);
+            case $stmt instanceof Update:
+
+                return $this->assembleUpdate($stmt);
+            default:
+                throw new \InvalidArgumentException(
+                    __METHOD__ . ' expects an instance of Delete, Insert, Select or Update.')
+                ;
+        }
+    }
+
+    /**
      * Assemble a DELETE query
      *
      * @param   Delete  $delete
