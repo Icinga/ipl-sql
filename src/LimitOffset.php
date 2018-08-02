@@ -5,7 +5,7 @@ namespace ipl\Sql;
 /**
  * Implementation for the {@link LimitOffsetInterface} to allow pagination via {@link limit()} and {@link offset()}
  */
-trait LimitOffsetTrait
+trait LimitOffset
 {
     /**
      * The maximum number of how many items to return

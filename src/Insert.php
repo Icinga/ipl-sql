@@ -7,7 +7,7 @@ namespace ipl\Sql;
  */
 class Insert implements CommonTableExpressionInterface
 {
-    use CommonTableExpressionTrait;
+    use CommonTableExpression;
 
     /** @var string|null The table for the INSERT INTO query */
     protected $into;

@@ -5,7 +5,7 @@ namespace ipl\Sql;
 /**
  * Implementation for the {@link CommonTableExpressionInterface} to allow CTEs via {@link with()}
  */
-trait CommonTableExpressionTrait
+trait CommonTableExpression
 {
     /**
      * All CTEs

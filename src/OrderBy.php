@@ -5,7 +5,7 @@ namespace ipl\Sql;
 /**
  * Trait for the ORDER BY part of a query
  */
-trait OrderByTrait
+trait OrderBy
 {
     /**
      * ORDER BY part of the query

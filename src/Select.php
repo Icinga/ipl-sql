@@ -7,10 +7,10 @@ namespace ipl\Sql;
  */
 class Select implements CommonTableExpressionInterface, LimitOffsetInterface, OrderByInterface, WhereInterface
 {
-    use CommonTableExpressionTrait;
-    use LimitOffsetTrait;
-    use OrderByTrait;
-    use WhereTrait;
+    use CommonTableExpression;
+    use LimitOffset;
+    use OrderBy;
+    use Where;
 
     /** @var bool Whether the query is DISTINCT */
     protected $distinct = false;

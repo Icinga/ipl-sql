@@ -5,7 +5,7 @@ namespace ipl\Sql;
 /**
  * Implementation for the {@link WhereInterface}
  */
-trait WhereTrait
+trait Where
 {
     /** @var array|null Internal representation for the WHERE part of the query */
     protected $where;

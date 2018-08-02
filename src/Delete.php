@@ -7,8 +7,8 @@ namespace ipl\Sql;
  */
 class Delete implements CommonTableExpressionInterface, WhereInterface
 {
-    use CommonTableExpressionTrait;
-    use WhereTrait;
+    use CommonTableExpression;
+    use Where;
 
     /** @var array|null The FROM part of the DELETE query */
     protected $from;

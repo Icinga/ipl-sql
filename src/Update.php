@@ -7,8 +7,8 @@ namespace ipl\Sql;
  */
 class Update implements CommonTableExpressionInterface, WhereInterface
 {
-    use CommonTableExpressionTrait;
-    use WhereTrait;
+    use CommonTableExpression;
+    use Where;
 
     /** @var array|null The table for the UPDATE query */
     protected $table;
