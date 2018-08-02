@@ -41,5 +41,8 @@
     "psr-4": {
       "ipl\\Tests\\Sql\\": "tests"
     }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
   }
 }
