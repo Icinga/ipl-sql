@@ -204,45 +204,69 @@ class Connection
     }
 
     /**
-     * Prepare and execute the given Update query
+     * Insert a table row with the specified data
      *
-     * @param   Update  $update
+     * @param   string  $table  The table to insert data into. The table specification must be in one of the following
+     *                          formats: 'table' or 'schema.table'
+     * @param   array   $data   Row data in terms of column-value pairs
      *
      * @return  \PDOStatement
      */
-    public function update(Update $update)
+    public function insert($table, array $data)
     {
-        list($stmt, $values) = $this->getQueryBuilder()->assembleUpdate($update);
+        $insert = (new Insert())
+            ->into($table)
+            ->values($data);
 
-        return $this->exec($stmt, $values);
+        return $this->exec($insert);
     }
 
     /**
-     * Prepare and execute the given Delete query
+     * Update table rows with the specified data, optionally based on a given condition
      *
-     * @param   Delete  $delete
+     * @param   string|array    $table      The table to update. The table specification must be in one of the
+     *                                      following formats: 'table', 'table alias', ['alias' => 'table']
+     * @param   array           $data       The columns to update in terms of column-value pairs
+     * @param   mixed           $condition  The WHERE condition
+     * @param   string          $operator   The operator to combine multiple conditions with,
+     *                                      if the condition is in the array format
      *
      * @return  \PDOStatement
      */
-    public function delete(Delete $delete)
+    public function update($table, array $data, $condition = null, $operator = Sql::ALL)
     {
-        list($stmt, $values) = $this->getQueryBuilder()->assembleDelete($delete);
+        $update = (new Update())
+            ->table($table)
+            ->set($data);
 
-        return $this->exec($stmt, $values);
+        if ($condition !== null) {
+            $update->where($condition, $operator);
+        }
+
+        return $this->exec($update);
     }
 
     /**
-     * Prepare and execute the given Insert query
+     * Delete table rows, optionally based on a given condition
      *
-     * @param   Insert  $insert
+     * @param   string|array    $table      The table to delete data from. The table specification must be in one of the
+     *                                      following formats: 'table', 'table alias', ['alias' => 'table']
+     * @param   mixed           $condition  The WHERE condition
+     * @param   string          $operator   The operator to combine multiple conditions with,
+     *                                      if the condition is in the array format
      *
      * @return  \PDOStatement
      */
-    public function insert(Insert $insert)
+    public function delete($table, $condition = null, $operator = Sql::ALL)
     {
-        list($stmt, $values) = $this->getQueryBuilder()->assembleInsert($insert);
+        $delete = (new Delete())
+            ->from($table);
 
-        return $this->exec($stmt, $values);
+        if ($condition !== null) {
+            $delete->where($condition, $operator);
+        }
+
+        return $this->exec($delete);
     }
 
     /**
