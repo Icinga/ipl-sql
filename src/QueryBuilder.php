@@ -562,7 +562,11 @@ class QueryBuilder
                 $column = "({$this->assembleSelect($column, $values)[0]})";
             }
 
-            $sql[] = "$column $direction";
+            if ($direction !== null) {
+                $sql[] = "$column $direction";
+            } else {
+                $sql[] = $column;
+            }
         }
 
         return 'ORDER BY ' . implode(', ', $sql);

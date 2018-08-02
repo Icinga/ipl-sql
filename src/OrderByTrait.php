@@ -24,7 +24,7 @@ trait OrderByTrait
         return $this->orderBy;
     }
 
-    public function orderBy($orderBy, $direction = 'ASC')
+    public function orderBy($orderBy, $direction = null)
     {
         if (! is_array($orderBy)) {
             $orderBy = [$orderBy];

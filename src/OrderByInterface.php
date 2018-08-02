@@ -40,5 +40,5 @@ interface OrderByInterface
      *
      * @return  $this
      */
-    public function orderBy($orderBy, $direction = 'ASC');
+    public function orderBy($orderBy, $direction = null);
 }

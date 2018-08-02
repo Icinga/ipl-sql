@@ -609,7 +609,7 @@ class SelectTest extends PHPUnit_Framework_TestCase
                 . " FROM customer c LEFT JOIN order o ON o.customer = c.id"
                 . " WHERE (c.name LIKE ?) OR (c.name LIKE ?)"
                 . " GROUP BY c.id HAVING (COUNT(o.customer) >= ?) OR (COUNT(o.customer) <= ?)"
-                . " ORDER BY COUNT(o.customer) ASC, c.name ASC LIMIT 25 OFFSET 75)"
+                . " ORDER BY COUNT(o.customer), c.name LIMIT 25 OFFSET 75)"
                 . " UNION ALL (SELECT -1 AS id, '' AS name, -1 AS orders)",
             ['%Doe%', '%Deo%', 42, 3]
         );
