@@ -19,6 +19,46 @@ class Sql
     const ANY = 'OR';
 
     /**
+     * Create and return a DELETE statement
+     *
+     * @return  Delete
+     */
+    public static function delete()
+    {
+        return new Delete();
+    }
+
+    /**
+     * Create and return a INSERT statement
+     *
+     * @return  Insert
+     */
+    public static function insert()
+    {
+        return new Insert();
+    }
+
+    /**
+     * Create and return a SELECT statement
+     *
+     * @return  Select
+     */
+    public static function select()
+    {
+        return new Select();
+    }
+
+    /**
+     * Create and return a UPDATE statement
+     *
+     * @return  Update
+     */
+    public static function update()
+    {
+        return new Update();
+    }
+
+    /**
      * Quote an identifier for use in an SQL statement by the given quote character(s)
      *
      * If you allow user input in your queries or if you are using special identifiers like reserved keywords,
