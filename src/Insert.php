@@ -9,36 +9,20 @@ class Insert implements CommonTableExpressionInterface
 {
     use CommonTableExpressionTrait;
 
-    /**
-     * The table to INSERT INTO
-     *
-     * @var string
-     */
+    /** @var string|null The table for the INSERT INTO query */
     protected $into;
 
-    /**
-     * The columns for which the query provides values
-     *
-     * @var array
-     */
+    /** @var array|null The columns for which the query provides values */
     protected $columns;
 
-    /**
-     * The values to INSERT INTO
-     *
-     * @var array
-     */
+    /** @var array|null The values to insert */
     protected $values;
 
-    /**
-     * The select query for INSERT INTO ... SELECT
-     *
-     * @var Select
-     */
+    /** @var Select|null The select query for INSERT INTO ... SELECT queries */
     protected $select;
 
     /**
-     * Get the table to INSERT INTO
+     * Get the table for the INSERT INTo query
      *
      * @return  string|null
      */
@@ -48,7 +32,7 @@ class Insert implements CommonTableExpressionInterface
     }
 
     /**
-     * Set the table to INSERT INTO
+     * Set the table for the INSERT INTO query
      *
      * Note that this method does NOT quote the table you specify for the INSERT INTO.
      * If you allow user input here, you must protected yourself against SQL injection using
@@ -56,7 +40,7 @@ class Insert implements CommonTableExpressionInterface
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   string  $table  The table to INSERT INTO. The table specification must be in one of the following
+     * @param   string  $table  The table to insert data into. The table specification must be in one of the following
      *                          formats: 'table' or 'schema.table'
      *
      * @return  $this
@@ -110,7 +94,7 @@ class Insert implements CommonTableExpressionInterface
     }
 
     /**
-     * Get the values to INSERT INTO
+     * Get the values to insert
      *
      * @return  array
      */
@@ -127,7 +111,7 @@ class Insert implements CommonTableExpressionInterface
      * restriction regarding quoting applies here. If you use {@link columns()} to set the columns and specify the
      * values in terms of column-value pairs, the columns from {@link columns()} will be used nonetheless.
      *
-     * @param   array   $values Array of values or column-value pairs
+     * @param   array   $values List of values or associative column-value pairs
      *
      * @return  $this
      */

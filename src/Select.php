@@ -12,25 +12,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     use OrderByTrait;
     use WhereTrait;
 
-    /**
-     * Whether the query is DISTINCT
-     *
-     * @var bool
-     */
+    /** @var bool Whether the query is DISTINCT */
     protected $distinct = false;
 
-    /**
-     * The columns to SELECT
-     *
-     * @var array
-     */
+    /** @var array|null The columns for the SELECT query */
     protected $columns;
 
-    /**
-     * FROM part of the query, i.e. the table names to select data from
-     *
-     * @var array|null
-     */
+    /** @var array|null FROM part of the query, i.e. the table names to select data from */
     protected $from;
 
     /**
@@ -45,18 +33,10 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      */
     protected $join;
 
-    /**
-     * The columns to GROUP BY
-     *
-     * @var array
-     */
+    /** @var array|null The columns for the GROUP BY part of the query */
     protected $groupBy;
 
-    /**
-     * Internal representation for the HAVING part of the query
-     *
-     * @var array
-     */
+    /** @var array|null Internal representation for the HAVING part of the query */
     protected $having;
 
     /**
@@ -84,7 +64,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Set whether to SELECT DISTINCT
      *
-     * @param   bool    $distinct   Whether to enable SELECT DISTINCT
+     * @param   bool    $distinct
      *
      * @return  $this
      */
@@ -96,7 +76,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
-     * Get the columns to SELECT
+     * Get the columns for the SELECT query
      *
      * @return  array
      */
@@ -106,9 +86,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
-     * Add SELECT columns to the query
+     * Add columns to the SELECT query
      *
-     * Multiple calls to this method will not overwrite the previous set columns but append the columns to the SELECT.
+     * Multiple calls to this method will not overwrite the previous set columns but append the columns to the query.
      *
      * Note that this method does NOT quote the columns you specify for the SELECT.
      * If you allow user input here, you must protected yourself against SQL injection using
@@ -281,7 +261,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the HAVING part of the query
      *
-     * @return  array
+     * @return  array|null
      */
     public function getHaving()
     {

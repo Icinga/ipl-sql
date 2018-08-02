@@ -10,11 +10,7 @@ class Delete implements CommonTableExpressionInterface, WhereInterface
     use CommonTableExpressionTrait;
     use WhereTrait;
 
-    /**
-     * The table to DELETE FROM
-     *
-     * @var array|null
-     */
+    /** @var array|null The FROM part of the DELETE query */
     protected $from;
 
     /**
@@ -36,7 +32,7 @@ class Delete implements CommonTableExpressionInterface, WhereInterface
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   string|array    $table  The table to DELETE FROM. The table specification must be in one of the
+     * @param   string|array    $table  The table to delete data from. The table specification must be in one of the
      *                                  following formats: 'table', 'table alias', ['alias' => 'table']
      *
      * @return  $this

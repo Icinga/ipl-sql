@@ -10,22 +10,14 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     use CommonTableExpressionTrait;
     use WhereTrait;
 
-    /**
-     * The table to UPDATE
-     *
-     * @var array|null
-     */
+    /** @var array|null The table for the UPDATE query */
     protected $table;
 
-    /**
-     * The columns to UPDATE in terms of column-value pairs
-     *
-     * @var array|null
-     */
+    /** @var array|null The columns to update in terms of column-value pairs */
     protected $set = [];
 
     /**
-     * Get the table to UPDATE
+     * Get the table for the UPDATE query
      *
      * @return  array|null
      */
@@ -35,7 +27,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     }
 
     /**
-     * Set the table to UPDATE
+     * Set the table for the UPDATE query
      *
      * Note that this method does NOT quote the table you specify for the UPDATE.
      * If you allow user input here, you must protected yourself against SQL injection using
@@ -43,7 +35,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   string|array    $table  The table to UPDATE. The table specification must be in one of the
+     * @param   string|array    $table  The table to update. The table specification must be in one of the
      *                                  following formats: 'table', 'table alias', ['alias' => 'table']
      *
      * @return  $this
@@ -56,9 +48,9 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     }
 
     /**
-     * Get the columns to UPDATE in terms of column-value pairs
+     * Get the columns to update in terms of column-value pairs
      *
-     * @return  array|null  Columns to UPDATE in terms of column-value pairs
+     * @return  array|null
      */
     public function getSet()
     {
@@ -66,7 +58,9 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     }
 
     /**
-     * Set the columns for which the statement provides values - either plain values or expressions or scalar subqueries
+     * Set the columns to update in terms of column-value pairs
+     *
+     * Values may either be plain or expressions or scalar subqueries.
      *
      * Note that this method does NOT quote the columns you specify for the UPDATE.
      * If you allow user input here, you must protected yourself against SQL injection using
@@ -74,7 +68,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   array   $set    The columns to UPDATE in terms of column-value pairs
+     * @param   array   $set    Associative array of column-value pairs
      *
      * @return  $this
      */

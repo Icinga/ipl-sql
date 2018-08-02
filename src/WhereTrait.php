@@ -7,11 +7,7 @@ namespace ipl\Sql;
  */
 trait WhereTrait
 {
-    /**
-     * Internal representation for the WHERE part of the query
-     *
-     * @var array|null
-     */
+    /** @var array|null Internal representation for the WHERE part of the query */
     protected $where;
 
     public function getWhere()

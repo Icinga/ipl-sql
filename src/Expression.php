@@ -7,18 +7,10 @@ namespace ipl\Sql;
  */
 class Expression implements ExpressionInterface
 {
-    /**
-     * The statement of the expression
-     *
-     * @var string
-     */
+    /** @var string The statement of the expression */
     protected $statement;
 
-    /**
-     * The values for the expression
-     *
-     * @var array
-     */
+    /** @var array The values for the expression */
     protected $values;
 
     /**

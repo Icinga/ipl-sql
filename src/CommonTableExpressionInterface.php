@@ -15,7 +15,7 @@ interface CommonTableExpressionInterface
      *   ...
      * ]
      *
-     * @return array[]
+     * @return  array[]
      */
     public function getWith();
 
@@ -33,7 +33,7 @@ interface CommonTableExpressionInterface
     /**
      * Reset all CTEs
      *
-     * @return $this
+     * @return  $this
      */
     public function resetWith();
 }
