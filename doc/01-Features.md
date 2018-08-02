@@ -29,7 +29,7 @@ $connection = new Connection([                                   // (1)
 
 $connection->connect();                                 // optional (12)
 
-var_dump($connection->run(
+var_dump($connection->exec(
     'SELECT * FROM customer WHERE id = ?;', [42]                 // (13)
 )->fetchRow());
 
@@ -45,7 +45,7 @@ the SSL certificates (9-11) are likely not to be neccessary depending on your
 database driver (2). Explicit initialization (12) and disconnecting (14) are 
 always optional.
 
-`$connection->run()` returns a 
+`$connection->exec()` returns a 
 [PDOStatement](https://secure.php.net/manual/en/class.pdostatement.php) - see 
 its documentation for details.
 
@@ -61,7 +61,7 @@ use ipl\Sql\Insert;
 use ipl\Sql\Select;
 use ipl\Sql\Update;
 
-$connection->insert(
+$connection->exec(
     (new Insert())
         ->into('customer')
         ->values([
@@ -70,34 +70,26 @@ $connection->insert(
         ])
 );
 
-$connection->select(
+$connection->exec(
     (new Select())
         ->columns(['name'])
         ->from('customer')
         ->where(['id = ?' => 42])
 )->fetchAll();
 
-$connection->update(
+$connection->exec(
     (new Update())
         ->table('customer')
         ->set(['name' => 'John Doe'])
         ->where(['id = ?' => 42])
 );
 
-$connection->delete(
+$connection->exec(
     (new Delete())
         ->from('customer')
         ->where(['id = ?' => 42])
 );
 ```
-
-The above four `Connection` methods behave like `run()`, but take an object of 
-the respective class - for the respective kind of SQL statement:
-
-* [Insert](#sql-insert)
-* [Select](#sql-select)
-* [Update](#sql-update)
-* [Delete](#sql-delete)
 
 ### Insert <a id="sql-insert"></a>
 
