@@ -19,21 +19,17 @@ class QueryBuilder
     {
         switch (true) {
             case $stmt instanceof Delete:
-
                 return $this->assembleDelete($stmt);
             case $stmt instanceof Insert:
-
                 return $this->assembleInsert($stmt);
             case $stmt instanceof Select:
-
                 return $this->assembleSelect($stmt);
             case $stmt instanceof Update:
-
                 return $this->assembleUpdate($stmt);
             default:
                 throw new \InvalidArgumentException(
-                    __METHOD__ . ' expects an instance of Delete, Insert, Select or Update.')
-                ;
+                    __METHOD__ . ' expects an instance of Delete, Insert, Select or Update.'
+                );
         }
     }
 
