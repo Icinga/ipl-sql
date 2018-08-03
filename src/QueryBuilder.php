@@ -2,6 +2,9 @@
 
 namespace ipl\Sql;
 
+use InvalidArgumentException;
+use ipl\Stdlib;
+
 class QueryBuilder
 {
     protected $separator = " ";
@@ -27,9 +30,10 @@ class QueryBuilder
             case $stmt instanceof Update:
                 return $this->assembleUpdate($stmt);
             default:
-                throw new \InvalidArgumentException(
-                    __METHOD__ . ' expects an instance of Delete, Insert, Select or Update.'
-                );
+                throw new InvalidArgumentException(sprintf(
+                    __METHOD__ . ' expects instances of Delete, Insert, Select or Update. Got %s instead.',
+                    Stdlib\get_php_type($stmt)
+                ));
         }
     }
 
