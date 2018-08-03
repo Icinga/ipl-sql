@@ -2,6 +2,8 @@
 
 namespace ipl\Sql;
 
+use ipl\Stdlib;
+
 /**
  * SQL UPDATE query
  */
@@ -68,13 +70,15 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Sql::quoteIdentifier()} as well.
      *
-     * @param   array   $set    Associative array of column-value pairs
+     * @param   array|object|\Traversable   $set    Associative set of column-value pairs
      *
      * @return  $this
+     *
+     * @throws  \InvalidArgumentException   If set type is invalid
      */
-    public function set(array $set)
+    public function set($set)
     {
-        $this->set = $set;
+        $this->set = Stdlib\arrayval($set);
 
         return $this;
     }
