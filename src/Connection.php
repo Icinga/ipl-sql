@@ -5,32 +5,28 @@ namespace ipl\Sql;
 use BadMethodCallException;
 use Exception;
 use PDO;
+use ipl\Sql\Adapter\AdapterInterface;
+use ipl\Sql\Adapter\Ansi;
+use ipl\Stdlib\Loader\PluginLoader;
 
 /**
  * Connection to a SQL database using the native PDO for database access
  */
 class Connection
 {
-    /**
-     * Connection configuration
-     *
-     * @var Config
-     */
+    use PluginLoader;
+
+    /** @var Config */
     protected $config;
 
-    /**
-     * PDO instance
-     *
-     * @var PDO
-     */
+    /** @var PDO */
     protected $pdo;
 
-    /**
-     * The query builder for the database connection
-     *
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder */
     protected $queryBuilder;
+
+    /** @var AdapterInterface */
+    protected $adapter;
 
     /**
      * Create a new database connection using the given config for initialising the options for the connection
@@ -43,6 +39,16 @@ class Connection
     {
         $this->config = $config instanceof Config ? $config : new Config($config);
         $this->queryBuilder = new QueryBuilder();
+
+        $this->addPluginLoader('adapter', __NAMESPACE__ . '\\Adapter');
+
+        $adapter = $this->eventuallyLoadPlugin('adapter', $this->config->db);
+
+        if ($adapter === null) {
+            $adapter = new Ansi();
+        }
+
+        $this->adapter = $adapter;
 
         $this->init();
     }
@@ -79,6 +85,16 @@ class Connection
      */
     public function init()
     {
+    }
+
+    /**
+     * Get the database adapter
+     *
+     * @return  AdapterInterface
+     */
+    public function getAdapter()
+    {
+        return $this->adapter;
     }
 
     /**
@@ -127,6 +143,8 @@ class Connection
         if ($this->config->charset !== null) {
             $this->exec('SET NAMES ?', [$this->config->charset]);
         }
+
+        $this->adapter->setClientTimezone($this);
 
         return $this;
     }
