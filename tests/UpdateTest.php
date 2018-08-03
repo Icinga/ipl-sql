@@ -27,7 +27,7 @@ class UpdateTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->query = new Update();
-        $this->queryBuilder = new QueryBuilder();
+        $this->queryBuilder = new QueryBuilder(new TestAdapter());
     }
 
     public function testEmptyUpdateTable()

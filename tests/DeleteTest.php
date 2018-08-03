@@ -25,7 +25,7 @@ class DeleteTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->query = new Delete();
-        $this->queryBuilder = new QueryBuilder();
+        $this->queryBuilder = new QueryBuilder(new TestAdapter());
     }
 
     public function testFrom()

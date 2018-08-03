@@ -38,7 +38,6 @@ class Connection
     public function __construct($config)
     {
         $this->config = $config instanceof Config ? $config : new Config($config);
-        $this->queryBuilder = new QueryBuilder();
 
         $this->addPluginLoader('adapter', __NAMESPACE__ . '\\Adapter');
 
@@ -104,6 +103,10 @@ class Connection
      */
     public function getQueryBuilder()
     {
+        if ($this->queryBuilder === null) {
+            $this->queryBuilder = new QueryBuilder($this->adapter);
+        }
+
         return $this->queryBuilder;
     }
 

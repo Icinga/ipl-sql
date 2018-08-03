@@ -27,7 +27,7 @@ class InsertTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->query = new Insert();
-        $this->queryBuilder = new QueryBuilder();
+        $this->queryBuilder = new QueryBuilder(new TestAdapter());
     }
 
     public function testEmptyInsertInto()

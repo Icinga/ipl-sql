@@ -3,11 +3,25 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
+use ipl\Sql\Adapter\AdapterInterface;
 use ipl\Stdlib;
 
 class QueryBuilder
 {
+    /** @var AdapterInterface */
+    protected $adapter;
+
     protected $separator = " ";
+
+    /**
+     * Create a new query builder for the specified database adapter
+     *
+     * @param   AdapterInterface $adapter
+     */
+    public function __construct(AdapterInterface $adapter)
+    {
+        $this->adapter = $adapter;
+    }
 
     /**
      * Assemble the given statement

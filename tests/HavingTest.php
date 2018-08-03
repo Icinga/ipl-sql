@@ -27,7 +27,7 @@ class HavingTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->query = new Select();
-        $this->queryBuilder = new QueryBuilder();
+        $this->queryBuilder = new QueryBuilder(new TestAdapter());
     }
 
     public function testHavingStringFormat()
