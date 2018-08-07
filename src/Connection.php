@@ -97,6 +97,16 @@ class Connection
     }
 
     /**
+     * Get the connection configuration
+     *
+     * @return  Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * Get the query builder for the database connection
      *
      * @return  QueryBuilder
@@ -120,11 +130,15 @@ class Connection
      */
     protected function createPdoAdapter()
     {
+        $adapter = $this->getAdapter();
+
+        $config = $this->getConfig();
+
         return new PDO(
-            "{$this->config->db}:host={$this->config->host};dbname={$this->config->dbname};port={$this->config->port}",
-            $this->config->username,
-            $this->config->password,
-            $this->config->attributes
+            $adapter->getDsn($config),
+            $config->username,
+            $config->password,
+            $adapter->getOptions($config)
         );
     }
 
@@ -140,8 +154,6 @@ class Connection
         }
 
         $this->pdo = $this->createPdoAdapter();
-
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         if ($this->config->charset !== null) {
             $this->exec('SET NAMES ?', [$this->config->charset]);

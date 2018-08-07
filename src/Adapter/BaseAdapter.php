@@ -4,7 +4,9 @@ namespace ipl\Sql\Adapter;
 
 use DateTime;
 use DateTimeZone;
+use PDO;
 use ipl\Sql\Connection;
+use ipl\Sql\Config;
 
 abstract class BaseAdapter implements AdapterInterface
 {
@@ -24,9 +26,39 @@ abstract class BaseAdapter implements AdapterInterface
      */
     protected $escapeCharacter = '\\"';
 
+    /** @var array Default PDO connect options */
+    protected $options = [
+        PDO::ATTR_CASE => PDO::CASE_NATURAL,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+        PDO::ATTR_STRINGIFY_FETCHES => false
+    ];
+
+    public function getDsn(Config $config)
+    {
+        $dsn = "{$config->db}:";
+
+        foreach(['host', 'dbname', 'port'] as $part) {
+            if (! empty($config->$part)) {
+                $dsn .= "{$part}={$config->$part}";
+            }
+        }
+
+        return $dsn;
+    }
+
+    public function getOptions(Config $config)
+    {
+        if (is_array($config->options)) {
+            return $config->options + $this->options;
+        }
+
+        return $this->options;
+    }
+
     public function setClientTimezone(Connection $db)
     {
-        return $this;
     }
 
     public function quoteIdentifier($identifier)

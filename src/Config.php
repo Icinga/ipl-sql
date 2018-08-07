@@ -78,12 +78,12 @@ class Config
     public $charset;
 
     /**
-     * PDO attributes
+     * PDO connect options
      *
      * Array of key-value pairs that should be set when calling {@link Connection::connect()} in order to establish a DB
      * connection.
      *
      * @var array
      */
-    public $attributes;
+    public $options;
 }
