@@ -92,9 +92,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * Note that this method does NOT quote the columns you specify for the SELECT.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the column names passed to this method.
+     * {@link Connection::quoteIdentifier()} for the column names passed to this method.
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
-     * {@link Sql::quoteIdentifier()} as well.
+     * {@link Connection::quoteIdentifier()} as well.
      *
      * @param   string|ExpressionInterface|Select|array     $columns    The column(s) to add to the SELECT.
      *  The items can be any mix of the following: 'column', 'column as alias', ['alias' => 'column']
@@ -129,9 +129,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * Note that this method does NOT quote the tables you specify for the FROM.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the table names passed to this method.
+     * {@link Connection::quoteIdentifier()} for the table names passed to this method.
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
-     * {@link Sql::quoteIdentifier()} as well.
+     * {@link Connection::quoteIdentifier()} as well.
      *
      * @param   string|Select|array $tables The table(s) to add to the FROM part. The items can be any mix of the
      *                                      following: ['table', 'table alias', 'alias' => 'table']
@@ -237,9 +237,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * This method does NOT quote the columns you specify for the GROUP BY.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the field names passed to this method.
+     * {@link Connection::quoteIdentifier()} for the field names passed to this method.
      * If you are using special field names, e.g. reserved keywords for your DBMS, you are required to use
-     * {@link Sql::quoteIdentifier()} as well.
+     * {@link Connection::quoteIdentifier()} as well.
      *
      * Note that this method does not override an already set GROUP BY part. Instead, multiple calls to this function
      * add the specified GROUP BY part.
@@ -277,9 +277,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * This method does NOT quote the columns you specify for the HAVING.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the field names passed to this method.
+     * {@link Connection::quoteIdentifier()} for the field names passed to this method.
      * If you are using special field names, e.g. reserved keywords for your DBMS, you are required to use
-     * {@link Sql::quoteIdentifier()} as well.
+     * {@link Connection::quoteIdentifier()} as well.
      *
      * Note that this method does not override an already set HAVING part. Instead, multiple calls to this function add
      * the specified HAVING part using the AND operator.

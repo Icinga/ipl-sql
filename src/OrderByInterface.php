@@ -29,9 +29,9 @@ interface OrderByInterface
      *
      * This method does NOT quote the columns you specify for the ORDER BY.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the field names passed to this method.
+     * {@link Connection::quoteIdentifier()} for the field names passed to this method.
      * If you are using special field names, e.g. reserved keywords for your DBMS, you are required to use
-     * {@link Sql::quoteIdentifier()} as well.
+     * {@link Connection::quoteIdentifier()} as well.
      *
      * @param   string|array    $orderBy    The ORDER BY part. The items can be in any format of the following:
      *                                      ['column', 'column' => 'DESC', 'column' => SORT_DESC]

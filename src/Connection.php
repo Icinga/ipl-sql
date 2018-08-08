@@ -8,12 +8,13 @@ use InvalidArgumentException;
 use PDO;
 use ipl\Sql\Adapter\AdapterInterface;
 use ipl\Sql\Adapter\Ansi;
+use ipl\Sql\Contracts\QuoterInterface;
 use ipl\Stdlib\Loader\PluginLoader;
 
 /**
  * Connection to a SQL database using the native PDO for database access
  */
-class Connection
+class Connection implements QuoterInterface
 {
     use PluginLoader;
 
@@ -453,5 +454,10 @@ class Connection
         }
 
         return $result;
+    }
+
+    public function quoteIdentifier($identifier)
+    {
+        return $this->getAdapter()->quoteIdentifier($identifier);
     }
 }

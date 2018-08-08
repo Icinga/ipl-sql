@@ -4,8 +4,9 @@ namespace ipl\Sql\Adapter;
 
 use ipl\Sql\Config;
 use ipl\Sql\Connection;
+use ipl\Sql\Contracts\QuoterInterface;
 
-interface AdapterInterface
+interface AdapterInterface extends QuoterInterface
 {
     /**
      * Get the DSN string from the given connection configuration
@@ -33,15 +34,4 @@ interface AdapterInterface
      * @return  $this
      */
     public function setClientTimezone(Connection $db);
-
-    /**
-     * Quote a string so that it can be safely used as table or column name, even if it is a reserved name
-     *
-     * The quote character depends on the underlying database adapter that is being used.
-     *
-     * @param   string  $identifier
-     *
-     * @return  string
-     */
-    public function quoteIdentifier($identifier);
 }

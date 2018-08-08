@@ -33,9 +33,9 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      *
      * Note that this method does NOT quote the table you specify for the UPDATE.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the table names passed to this method.
+     * {@link Connection::quoteIdentifier()} for the table names passed to this method.
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
-     * {@link Sql::quoteIdentifier()} as well.
+     * {@link Connection::quoteIdentifier()} as well.
      *
      * @param   string|array    $table  The table to update. The table specification must be in one of the
      *                                  following formats: 'table', 'table alias', ['alias' => 'table']
@@ -66,9 +66,9 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      *
      * Note that this method does NOT quote the columns you specify for the UPDATE.
      * If you allow user input here, you must protected yourself against SQL injection using
-     * {@link Sql::quoteIdentifier()} for the column names passed to this method.
+     * {@link Connection::quoteIdentifier()} for the column names passed to this method.
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
-     * {@link Sql::quoteIdentifier()} as well.
+     * {@link Connection::quoteIdentifier()} as well.
      *
      * @param   array|object|\Traversable   $set    Associative set of column-value pairs
      *
