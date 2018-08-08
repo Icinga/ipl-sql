@@ -4,6 +4,7 @@ namespace ipl\Sql;
 
 use BadMethodCallException;
 use Exception;
+use InvalidArgumentException;
 use PDO;
 use ipl\Sql\Adapter\AdapterInterface;
 use ipl\Sql\Adapter\Ansi;
@@ -33,21 +34,24 @@ class Connection
      *
      * {@link init()} is called after construction.
      *
-     * @param   Config|\Traversable|array  $config
+     * @param   Config|\Traversable|array   $config
+     *
+     * @throws  InvalidArgumentException    If there's no adapter for the given database available
      */
     public function __construct($config)
     {
-        $this->config = $config instanceof Config ? $config : new Config($config);
+        $config = $config instanceof Config ? $config : new Config($config);
 
         $this->addPluginLoader('adapter', __NAMESPACE__ . '\\Adapter');
 
-        $adapter = $this->eventuallyLoadPlugin('adapter', $this->config->db);
+        $adapter = $this->eventuallyLoadPlugin('adapter', $config->db);
 
         if ($adapter === null) {
-            $adapter = new Ansi();
+            throw new InvalidArgumentException("Can't load database adapter for '{$config->db}'.");
         }
 
         $this->adapter = $adapter;
+        $this->config = $config;
 
         $this->init();
     }
