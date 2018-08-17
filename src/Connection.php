@@ -295,12 +295,16 @@ class Connection implements QuoterInterface
      * Prepare and execute the given statement
      *
      * @param   Delete|Insert|Select|Update|string  $stmt   The SQL statement to prepare and execute
-     * @param   array                               $values Values to bind to the statement, if any
+     * @param   string|array                        $values Values to bind to the statement, if any
      *
      * @return  \PDOStatement
      */
-    public function exec($stmt, array $values = null)
+    public function exec($stmt, $values = null)
     {
+        if ($values !== null && ! is_array($values)) {
+            $values = [$values];
+        }
+
         if (is_object($stmt)) {
             list($stmt, $values) = $this->getQueryBuilder()->assemble($stmt);
         }
