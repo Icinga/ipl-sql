@@ -161,7 +161,7 @@ class Connection implements QuoterInterface
         $this->pdo = $this->createPdoAdapter();
 
         if ($this->config->charset !== null) {
-            $this->exec('SET NAMES ?', [$this->config->charset]);
+            $this->exec(sprintf('SET NAMES %s', $this->quoteIdentifier($this->config->charset)));
         }
 
         $this->adapter->setClientTimezone($this);
