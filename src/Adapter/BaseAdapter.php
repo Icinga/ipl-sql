@@ -39,13 +39,15 @@ abstract class BaseAdapter implements AdapterInterface
     {
         $dsn = "{$config->db}:";
 
+        $parts = [];
+
         foreach(['host', 'dbname', 'port'] as $part) {
             if (! empty($config->$part)) {
-                $dsn .= "{$part}={$config->$part}";
+                $parts[] = "{$part}={$config->$part}";
             }
         }
 
-        return $dsn;
+        return $dsn . implode(';', $parts);
     }
 
     public function getOptions(Config $config)
