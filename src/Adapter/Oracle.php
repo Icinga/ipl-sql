@@ -32,7 +32,7 @@ class Oracle extends BaseAdapter
 
     public function setClientTimezone(Connection $db)
     {
-        $db->exec('ALTER SESSION SET TIME_ZONE = ?', $this->getTimezoneOffset());
+        $db->exec('ALTER SESSION SET TIME_ZONE = ?', [$this->getTimezoneOffset()]);
 
         return $this;
     }
