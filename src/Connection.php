@@ -216,7 +216,7 @@ class Connection implements QuoterInterface
      */
     public function fetchAll($stmt, array $values = null)
     {
-        return $this->exec($stmt, $values)
+        return $this->prepexec($stmt, $values)
             ->fetchAll();
     }
 
@@ -231,7 +231,7 @@ class Connection implements QuoterInterface
      */
     public function fetchCol($stmt, array $values = null)
     {
-        return $this->exec($stmt, $values)
+        return $this->prepexec($stmt, $values)
             ->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 
@@ -246,7 +246,7 @@ class Connection implements QuoterInterface
      */
     public function fetchOne($stmt, array $values = null)
     {
-        return $this->exec($stmt, $values)
+        return $this->prepexec($stmt, $values)
             ->fetch();
     }
 
@@ -255,7 +255,7 @@ class Connection implements QuoterInterface
      */
     public function fetchRow($stmt, array $values = null)
     {
-        return $this->exec($stmt, $values)
+        return $this->prepexec($stmt, $values)
             ->fetch();
     }
 
@@ -272,7 +272,7 @@ class Connection implements QuoterInterface
      */
     public function fetchPairs($stmt, array $values = null)
     {
-        return $this->exec($stmt, $values)
+        return $this->prepexec($stmt, $values)
             ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
@@ -287,7 +287,7 @@ class Connection implements QuoterInterface
      */
     public function fetchScalar($stmt, array $values = null)
     {
-        return $this->exec($stmt, $values)
+        return $this->prepexec($stmt, $values)
             ->fetchColumn(0);
     }
 
@@ -299,7 +299,7 @@ class Connection implements QuoterInterface
      *
      * @return  \PDOStatement
      */
-    public function exec($stmt, $values = null)
+    public function prepexec($stmt, $values = null)
     {
         if ($values !== null && ! is_array($values)) {
             $values = [$values];
@@ -328,7 +328,7 @@ class Connection implements QuoterInterface
     {
         list($stmt, $values) = $this->getQueryBuilder()->assembleSelect($select);
 
-        return $this->exec($stmt, $values);
+        return $this->prepexec($stmt, $values);
     }
 
     /**
@@ -348,7 +348,7 @@ class Connection implements QuoterInterface
             ->into($table)
             ->values($data);
 
-        return $this->exec($insert);
+        return $this->prepexec($insert);
     }
 
     /**
@@ -376,7 +376,7 @@ class Connection implements QuoterInterface
             $update->where($condition, $operator);
         }
 
-        return $this->exec($update);
+        return $this->prepexec($update);
     }
 
     /**
@@ -399,7 +399,7 @@ class Connection implements QuoterInterface
             $delete->where($condition, $operator);
         }
 
-        return $this->exec($delete);
+        return $this->prepexec($delete);
     }
 
     /**
