@@ -41,7 +41,7 @@ abstract class BaseAdapter implements AdapterInterface
 
         $parts = [];
 
-        foreach(['host', 'dbname', 'port'] as $part) {
+        foreach (['host', 'dbname', 'port'] as $part) {
             if (! empty($config->$part)) {
                 $parts[] = "{$part}={$config->$part}";
             }
