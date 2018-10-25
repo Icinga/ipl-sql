@@ -304,7 +304,7 @@ class QueryBuilder
      *
      * @return  string  The WHERE part of the query
      */
-    public function buildWhere(array $where = null, array &$values)
+    public function buildWhere(array $where = null, array &$values = [])
     {
         if ($where === null) {
             return '';
@@ -433,7 +433,7 @@ class QueryBuilder
      *
      * @return  string  The FROM part of the query
      */
-    public function buildFrom(array $from = null, array &$values)
+    public function buildFrom(array $from = null, array &$values = [])
     {
         if ($from === null) {
             return '';
@@ -515,7 +515,7 @@ class QueryBuilder
      *
      * @return  string  The GROUP BY part of the query
      */
-    public function buildGroupBy(array $groupBy = null, array &$values)
+    public function buildGroupBy(array $groupBy = null, array &$values = [])
     {
         if ($groupBy === null) {
             return '';
@@ -541,7 +541,7 @@ class QueryBuilder
      *
      * @return  string  The HAVING part of the query
      */
-    public function buildHaving(array $having = null, array &$values)
+    public function buildHaving(array $having = null, array &$values = [])
     {
         if ($having === null) {
             return '';
@@ -558,7 +558,7 @@ class QueryBuilder
      *
      * @return  string  The ORDER BY part of the query
      */
-    public function buildOrderBy(array $orderBy = null, array &$values)
+    public function buildOrderBy(array $orderBy = null, array &$values = [])
     {
         if ($orderBy === null) {
             return '';
@@ -617,7 +617,7 @@ class QueryBuilder
      *
      * @return  string  The UNION part of the query
      */
-    public function buildUnion(array $unions = null, array &$values)
+    public function buildUnion(array $unions = null, array &$values = [])
     {
         if ($unions === null) {
             return '';
@@ -674,7 +674,7 @@ class QueryBuilder
      *
      * @return  string  The SET part of a UPDATE query
      */
-    public function buildUpdateSet(array $set = null, array &$values)
+    public function buildUpdateSet(array $set = null, array &$values = [])
     {
         if ($set === null) {
             return '';
