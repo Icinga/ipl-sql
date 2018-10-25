@@ -119,9 +119,30 @@ class QueryBuilder
 
         $sql = implode($this->separator, $sql);
 
-        $union = $this->buildUnion($select->getUnion(), $values);
-        if ($union) {
-            $sql = "($sql){$this->separator}$union";
+        $unions = $this->buildUnions($select->getUnion(), $values);
+        if ($unions) {
+            list($unionKeywords, $selects) = $unions;
+
+            if ($sql) {
+                $sql = "($sql){$this->separator}";
+
+                $requiresUnionKeyword = true;
+            } else {
+                $requiresUnionKeyword = false;
+            }
+
+            do {
+                $unionKeyword = array_shift($unionKeywords);
+                $select = array_shift($selects);
+
+                if ($requiresUnionKeyword) {
+                    $sql .= "$unionKeyword{$this->separator}";
+                }
+
+                $sql .= "($select)";
+
+                $requiresUnionKeyword = true;
+            } while (! empty($unionKeywords));
         }
 
         return [$sql, $values];
@@ -610,20 +631,21 @@ class QueryBuilder
     }
 
     /**
-     * Build the UNION part of a query
+     * Build the UNION parts of a query
      *
      * @param   array   $unions
      * @param   array   $values
      *
-     * @return  string  The UNION part of the query
+     * @return  array|null  The UNION parts of the query
      */
-    public function buildUnion(array $unions = null, array &$values = [])
+    public function buildUnions(array $unions = null, array &$values = [])
     {
         if ($unions === null) {
-            return '';
+            return null;
         }
 
-        $sql = [];
+        $unionKeywords = [];
+        $selects = [];
 
         foreach ($unions as $union) {
             list($select, $all) = $union;
@@ -632,10 +654,11 @@ class QueryBuilder
                 list($select, $values) = $this->assembleSelect($select, $values);
             }
 
-            $sql[] = ($all ? 'UNION ALL' : 'UNION') . " ($select)";
+            $unionKeywords[] = ($all ? 'UNION ALL' : 'UNION');
+            $selects[] =  $select;
         }
 
-        return implode($this->separator, $sql);
+        return [$unionKeywords, $selects];
     }
 
     /**

@@ -661,6 +661,22 @@ class SelectTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testJustAUnionRendersAsSelect()
+    {
+        $unionQuery = (new Select())
+            ->columns('a')
+            ->from('table2')
+            ->where(['b < ?' => 2]);
+
+        $this->query
+            ->union($unionQuery);
+
+        $this->assertCorrectStatementAndValues(
+            '(SELECT a FROM table2 WHERE b < ?)',
+            [2]
+        );
+    }
+
     protected function assertCorrectStatementAndValues($statement, $values)
     {
         list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
