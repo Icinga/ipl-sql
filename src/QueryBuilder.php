@@ -124,7 +124,7 @@ class QueryBuilder
             list($unionKeywords, $selects) = $unions;
 
             if ($sql) {
-                $sql = "($sql){$this->separator}";
+                $sql = "($sql)";
 
                 $requiresUnionKeyword = true;
             } else {
@@ -136,7 +136,7 @@ class QueryBuilder
                 $select = array_shift($selects);
 
                 if ($requiresUnionKeyword) {
-                    $sql .= "$unionKeyword{$this->separator}";
+                    $sql .= "{$this->separator}$unionKeyword{$this->separator}";
                 }
 
                 $sql .= "($select)";

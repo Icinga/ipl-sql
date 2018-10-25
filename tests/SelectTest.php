@@ -677,6 +677,54 @@ class SelectTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testMoreThanOneUnionWithoutSelect()
+    {
+        $union1 = (new Select())
+            ->columns('a')
+            ->from('table1')
+            ->where(['b < ?' => 1]);
+
+        $union2 = (new Select())
+            ->columns('a')
+            ->from('table2')
+            ->where(['b > ?' => 2]);
+
+        $this->query
+            ->unionAll($union1)
+            ->unionAll($union2);
+
+        $this->assertCorrectStatementAndValues(
+            '(SELECT a FROM table1 WHERE b < ?) UNION ALL (SELECT a FROM table2 WHERE b > ?)',
+            [1, 2]
+        );
+    }
+
+    public function testMoreThanOneUnionWithSelect()
+    {
+        $union1 = (new Select())
+            ->columns('a')
+            ->from('table1')
+            ->where(['b < ?' => 1]);
+
+        $union2 = (new Select())
+            ->columns('a')
+            ->from('table2')
+            ->where(['b > ?' => 2]);
+
+        $this->query
+            ->from('table3')
+            ->columns('a')
+            ->unionAll($union1)
+            ->unionAll($union2);
+
+        $this->assertCorrectStatementAndValues(
+            '(SELECT a FROM table3)'
+            . ' UNION ALL (SELECT a FROM table1 WHERE b < ?)'
+            . ' UNION ALL (SELECT a FROM table2 WHERE b > ?)',
+            [1, 2]
+        );
+    }
+
     protected function assertCorrectStatementAndValues($statement, $values)
     {
         list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
