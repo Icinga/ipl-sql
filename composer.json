@@ -25,15 +25,10 @@
       "role": "Developer"
     }
   ],
-  "repositories": [{
-    "type": "vcs",
-    "url": "https://github.com/Icinga/ipl-stdlib",
-    "no-api": true
-  }],
   "require": {
     "php": ">=5.4.0",
     "ext-pdo": "*",
-    "ipl/stdlib": "dev-master"
+    "ipl/stdlib": "^0.1"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^2.9.1",
