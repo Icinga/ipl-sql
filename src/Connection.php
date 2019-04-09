@@ -365,7 +365,7 @@ class Connection implements QuoterInterface
      *
      * @throws  \InvalidArgumentException   If data type is invalid
      */
-    public function update($table, array $data, $condition = null, $operator = Sql::ALL)
+    public function update($table, $data, $condition = null, $operator = Sql::ALL)
     {
         $update = (new Update())
             ->table($table)
