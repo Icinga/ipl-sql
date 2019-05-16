@@ -28,7 +28,7 @@
   "require": {
     "php": ">=5.4.0",
     "ext-pdo": "*",
-    "ipl/stdlib": "^0.1"
+    "ipl/stdlib": ">=0.1"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^2.9.1",
