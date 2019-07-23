@@ -8,7 +8,7 @@ class Pgsql extends BaseAdapter
 {
     public function setClientTimezone(Connection $db)
     {
-        $db->prepexec('SET TIME ZONE INTERVAL ? HOUR TO MINUTE', [$this->getTimezoneOffset()]);
+        $db->exec(sprintf('SET TIME ZONE INTERVAL %s HOUR TO MINUTE', $db->quote($this->getTimezoneOffset())));
 
         return $this;
     }
