@@ -426,7 +426,7 @@ class Connection implements QuoterInterface
 
     /**
      * Roll back a transaction
-     *l
+     *
      * @return  bool    Whether the transaction was rolled back successfully
      */
     public function rollBackTransaction()
