@@ -7,7 +7,6 @@ use Exception;
 use InvalidArgumentException;
 use PDO;
 use ipl\Sql\Adapter\AdapterInterface;
-use ipl\Sql\Adapter\Ansi;
 use ipl\Sql\Contracts\QuoterInterface;
 use ipl\Stdlib\Loader\PluginLoader;
 
