@@ -32,12 +32,12 @@ class FilterProcessor
                     $part = static::assembleFilter($filterPart, $level + 1);
                     if ($part) {
                         if ($condition === null) {
-                            $condition = [$operator, $part];
+                            $condition = [$operator, [$part]];
                         } else {
                             if ($condition[0] === $operator) {
-                                $condition[] = $part;
+                                $condition[1][] = $part;
                             } else {
-                                $condition = [$operator, $condition, $part];
+                                $condition = [$operator, [$condition, $part]];
                             }
                         }
                     }
