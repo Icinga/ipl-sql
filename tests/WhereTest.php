@@ -95,6 +95,50 @@ class WhereTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testWhereNestedArrays()
+    {
+        $this->query->where([
+            Sql::ANY,
+            [
+                [
+                    Sql::ALL,
+                    [
+                        'foo = ?' => 'bar',
+                        'baz = ?' => 'plums'
+                    ]
+                ],
+                [
+                    Sql::ANY,
+                    [
+                        'foo = ?' => 'bar',
+                        'baz = ?' => 'plums'
+                    ]
+                ]
+            ]
+        ]);
+
+        $where = $this->query->getWhere();
+
+        // Operator of the WHERE tree
+        $this->assertSame(Sql::ALL, $where[0]);
+
+        // Operator of each condition
+        $this->assertSame(Sql::ANY, $where[1][0][0]);
+        $this->assertSame(Sql::ALL, $where[1][0][1][0][0]);
+        $this->assertSame(Sql::ANY, $where[1][0][1][1][0]);
+
+        // Expressions and values
+        $this->assertSame('bar', $where[1][0][1][0]['foo = ?']);
+        $this->assertSame('plums', $where[1][0][1][0]['baz = ?']);
+        $this->assertSame('bar', $where[1][0][1][1]['foo = ?']);
+        $this->assertSame('plums', $where[1][0][1][1]['baz = ?']);
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE ((foo = ?) AND (baz = ?)) OR ((foo = ?) OR (baz = ?))',
+            ['bar', 'plums', 'bar', 'plums']
+        );
+    }
+
     public function testWhereWithExpression()
     {
         $expression = new Expression('c2 = ?', 1);
