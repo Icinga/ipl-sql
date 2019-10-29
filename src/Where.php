@@ -44,6 +44,8 @@ trait Where
         if (is_array($condition)) {
             if (empty($condition)) {
                 return [$operator, $operator === Sql::ALL ? '1' : '0'];
+            } elseif (count($condition) === 2 && isset($condition[1]) && is_array($condition[1])) {
+                return $condition;
             }
         } else {
             $condition = [$condition];
@@ -62,12 +64,12 @@ trait Where
     protected function mergeCondition(& $base, array $condition, $operator)
     {
         if ($base === null) {
-            $base = [$operator, $condition];
+            $base = [$operator, [$condition]];
         } else {
             if ($base[0] === $operator) {
-                $base[] = $condition;
+                $base[1][] = $condition;
             } else {
-                $base = [$operator, $base, $condition];
+                $base = [$operator, [$base, $condition]];
             }
         }
     }
