@@ -117,7 +117,7 @@ class HavingTest extends PHPUnit_Framework_TestCase
     {
         $this->query->having('c1 = x');
         $this->assertSame(
-            ['AND', ['AND', 'c1 = x']],
+            ['AND', [['AND', ['c1 = x']]]],
             $this->query->getHaving()
         );
 

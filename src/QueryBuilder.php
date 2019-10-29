@@ -286,8 +286,9 @@ class QueryBuilder
         $sql = [];
 
         $operator = array_shift($condition);
+        $conditions = array_shift($condition);
 
-        foreach ($condition as $expression => $value) {
+        foreach ($conditions as $expression => $value) {
             if (is_array($value)) {
                 if (is_int($expression)) {
                     // Operator format

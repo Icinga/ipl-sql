@@ -117,7 +117,7 @@ class WhereTest extends PHPUnit_Framework_TestCase
     {
         $this->query->where('c1 = x');
         $this->assertSame(
-            ['AND', ['AND', 'c1 = x']],
+            ['AND', [['AND', ['c1 = x']]]],
             $this->query->getWhere()
         );
 

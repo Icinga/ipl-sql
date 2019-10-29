@@ -30,7 +30,7 @@ trait Where
     }
 
     /**
-     * Make $condition an array and build an array like this: [$operator] + $condition
+     * Make $condition an array and build an array like this: [$operator, [$condition]]
      *
      * If $condition is empty, replace it with a boolean constant depending on the operator.
      *
@@ -43,15 +43,15 @@ trait Where
     {
         if (is_array($condition)) {
             if (empty($condition)) {
-                return [$operator, $operator === Sql::ALL ? '1' : '0'];
-            } elseif (count($condition) === 2 && isset($condition[1]) && is_array($condition[1])) {
+                $condition = [$operator === Sql::ALL ? '1' : '0'];
+            } elseif (isset($condition[1]) && count($condition) === 2 && is_array($condition[1])) {
                 return $condition;
             }
         } else {
             $condition = [$condition];
         }
 
-        return array_merge([$operator], $condition);
+        return [$operator, $condition];
     }
 
     /**
