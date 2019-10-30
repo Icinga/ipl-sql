@@ -19,6 +19,16 @@ class Sql
     const ANY = 'OR';
 
     /**
+     * SQL AND NOT operator
+     */
+    const NOT_ALL = 'AND NOT';
+
+    /**
+     * SQL OR NOT operator
+     */
+    const NOT_ANY = 'OR NOT';
+
+    /**
      * Create and return a DELETE statement
      *
      * @return  Delete

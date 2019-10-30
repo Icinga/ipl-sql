@@ -316,6 +316,42 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
+     * Add a AND NOT part to the HAVING part of the query
+     *
+     * Please see {@link having()} for the supported formats and restrictions regarding quoting of the field names.
+     *
+     * @param   string|ExpressionInterface|Select|array $condition  The HAVING condition
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
+     *
+     * @return  $this
+     */
+    public function notHaving($condition, $operator = Sql::ALL)
+    {
+        $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
+
+        return $this;
+    }
+
+    /**
+     * Add a OR NOT part to the HAVING part of the query
+     *
+     * Please see {@link having()} for the supported formats and restrictions regarding quoting of the field names.
+     *
+     * @param   string|ExpressionInterface|Select|array $condition  The HAVING condition
+     * @param   string                                  $operator   The operator to combine multiple conditions with,
+     *                                                              if the condition is in the array format
+     *
+     * @return  $this
+     */
+    public function orNotHaving($condition, $operator = Sql::ALL)
+    {
+        $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
+
+        return $this;
+    }
+
+    /**
      * Get the UNION parts of the query
      *
      * @return  array|null
