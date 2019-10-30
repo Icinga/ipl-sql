@@ -36,21 +36,6 @@ class WhereTest extends PHPUnit_Framework_TestCase
         $this->query->where('c2 IS NULL');
         $this->query->where('c3 IS NOT NULL');
 
-        $where = $this->query->getWhere();
-
-        // Operator of the WHERE tree
-        $this->assertSame(Sql::ALL, $where[0]);
-
-        // Operator of each condition
-        $this->assertSame(Sql::ALL, $where[1][0]);
-        $this->assertSame(Sql::ALL, $where[2][0]);
-        $this->assertSame(Sql::ALL, $where[3][0]);
-
-        // Expressions
-        $this->assertSame('c1 = x', $where[1][1]);
-        $this->assertSame('c2 IS NULL', $where[2][1]);
-        $this->assertSame('c3 IS NOT NULL', $where[3][1]);
-
         $this->assertCorrectStatementAndValues('WHERE (c1 = x) AND (c2 IS NULL) AND (c3 IS NOT NULL)', []);
     }
 
@@ -63,30 +48,6 @@ class WhereTest extends PHPUnit_Framework_TestCase
         $this->query->where(['c5 IS NOT NULL']);
         $this->query->where(['c6 IN (?)' => [1, 2, 3]]);
         $this->query->where(['c7 = ?' => 1, 'c8 = ?' => 1]);
-
-        $where = $this->query->getWhere();
-
-        // Operator of the WHERE tree
-        $this->assertSame(Sql::ALL, $where[0]);
-
-        // Operator of each condition
-        $this->assertSame(Sql::ALL, $where[1][0]);
-        $this->assertSame(Sql::ALL, $where[2][0]);
-        $this->assertSame(Sql::ALL, $where[3][0]);
-        $this->assertSame(Sql::ALL, $where[4][0]);
-        $this->assertSame(Sql::ALL, $where[5][0]);
-        $this->assertSame(Sql::ALL, $where[6][0]);
-        $this->assertSame(Sql::ALL, $where[7][0]);
-
-        // Expressions and values
-        $this->assertSame('c1 = x', $where[1][1]);
-        $this->assertSame(1, $where[2]['c2 = ?']);
-        $this->assertSame(1, $where[3]['c3 > ?']);
-        $this->assertSame('c4 IS NULL', $where[4][1]);
-        $this->assertSame('c5 IS NOT NULL', $where[5][1]);
-        $this->assertSame([1, 2, 3], $where[6]['c6 IN (?)']);
-        $this->assertSame(1, $where[7]['c7 = ?']);
-        $this->assertSame(1, $where[7]['c8 = ?']);
 
         $this->assertCorrectStatementAndValues(
             'WHERE (c1 = x) AND (c2 = ?) AND (c3 > ?) AND (c4 IS NULL)'
@@ -117,22 +78,6 @@ class WhereTest extends PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $where = $this->query->getWhere();
-
-        // Operator of the WHERE tree
-        $this->assertSame(Sql::ALL, $where[0]);
-
-        // Operator of each condition
-        $this->assertSame(Sql::ANY, $where[1][0][0]);
-        $this->assertSame(Sql::ALL, $where[1][0][1][0][0]);
-        $this->assertSame(Sql::ANY, $where[1][0][1][1][0]);
-
-        // Expressions and values
-        $this->assertSame('bar', $where[1][0][1][0]['foo = ?']);
-        $this->assertSame('plums', $where[1][0][1][0]['baz = ?']);
-        $this->assertSame('bar', $where[1][0][1][1]['foo = ?']);
-        $this->assertSame('plums', $where[1][0][1][1]['baz = ?']);
-
         $this->assertCorrectStatementAndValues(
             'WHERE ((foo = ?) AND (baz = ?)) OR ((foo = ?) OR (baz = ?))',
             ['bar', 'plums', 'bar', 'plums']
@@ -144,7 +89,6 @@ class WhereTest extends PHPUnit_Framework_TestCase
         $expression = new Expression('c2 = ?', 1);
         $this->query->where($expression);
 
-        $this->assertSame([Sql::ALL, [Sql::ALL, $expression]], $this->query->getWhere());
         $this->assertCorrectStatementAndValues('WHERE c2 = ?', [1]);
     }
 
@@ -153,7 +97,6 @@ class WhereTest extends PHPUnit_Framework_TestCase
         $select = (new Select())->columns('COUNT(*)')->from('t1')->where(['c2 = ?' => 1]);
         $this->query->where($select);
 
-        $this->assertSame([Sql::ALL, [Sql::ALL, $select]], $this->query->getWhere());
         $this->assertCorrectStatementAndValues('WHERE (SELECT COUNT(*) FROM t1 WHERE c2 = ?)', [1]);
     }
 
