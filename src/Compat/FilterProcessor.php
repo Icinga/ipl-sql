@@ -43,6 +43,10 @@ class FilterProcessor
                         } else {
                             if ($condition[0] === $operator) {
                                 $condition[1][] = $part;
+                            } elseif ($operator === Sql::NOT_ALL) {
+                                $condition = [Sql::ALL, [$condition, [$operator, [$part]]]];
+                            } elseif ($operator === Sql::NOT_ANY) {
+                                $condition = [Sql::ANY, [$condition, [$operator, [$part]]]];
                             } else {
                                 $condition = [$operator, [$condition, $part]];
                             }
@@ -54,10 +58,9 @@ class FilterProcessor
             }
         } else {
             /** @var FilterExpression $filter */
-            $condition = array_merge(
-                [Sql::ALL],
+            $condition = [Sql::ALL,
                 static::assemblePredicate($filter->getColumn(), $filter->getSign(), $filter->getExpression())
-            );
+            ];
         }
 
         return $condition;
