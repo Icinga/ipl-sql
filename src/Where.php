@@ -29,6 +29,20 @@ trait Where
         return $this;
     }
 
+    public function notWhere($condition, $operator = Sql::ALL)
+    {
+        $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
+
+        return $this;
+    }
+
+    public function orNotWhere($condition, $operator = Sql::ALL)
+    {
+        $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
+
+        return $this;
+    }
+
     /**
      * Make $condition an array and build an array like this: [$operator, [$condition]]
      *
@@ -68,6 +82,10 @@ trait Where
         } else {
             if ($base[0] === $operator) {
                 $base[1][] = $condition;
+            } elseif ($operator === Sql::NOT_ALL) {
+                $base = [Sql::ALL, [$base, [$operator, [$condition]]]];
+            } elseif ($operator === Sql::NOT_ANY) {
+                $base = [Sql::ANY, [$base, [$operator, [$condition]]]];
             } else {
                 $base = [$operator, [$base, $condition]];
             }

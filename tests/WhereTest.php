@@ -56,6 +56,41 @@ class WhereTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSingleNotWhere()
+    {
+        $this->query->notWhere('foo = bar');
+
+        $this->assertCorrectStatementAndValues('WHERE NOT (foo = bar)', []);
+    }
+
+    public function testNotWhereArrayFormat()
+    {
+        $this->query->notWhere(['c1 = x']);
+        $this->query->notWhere(['c2 = ?' => 1]);
+        $this->query->notWhere(['c3 IN (?)' => [1, 2, 3]]);
+        $this->query->notWhere(['c4 = ?' => 1, 'c5 = ?' => 1], Sql::ANY);
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE NOT (c1 = x) AND NOT (c2 = ?) AND NOT (c3 IN (?, ?, ?)) AND NOT ((c4 = ?) OR (c5 = ?))',
+            [1, 1, 2, 3, 1, 1]
+        );
+    }
+
+    public function testMixedWhere()
+    {
+        $this->query->where('c1 = 1');
+        $this->query->orWhere(['c2 = ?' => 2]);
+        $this->query->notWhere(['c3 = 3', 'c4 = ?' => 4]);
+        $this->query->where(['c5 = ?' => 5, 'c6 = ?' => 6], Sql::ANY);
+        $this->query->orNotWhere('c7 = 8');
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE (((c1 = 1) OR (c2 = ?)) AND (NOT ((c3 = 3) AND (c4 = ?)))'
+            . ' AND ((c5 = ?) OR (c6 = ?))) OR (NOT (c7 = 8))',
+            [2, 4, 5, 6]
+        );
+    }
+
     public function testWhereNestedArrays()
     {
         $this->query->where([

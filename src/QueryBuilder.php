@@ -313,6 +313,10 @@ class QueryBuilder
             }
         }
 
+        if ($operator === Sql::NOT_ALL || $operator === Sql::NOT_ANY) {
+            return 'NOT (' . implode(") $operator (", $sql) . ')';
+        }
+
         return count($sql) === 1 && ! ($value instanceof Select)
             ? $sql[0]
             : '(' . implode(") $operator (", $sql) . ')';

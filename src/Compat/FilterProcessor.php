@@ -22,8 +22,15 @@ class FilterProcessor
             } elseif ($filter instanceof FilterOr) {
                 $operator = Sql::ANY;
             } elseif ($filter instanceof FilterNot) {
-                $operator = 'NOT'; // TODO(el): Sql::NOT does not exist yet
-            } else {
+                $filter = array_shift(clone $filter->filters());
+                if ($filter instanceof FilterAnd) {
+                    $operator = Sql::NOT_ALL;
+                } elseif ($filter instanceof FilterOr) {
+                    $operator = Sql::NOT_ANY;
+                }
+            }
+
+            if (! isset($operator)) {
                 throw new \InvalidArgumentException(sprintf('Cannot render filter: %s', get_class($filter)));
             }
 
