@@ -135,6 +135,14 @@ class WhereTest extends PHPUnit_Framework_TestCase
         $this->assertCorrectStatementAndValues('WHERE (SELECT COUNT(*) FROM t1 WHERE c2 = ?)', [1]);
     }
 
+    public function testWhereWithSelectAndExpression()
+    {
+        $select = (new Select())->columns('1')->from('t1')->where(['c2 = ?' => 1])->limit(1);
+        $this->query->where(['EXISTS ?' => $select]);
+
+        $this->assertCorrectStatementAndValues('WHERE EXISTS (SELECT 1 FROM t1 WHERE c2 = ? LIMIT 1)', [1]);
+    }
+
     public function testResetWhere()
     {
         $this->query->where('c1 = x');
