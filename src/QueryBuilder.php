@@ -303,7 +303,12 @@ class QueryBuilder
                     $sql[] = $value->getStatement();
                     $values = array_merge($values, $value->getValues());
                 } elseif ($value instanceof Select) {
-                    $sql[] = $this->assembleSelect($value, $values)[0];
+                    $stmt = '(' . $this->assembleSelect($value, $values)[0] . ')';
+                    if (is_int($expression)) {
+                        $sql[] = $stmt;
+                    } else {
+                        $sql[] = str_replace('?', $stmt, $expression);
+                    }
                 } elseif (is_int($expression)) {
                     $sql[] = $value;
                 } else {
@@ -317,9 +322,7 @@ class QueryBuilder
             return 'NOT (' . implode(") $operator (", $sql) . ')';
         }
 
-        return count($sql) === 1 && ! ($value instanceof Select)
-            ? $sql[0]
-            : '(' . implode(") $operator (", $sql) . ')';
+        return count($sql) === 1 ? $sql[0] : '(' . implode(") $operator (", $sql) . ')';
     }
 
     /**
