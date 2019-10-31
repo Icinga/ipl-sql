@@ -58,7 +58,7 @@ trait Where
         if (is_array($condition)) {
             if (empty($condition)) {
                 $condition = [$operator === Sql::ALL ? '1' : '0'];
-            } elseif (isset($condition[1]) && count($condition) === 2 && is_array($condition[1])) {
+            } elseif (in_array(reset($condition), [Sql::ALL, Sql::ANY, Sql::NOT_ALL, Sql::NOT_ANY], true)) {
                 return $condition;
             }
         } else {

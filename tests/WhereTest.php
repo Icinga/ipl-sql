@@ -119,6 +119,31 @@ class WhereTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testPartiallyPreparedWhere()
+    {
+        $this->query->where([
+            [
+                Sql::ALL,
+                [
+                    'foo = ?' => 'bar',
+                    'baz = plums'
+                ]
+            ],
+            [
+                Sql::ANY,
+                [
+                    'foo = bar',
+                    'baz = ?' => 'plums'
+                ]
+            ]
+        ]);
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE ((foo = ?) AND (baz = plums)) AND ((foo = bar) OR (baz = ?))',
+            ['bar', 'plums']
+        );
+    }
+
     public function testWhereWithExpression()
     {
         $expression = new Expression('c2 = ?', 1);
