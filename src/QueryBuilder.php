@@ -475,7 +475,7 @@ class QueryBuilder
                 $table = "({$this->assembleSelect($table, $values)[0]})";
             }
 
-            if (is_int($alias)) {
+            if (is_int($alias) || $alias === $table) {
                 $sql[] = $table;
             } else {
                 $sql[] = "$table $alias";
@@ -500,9 +500,6 @@ class QueryBuilder
         }
 
         $sql = [];
-        $tableName = null;
-        $alias = null;
-
         foreach ($joins as $join) {
             list($joinType, $table, $condition) = $join;
 
@@ -510,26 +507,23 @@ class QueryBuilder
                 foreach ($table as $alias => $tableName) {
                     break;
                 }
-
-                if ($tableName instanceof Select) {
-                    $tableName = "({$this->assembleSelect($tableName, $values)[0]})";
-                }
-
-                if (is_array($condition)) {
-                    $condition = $this->buildCondition($condition, $values);
-                }
-
-                $sql[] = "$joinType JOIN $tableName $alias ON $condition";
             } else {
-                if ($table instanceof Select) {
-                    $table = "({$this->assembleSelect($table, $values)[0]})";
-                }
+                $alias = null;
+                $tableName = $table;
+            }
 
-                if (is_array($condition)) {
-                    $condition = $this->buildCondition($condition, $values);
-                }
+            if ($tableName instanceof Select) {
+                $tableName = "({$this->assembleSelect($tableName, $values)[0]})";
+            }
 
-                $sql[] = "$joinType JOIN $table ON $condition";
+            if (is_array($condition)) {
+                $condition = $this->buildCondition($condition, $values);
+            }
+
+            if (empty($alias) || $alias === $tableName) {
+                $sql[] = "$joinType JOIN $tableName ON $condition";
+            } else {
+                $sql[] = "$joinType JOIN $tableName $alias ON $condition";
             }
         }
 
