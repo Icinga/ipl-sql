@@ -36,6 +36,10 @@ trait OrderBy
                 $dir = $direction;
             }
 
+            if (is_array($column) && count($column) === 2) {
+                list($column, $dir) = $column;
+            }
+
             if ($dir === SORT_ASC) {
                 $dir = 'ASC';
             } elseif ($dir === SORT_DESC) {

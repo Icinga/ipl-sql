@@ -454,6 +454,14 @@ class SelectTest extends PHPUnit_Framework_TestCase
         $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);
     }
 
+    public function testOrderByWithExpressionAndExplicitDirection()
+    {
+        $column = new Expression('x = ?', 1);
+        $this->query->orderBy([[$column, 'DESC']]);
+
+        $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);
+    }
+
     public function testOrderByWithSelect()
     {
         $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
