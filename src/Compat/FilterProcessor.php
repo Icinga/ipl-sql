@@ -22,12 +22,7 @@ class FilterProcessor
             } elseif ($filter instanceof FilterOr) {
                 $operator = Sql::ANY;
             } elseif ($filter instanceof FilterNot) {
-                $filter = reset($filter->filters());
-                if ($filter instanceof FilterAnd) {
-                    $operator = Sql::NOT_ALL;
-                } elseif ($filter instanceof FilterOr) {
-                    $operator = Sql::NOT_ANY;
-                }
+                $operator = Sql::NOT_ALL;
             }
 
             if (! isset($operator)) {
