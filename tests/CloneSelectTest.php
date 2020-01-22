@@ -4,9 +4,8 @@ namespace ipl\Tests\Sql;
 
 use ipl\Sql\Expression;
 use ipl\Sql\Select;
-use PHPUnit_Framework_TestCase;
 
-class CloneSelectTest extends PHPUnit_Framework_TestCase
+class CloneSelectTest extends \PHPUnit\Framework\TestCase
 {
     public function testCte()
     {

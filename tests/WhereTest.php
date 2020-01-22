@@ -6,9 +6,8 @@ use ipl\Sql\Expression;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Sql;
-use PHPUnit_Framework_TestCase;
 
-class WhereTest extends PHPUnit_Framework_TestCase
+class WhereTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The SELECT query to test

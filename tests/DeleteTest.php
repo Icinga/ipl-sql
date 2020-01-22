@@ -4,9 +4,8 @@ namespace ipl\Tests\Sql;
 
 use ipl\Sql\Delete;
 use ipl\Sql\QueryBuilder;
-use PHPUnit_Framework_TestCase;
 
-class DeleteTest extends PHPUnit_Framework_TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The DELETE query to test

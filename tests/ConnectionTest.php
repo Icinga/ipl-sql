@@ -9,9 +9,8 @@ use ipl\Sql\Adapter\Pgsql;
 use ipl\Sql\Adapter\Sqlite;
 use ipl\Sql\Connection;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
 
-class ConnectionTest extends PHPUnit_Framework_TestCase
+class ConnectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructMssqlConnection()
     {

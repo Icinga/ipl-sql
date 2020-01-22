@@ -6,9 +6,8 @@ use ipl\Sql\Expression;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Update;
-use PHPUnit_Framework_TestCase;
 
-class UpdateTest extends PHPUnit_Framework_TestCase
+class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The UPDATE query to test
