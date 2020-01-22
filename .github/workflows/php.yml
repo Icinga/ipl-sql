@@ -44,7 +44,7 @@ jobs:
 
       - name: PHP CodeSniffer
         if: success() || matrix.allow_failure
-        run: phpcs
+        run: phpcs -wps --colors
 
   test:
     name: Unit tests with php ${{ matrix.php }} on ${{ matrix.os }}
