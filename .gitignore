@@ -1,9 +1,9 @@
 # Exclude all hidden files...
 .*
 
-# ...except those related to git or testing
+# Except those related to Git and GitHub
 !.git*
-!.travis.yml
+!.github*
 
 # Exclude build and packaging leftovers
 /debian

@@ -75,7 +75,7 @@ trait Where
      * @param   array   $condition  As returned by {@link buildCondition()}
      * @param   string  $operator
      */
-    protected function mergeCondition(& $base, array $condition, $operator)
+    protected function mergeCondition(&$base, array $condition, $operator)
     {
         if ($base === null) {
             $base = [$operator, [$condition]];

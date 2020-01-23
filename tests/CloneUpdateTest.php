@@ -5,9 +5,8 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Expression;
 use ipl\Sql\Select;
 use ipl\Sql\Update;
-use PHPUnit_Framework_TestCase;
 
-class CloneUpdateTest extends PHPUnit_Framework_TestCase
+class CloneUpdateTest extends \PHPUnit\Framework\TestCase
 {
     public function testCte()
     {

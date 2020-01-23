@@ -1,6 +1,7 @@
 # Icinga PHP Library - SQL abstraction layer
 
-[![Build Status](https://travis-ci.org/Icinga/ipl-sql.svg?branch=master)](https://travis-ci.org/Icinga/ipl-sql)
+[![PHP Support](https://img.shields.io/badge/php-%3E%3D%205.6-777BB4?logo=PHP)](https://php.net/)
+![Build Status](https://github.com/Icinga/ipl-sql/workflows/PHP%20Tests/badge.svg?branch=master)
 
 The package `ipl\Sql` provides a [database connection
 abstraction](#sql-connection) and an [SQL query abstraction layer](#sql-queries)
