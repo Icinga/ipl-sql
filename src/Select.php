@@ -5,10 +5,11 @@ namespace ipl\Sql;
 /**
  * SQL SELECT query
  */
-class Select implements CommonTableExpressionInterface, LimitOffsetInterface, OrderByInterface, WhereInterface
+class Select implements CommonTableExpressionInterface, LimitOffsetInterface, OrderByInterface, WhereInterface, CommentsInterface
 {
     use CommonTableExpression;
     use LimitOffset;
+    use Comments;
     use OrderBy;
     use Where;
 
