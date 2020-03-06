@@ -8,14 +8,14 @@ use InvalidArgumentException;
 use PDO;
 use ipl\Sql\Adapter\AdapterInterface;
 use ipl\Sql\Contracts\QuoterInterface;
-use ipl\Stdlib\Loader\PluginLoader;
+use ipl\Stdlib\Plugins;
 
 /**
  * Connection to a SQL database using the native PDO for database access
  */
 class Connection implements QuoterInterface
 {
-    use PluginLoader;
+    use Plugins;
 
     /** @var Config */
     protected $config;
@@ -44,13 +44,13 @@ class Connection implements QuoterInterface
 
         $this->addPluginLoader('adapter', __NAMESPACE__ . '\\Adapter');
 
-        $adapter = $this->eventuallyLoadPlugin('adapter', $config->db);
+        $adapter = $this->loadPlugin('adapter', $config->db);
 
-        if ($adapter === null) {
+        if (! $adapter) {
             throw new InvalidArgumentException("Can't load database adapter for '{$config->db}'.");
         }
 
-        $this->adapter = $adapter;
+        $this->adapter = new $adapter();
         $this->config = $config;
 
         $this->init();
