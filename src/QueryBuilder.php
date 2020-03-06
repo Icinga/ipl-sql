@@ -4,7 +4,8 @@ namespace ipl\Sql;
 
 use InvalidArgumentException;
 use ipl\Sql\Adapter\AdapterInterface;
-use ipl\Stdlib;
+
+use function ipl\Stdlib\get_php_type;
 
 class QueryBuilder
 {
@@ -30,7 +31,7 @@ class QueryBuilder
      *
      * @return  array
      *
-     * @throw   \InvalidArgumentException   If statement type is invalid
+     * @throw   InvalidArgumentException   If statement type is invalid
      */
     public function assemble($stmt)
     {
@@ -46,7 +47,7 @@ class QueryBuilder
             default:
                 throw new InvalidArgumentException(sprintf(
                     __METHOD__ . ' expects instances of Delete, Insert, Select or Update. Got %s instead.',
-                    Stdlib\get_php_type($stmt)
+                    get_php_type($stmt)
                 ));
         }
     }

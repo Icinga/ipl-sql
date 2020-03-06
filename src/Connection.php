@@ -6,6 +6,7 @@ use BadMethodCallException;
 use Exception;
 use InvalidArgumentException;
 use PDO;
+use PDOStatement;
 use ipl\Sql\Adapter\AdapterInterface;
 use ipl\Sql\Contracts\QuoterInterface;
 use ipl\Stdlib\Plugins;
@@ -296,7 +297,7 @@ class Connection implements QuoterInterface
      * @param   Delete|Insert|Select|Update|string  $stmt   The SQL statement to prepare and execute
      * @param   string|array                        $values Values to bind to the statement, if any
      *
-     * @return  \PDOStatement
+     * @return  PDOStatement
      */
     public function prepexec($stmt, $values = null)
     {
@@ -321,7 +322,7 @@ class Connection implements QuoterInterface
      *
      * @param   Select  $select
      *
-     * @return  \PDOStatement
+     * @return  PDOStatement
      */
     public function select(Select $select)
     {
@@ -337,9 +338,9 @@ class Connection implements QuoterInterface
      *                                              one of the following formats: 'table' or 'schema.table'
      * @param   array|object|\Traversable   $data   Row data in terms of column-value pairs
      *
-     * @return  \PDOStatement
+     * @return  PDOStatement
      *
-     * @throws  \InvalidArgumentException   If data type is invalid
+     * @throws  InvalidArgumentException   If data type is invalid
      */
     public function insert($table, $data)
     {
@@ -361,9 +362,9 @@ class Connection implements QuoterInterface
      * @param   string                      $operator   The operator to combine multiple conditions with,
      *                                                  if the condition is in the array format
      *
-     * @return  \PDOStatement
+     * @return  PDOStatement
      *
-     * @throws  \InvalidArgumentException   If data type is invalid
+     * @throws  InvalidArgumentException   If data type is invalid
      */
     public function update($table, $data, $condition = null, $operator = Sql::ALL)
     {
@@ -387,7 +388,7 @@ class Connection implements QuoterInterface
      * @param   string          $operator   The operator to combine multiple conditions with,
      *                                      if the condition is in the array format
      *
-     * @return  \PDOStatement
+     * @return  PDOStatement
      */
     public function delete($table, $condition = null, $operator = Sql::ALL)
     {

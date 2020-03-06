@@ -2,7 +2,9 @@
 
 namespace ipl\Sql;
 
-use ipl\Stdlib;
+use InvalidArgumentException;
+
+use function ipl\Stdlib\arrayval;
 
 /**
  * SQL UPDATE query
@@ -74,11 +76,11 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      *
      * @return  $this
      *
-     * @throws  \InvalidArgumentException   If set type is invalid
+     * @throws  InvalidArgumentException   If set type is invalid
      */
     public function set($set)
     {
-        $this->set = Stdlib\arrayval($set);
+        $this->set = arrayval($set);
 
         return $this;
     }

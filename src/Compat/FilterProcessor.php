@@ -7,6 +7,7 @@ use Icinga\Data\Filter\FilterAnd;
 use Icinga\Data\Filter\FilterExpression;
 use Icinga\Data\Filter\FilterNot;
 use Icinga\Data\Filter\FilterOr;
+use InvalidArgumentException;
 use ipl\Sql\Expression;
 use ipl\Sql\Sql;
 
@@ -26,7 +27,7 @@ class FilterProcessor
             }
 
             if (! isset($operator)) {
-                throw new \InvalidArgumentException(sprintf('Cannot render filter: %s', get_class($filter)));
+                throw new InvalidArgumentException(sprintf('Cannot render filter: %s', get_class($filter)));
             }
 
             if (! $filter->isEmpty()) {
@@ -70,7 +71,7 @@ class FilterProcessor
                 return ["($column NOT IN (?) OR $column IS NULL)" => $expression];
             }
 
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Unable to render array expressions with operators other than equal or not equal'
             );
         } elseif ($operator === '=' && strpos($expression, '*') !== false) {

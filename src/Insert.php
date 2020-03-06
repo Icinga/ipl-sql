@@ -2,7 +2,9 @@
 
 namespace ipl\Sql;
 
-use ipl\Stdlib;
+use InvalidArgumentException;
+
+use function ipl\Stdlib\arrayval;
 
 /**
  * SQL INSERT query
@@ -117,11 +119,11 @@ class Insert implements CommonTableExpressionInterface
      *
      * @return  $this
      *
-     * @throws  \InvalidArgumentException   If values type is invalid
+     * @throws  InvalidArgumentException   If values type is invalid
      */
     public function values($values)
     {
-        $this->values = Stdlib\arrayval($values);
+        $this->values = arrayval($values);
 
         return $this;
     }
