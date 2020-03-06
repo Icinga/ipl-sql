@@ -2,12 +2,12 @@
 
 namespace ipl\Sql;
 
-use ipl\Stdlib\Contract\PaginationInterface;
+use ipl\Stdlib\Contract\Paginatable;
 
 /**
  * Pagination adapter for ipl SQL queries
  */
-class PaginationAdapter implements PaginationInterface
+class PaginationAdapter implements Paginatable
 {
     /** @var Connection */
     protected $db;
