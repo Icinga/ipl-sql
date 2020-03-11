@@ -1,8 +1,8 @@
 <?php
 
-namespace ipl\Sql\Contracts;
+namespace ipl\Sql\Contract;
 
-interface QuoterInterface
+interface Quoter
 {
     /**
      * Quote a string so that it can be safely used as table or column name, even if it is a reserved name

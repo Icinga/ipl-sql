@@ -5,16 +5,16 @@ namespace ipl\Sql;
 use BadMethodCallException;
 use Exception;
 use InvalidArgumentException;
+use ipl\Sql\Contract\Quoter;
 use PDO;
 use PDOStatement;
 use ipl\Sql\Adapter\AdapterInterface;
-use ipl\Sql\Contracts\QuoterInterface;
 use ipl\Stdlib\Plugins;
 
 /**
  * Connection to a SQL database using the native PDO for database access
  */
-class Connection implements QuoterInterface
+class Connection implements Quoter
 {
     use Plugins;
 
