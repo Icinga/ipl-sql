@@ -8,7 +8,7 @@
   "require": {
     "php": ">=5.4.0",
     "ext-pdo": "*",
-    "ipl/stdlib": ">=0.1"
+    "ipl/stdlib": ">=0.5.0"
   },
   "autoload": {
     "psr-4": {
