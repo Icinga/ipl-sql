@@ -5,10 +5,10 @@ namespace ipl\Sql;
 use BadMethodCallException;
 use Exception;
 use InvalidArgumentException;
+use ipl\Sql\Contract\Adapter;
 use ipl\Sql\Contract\Quoter;
 use PDO;
 use PDOStatement;
-use ipl\Sql\Adapter\AdapterInterface;
 use ipl\Stdlib\Plugins;
 
 /**
@@ -27,7 +27,7 @@ class Connection implements Quoter
     /** @var QueryBuilder */
     protected $queryBuilder;
 
-    /** @var AdapterInterface */
+    /** @var Adapter */
     protected $adapter;
 
     /**
@@ -94,7 +94,7 @@ class Connection implements Quoter
     /**
      * Get the database adapter
      *
-     * @return  AdapterInterface
+     * @return  Adapter
      */
     public function getAdapter()
     {

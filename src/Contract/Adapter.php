@@ -1,12 +1,11 @@
 <?php
 
-namespace ipl\Sql\Adapter;
+namespace ipl\Sql\Contract;
 
 use ipl\Sql\Config;
 use ipl\Sql\Connection;
-use ipl\Sql\Contracts\QuoterInterface;
 
-interface AdapterInterface extends QuoterInterface
+interface Adapter extends Quoter
 {
     /**
      * Get the DSN string from the given connection configuration

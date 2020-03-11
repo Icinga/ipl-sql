@@ -3,13 +3,13 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
-use ipl\Sql\Adapter\AdapterInterface;
+use ipl\Sql\Contract\Adapter;
 
 use function ipl\Stdlib\get_php_type;
 
 class QueryBuilder
 {
-    /** @var AdapterInterface */
+    /** @var Adapter */
     protected $adapter;
 
     protected $separator = " ";
@@ -17,9 +17,9 @@ class QueryBuilder
     /**
      * Create a new query builder for the specified database adapter
      *
-     * @param   AdapterInterface $adapter
+     * @param   Adapter $adapter
      */
-    public function __construct(AdapterInterface $adapter)
+    public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
     }
