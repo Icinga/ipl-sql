@@ -5,26 +5,6 @@
   "keywords": ["sql", "database"],
   "homepage": "https://github.com/Icinga/ipl-sql",
   "license": "GPL-2.0-or-later",
-  "authors": [
-    {
-      "name": "Alexander A. Klimov",
-      "email": "alexander.klimov@icinga.com",
-      "homepage": "https://github.com/Al2Klimov",
-      "role": "Developer"
-    },
-    {
-      "name": "Eric Lippmann",
-      "email": "eric.lippmann@icinga.com",
-      "homepage": "https://github.com/lippserd",
-      "role": "Developer"
-    },
-    {
-      "name": "Thomas Gelf",
-      "email": "thomas.gelf@icinga.com",
-      "homepage": "https://github.com/Thomas-Gelf",
-      "role": "Developer"
-    }
-  ],
   "require": {
     "php": ">=5.4.0",
     "ext-pdo": "*",
