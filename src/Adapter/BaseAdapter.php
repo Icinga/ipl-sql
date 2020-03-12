@@ -4,11 +4,12 @@ namespace ipl\Sql\Adapter;
 
 use DateTime;
 use DateTimeZone;
-use PDO;
-use ipl\Sql\Connection;
 use ipl\Sql\Config;
+use ipl\Sql\Connection;
+use ipl\Sql\Contract\Adapter;
+use PDO;
 
-abstract class BaseAdapter implements AdapterInterface
+abstract class BaseAdapter implements Adapter
 {
     /**
      * Quote character to use for quoting identifiers
@@ -19,11 +20,7 @@ abstract class BaseAdapter implements AdapterInterface
      */
     protected $quoteCharacter = ['"', '"'];
 
-    /**
-     * Character to use for escaping quote characters
-     *
-     * @var string
-     */
+    /** @var string Character to use for escaping quote characters */
     protected $escapeCharacter = '\\"';
 
     /** @var array Default PDO connect options */

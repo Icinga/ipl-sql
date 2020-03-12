@@ -15,25 +15,25 @@ interface CommonTableExpressionInterface
      *   ...
      * ]
      *
-     * @return  array[]
+     * @return array[]
      */
     public function getWith();
 
     /**
      * Add a CTE
      *
-     * @param   Select      $query
-     * @param   string      $alias
-     * @param   bool        $recursive
+     * @param Select $query
+     * @param string $alias
+     * @param bool   $recursive
      *
-     * @return  $this
+     * @return $this
      */
     public function with(Select $query, $alias, $recursive = false);
 
     /**
      * Reset all CTEs
      *
-     * @return  $this
+     * @return $this
      */
     public function resetWith();
 }

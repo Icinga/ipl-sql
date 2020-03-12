@@ -3,7 +3,8 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
-use Traversable;
+
+use function ipl\Stdlib\get_php_type;
 
 /**
  * SQL connection configuration
@@ -13,12 +14,18 @@ class Config
     /**
      * Create a new SQL connection configuration from the given configuration key-value pairs
      *
-     * @param   array|Traversable   $config Configuration key-value pairs
+     * @param iterable $config Configuration key-value pairs
+     *
+     * @throws InvalidArgumentException If $config is not iterable
      */
     public function __construct($config)
     {
-        if (! is_array($config) && ! $config instanceof Traversable) {
-            throw new InvalidArgumentException('Config expects array or Traversable');
+        if (! is_iterable($config)) {
+            throw new InvalidArgumentException(sprintf(
+                '%s expects parameter one to be iterable, got %s instead',
+                __METHOD__,
+                get_php_type($config)
+            ));
         }
 
         foreach ($config as $key => $value) {
@@ -26,46 +33,22 @@ class Config
         }
     }
 
-    /**
-     * Type of the DBMS
-     *
-     * @var string
-     */
+    /** @var string Type of the DBMS */
     public $db;
 
-    /**
-     * Database host
-     *
-     * @var string
-     */
+    /** @var string Database host */
     public $host;
 
-    /**
-     * Database port
-     *
-     * @var int
-     */
+    /** @var int Database port */
     public $port;
 
-    /**
-     * Database name
-     *
-     * @var string
-     */
+    /** @var string Database name */
     public $dbname;
 
-    /**
-     * Username to use for authentication
-     *
-     * @var string
-     */
+    /** @var string Username to use for authentication */
     public $username;
 
-    /**
-     * Password to use for authentication
-     *
-     * @var string
-     */
+    /** @var string Password to use for authentication */
     public $password;
 
     /**

@@ -1,17 +1,17 @@
 <?php
 
-namespace ipl\Sql\Contracts;
+namespace ipl\Sql\Contract;
 
-interface QuoterInterface
+interface Quoter
 {
     /**
      * Quote a string so that it can be safely used as table or column name, even if it is a reserved name
      *
      * The quote character depends on the underlying database adapter that is being used.
      *
-     * @param   string  $identifier
+     * @param string $identifier
      *
-     * @return  string
+     * @return string
      */
     public function quoteIdentifier($identifier);
 }

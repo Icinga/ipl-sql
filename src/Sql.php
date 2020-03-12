@@ -31,7 +31,7 @@ class Sql
     /**
      * Create and return a DELETE statement
      *
-     * @return  Delete
+     * @return Delete
      */
     public static function delete()
     {
@@ -41,7 +41,7 @@ class Sql
     /**
      * Create and return a INSERT statement
      *
-     * @return  Insert
+     * @return Insert
      */
     public static function insert()
     {
@@ -51,7 +51,7 @@ class Sql
     /**
      * Create and return a SELECT statement
      *
-     * @return  Select
+     * @return Select
      */
     public static function select()
     {
@@ -61,7 +61,7 @@ class Sql
     /**
      * Create and return a UPDATE statement
      *
-     * @return  Update
+     * @return Update
      */
     public static function update()
     {

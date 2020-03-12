@@ -2,15 +2,15 @@
 
 namespace ipl\Sql\Adapter;
 
+use ipl\Sql\Config;
 use PDO;
 use RuntimeException;
-use ipl\Sql\Config;
 
 class Mssql extends BaseAdapter
 {
     protected $quoteCharacter = ['[', ']'];
 
-    protected $escapeCharatcer = '[[]';
+    protected $escapeCharacter = '[[]';
 
     public function getDsn(Config $config)
     {

@@ -3,12 +3,13 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
-use ipl\Sql\Adapter\AdapterInterface;
-use ipl\Stdlib;
+use ipl\Sql\Contract\Adapter;
+
+use function ipl\Stdlib\get_php_type;
 
 class QueryBuilder
 {
-    /** @var AdapterInterface */
+    /** @var Adapter */
     protected $adapter;
 
     protected $separator = " ";
@@ -16,9 +17,9 @@ class QueryBuilder
     /**
      * Create a new query builder for the specified database adapter
      *
-     * @param   AdapterInterface $adapter
+     * @param Adapter $adapter
      */
-    public function __construct(AdapterInterface $adapter)
+    public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
     }
@@ -26,11 +27,11 @@ class QueryBuilder
     /**
      * Assemble the given statement
      *
-     * @param   Delete|Insert|Select|Update $stmt
+     * @param Delete|Insert|Select|Update $stmt
      *
-     * @return  array
+     * @return array
      *
-     * @throw   \InvalidArgumentException   If statement type is invalid
+     * @throw InvalidArgumentException If statement type is invalid
      */
     public function assemble($stmt)
     {
@@ -46,7 +47,7 @@ class QueryBuilder
             default:
                 throw new InvalidArgumentException(sprintf(
                     __METHOD__ . ' expects instances of Delete, Insert, Select or Update. Got %s instead.',
-                    Stdlib\get_php_type($stmt)
+                    get_php_type($stmt)
                 ));
         }
     }
@@ -54,9 +55,9 @@ class QueryBuilder
     /**
      * Assemble a DELETE query
      *
-     * @param   Delete  $delete
+     * @param Delete $delete
      *
-     * @return  array
+     * @return array
      */
     public function assembleDelete(Delete $delete)
     {
@@ -74,9 +75,9 @@ class QueryBuilder
     /**
      * Assemble a INSERT statement
      *
-     * @param   Insert  $insert
+     * @param Insert $insert
      *
-     * @return  array
+     * @return array
      */
     public function assembleInsert(Insert $insert)
     {
@@ -98,10 +99,10 @@ class QueryBuilder
     /**
      * Assemble a SELECT query
      *
-     * @param   Select  $select
-     * @param   array   $values
+     * @param Select $select
+     * @param array  $values
      *
-     * @return  array
+     * @return array
      */
     public function assembleSelect(Select $select, array &$values = [])
     {
@@ -151,9 +152,9 @@ class QueryBuilder
     /**
      * Assemble a UPDATE query
      *
-     * @param   Update  $update
+     * @param Update $update
      *
-     * @return  array
+     * @return array
      */
     public function assembleUpdate(Update $update)
     {
@@ -172,10 +173,10 @@ class QueryBuilder
     /**
      * Build the WITH part of a query
      *
-     * @param   array   $with
-     * @oaram   array   $values
+     * @param array $with
+     * @param array $values
      *
-     * @return  string  The WITH part of a query
+     * @return string The WITH part of a query
      */
     public function buildWith(array $with, array &$values)
     {
@@ -202,9 +203,9 @@ class QueryBuilder
     /**
      * Build the DELETE FROM part of a query
      *
-     * @param   array   $from
+     * @param array $from
      *
-     * @return  string  The DELETE FROM part of a query
+     * @return string The DELETE FROM part of a query
      */
     public function buildDeleteFrom(array $from = null)
     {
@@ -230,10 +231,10 @@ class QueryBuilder
     /**
      * Outsourced logic of {@link buildCondition()}
      *
-     * @param   string  $expression
-     * @param   array   $values
+     * @param string $expression
+     * @param array  $values
      *
-     * @return  array
+     * @return array
      */
     public function unpackCondition($expression, array $values)
     {
@@ -276,10 +277,10 @@ class QueryBuilder
     /**
      * Outsourced logic {@link buildWhere()} and {@link buildHaving()} have in common
      *
-     * @param   array   $condition
-     * @param   array   $values
+     * @param array $condition
+     * @param array $values
      *
-     * @return  string
+     * @return string
      */
     public function buildCondition(array $condition, array &$values)
     {
@@ -328,10 +329,10 @@ class QueryBuilder
     /**
      * Build the WHERE part of a query
      *
-     * @param   array   $where
-     * @oaram   array   $values
+     * @param array $where
+     * @oaram array $values
      *
-     * @return  string  The WHERE part of the query
+     * @return string The WHERE part of the query
      */
     public function buildWhere(array $where = null, array &$values = [])
     {
@@ -345,9 +346,9 @@ class QueryBuilder
     /**
      * Build the INSERT INTO part of a INSERT INTO ... statement
      *
-     * @param   string|null $into
+     * @param string|null $into
      *
-     * @return  string  The INSERT INTO part of a INSERT INTO ... statement
+     * @return string The INSERT INTO part of a INSERT INTO ... statement
      */
     public function buildInsertInto($into)
     {
@@ -361,11 +362,11 @@ class QueryBuilder
     /**
      * Build the columns and SELECT part of a INSERT INTO ... SELECT statement
      *
-     * @param   array   $columns
-     * @param   Select  $select
-     * @param   array   $values
+     * @param array  $columns
+     * @param Select $select
+     * @param array  $values
      *
-     * @return  string  The columns and SELECT part of the INSERT INTO ... SELECT statement
+     * @return string The columns and SELECT part of the INSERT INTO ... SELECT statement
      */
     public function buildInsertIntoSelect(array $columns, Select $select, array &$values)
     {
@@ -380,11 +381,11 @@ class QueryBuilder
     /**
      * Build the columns and values part of a INSERT INTO ... statement
      *
-     * @param   array   $columns
-     * @param   array   $insertValues
-     * @param   array   $values
+     * @param array $columns
+     * @param array $insertValues
+     * @param array $values
      *
-     * @return  string  The columns and values part of a INSERT INTO ... statement
+     * @return string The columns and values part of a INSERT INTO ... statement
      */
     public function buildInsertColumnsAndValues(array $columns, array $insertValues, array &$values)
     {
@@ -412,11 +413,11 @@ class QueryBuilder
     /**
      * Build the SELECT part of a query
      *
-     * @param   array   $columns
-     * @param   bool    $distinct
-     * @param   array   $values
+     * @param array $columns
+     * @param bool  $distinct
+     * @param array $values
      *
-     * @return  string  The SELECT part of the query
+     * @return string The SELECT part of the query
      */
     public function buildSelect(array $columns, $distinct, array &$values)
     {
@@ -457,10 +458,10 @@ class QueryBuilder
     /**
      * Build the FROM part of a query
      *
-     * @param   array   $from
-     * @param   array   $values
+     * @param array $from
+     * @param array $values
      *
-     * @return  string  The FROM part of the query
+     * @return string The FROM part of the query
      */
     public function buildFrom(array $from = null, array &$values = [])
     {
@@ -488,10 +489,10 @@ class QueryBuilder
     /**
      * Build the JOIN part(s) of a query
      *
-     * @param   array   $joins
-     * @oaram   array   $values
+     * @param array $joins
+     * @oaram array $values
      *
-     * @return  string  The JOIN part(s) of the query
+     * @return string The JOIN part(s) of the query
      */
     public function buildJoin($joins, array &$values)
     {
@@ -533,10 +534,10 @@ class QueryBuilder
     /**
      * Build the GROUP BY part of a query
      *
-     * @param   array   $groupBy
-     * @param   array   $values
+     * @param array $groupBy
+     * @param array $values
      *
-     * @return  string  The GROUP BY part of the query
+     * @return string The GROUP BY part of the query
      */
     public function buildGroupBy(array $groupBy = null, array &$values = [])
     {
@@ -559,10 +560,10 @@ class QueryBuilder
     /**
      * Build the HAVING part of a query
      *
-     * @param   array   $having
-     * @param   array   $values
+     * @param array $having
+     * @param array $values
      *
-     * @return  string  The HAVING part of the query
+     * @return string The HAVING part of the query
      */
     public function buildHaving(array $having = null, array &$values = [])
     {
@@ -576,10 +577,10 @@ class QueryBuilder
     /**
      * Build the ORDER BY part of a query
      *
-     * @param   array   $orderBy
-     * @param   array   $values
+     * @param array $orderBy
+     * @param array $values
      *
-     * @return  string  The ORDER BY part of the query
+     * @return string The ORDER BY part of the query
      */
     public function buildOrderBy(array $orderBy = null, array &$values = [])
     {
@@ -612,10 +613,10 @@ class QueryBuilder
     /**
      * Build the LIMIT and OFFSET part of a query
      *
-     * @param   int $limit
-     * @param   int $offset
+     * @param int $limit
+     * @param int $offset
      *
-     * @return  string  The LIMIT and OFFSET part of the query
+     * @return string The LIMIT and OFFSET part of the query
      */
     public function buildLimitOffset($limit = null, $offset = null)
     {
@@ -635,10 +636,10 @@ class QueryBuilder
     /**
      * Build the UNION parts of a query
      *
-     * @param   array   $unions
-     * @param   array   $values
+     * @param array $unions
+     * @param array $values
      *
-     * @return  array|null  The UNION parts of the query
+     * @return array|null The UNION parts of the query
      */
     public function buildUnions(array $unions = null, array &$values = [])
     {
@@ -666,9 +667,9 @@ class QueryBuilder
     /**
      * Build the UPDATE {table} part of a query
      *
-     * @param   array   $updateTable    The table to UPDATE
+     * @param array $updateTable The table to UPDATE
      *
-     * @return  string  The UPDATE {table} part of the query
+     * @return string The UPDATE {table} part of the query
      */
     public function buildUpdateTable(array $updateTable = null)
     {
@@ -694,10 +695,10 @@ class QueryBuilder
     /**
      * Build the SET part of a UPDATE query
      *
-     * @param   array   $set
-     * @param   array   $values
+     * @param array $set
+     * @param array $values
      *
-     * @return  string  The SET part of a UPDATE query
+     * @return string The SET part of a UPDATE query
      */
     public function buildUpdateSet(array $set = null, array &$values = [])
     {

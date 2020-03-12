@@ -48,10 +48,10 @@ trait Where
      *
      * If $condition is empty, replace it with a boolean constant depending on the operator.
      *
-     * @param   string|array    $condition
-     * @param   string          $operator
+     * @param string|array $condition
+     * @param string       $operator
      *
-     * @return  array
+     * @return array
      */
     protected function buildCondition($condition, $operator)
     {
@@ -71,9 +71,9 @@ trait Where
     /**
      * Merge the given condition with ours via the given operator
      *
-     * @param   mixed   $base       Our condition
-     * @param   array   $condition  As returned by {@link buildCondition()}
-     * @param   string  $operator
+     * @param mixed  $base      Our condition
+     * @param array  $condition As returned by {@link buildCondition()}
+     * @param string $operator
      */
     protected function mergeCondition(&$base, array $condition, $operator)
     {
@@ -107,7 +107,7 @@ trait Where
     /**
      * Clone a condition in-place
      *
-     * @param   array   $condition  As returned by {@link buildCondition()}
+     * @param array $condition As returned by {@link buildCondition()}
      */
     protected function cloneCondition(array &$condition)
     {

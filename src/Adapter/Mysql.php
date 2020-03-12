@@ -2,15 +2,15 @@
 
 namespace ipl\Sql\Adapter;
 
-use ipl\Sql\Connection;
 use ipl\Sql\Config;
+use ipl\Sql\Connection;
 use PDO;
 
 class Mysql extends BaseAdapter
 {
     protected $quoteCharacter = ['`', '`'];
 
-    protected $escapeCharatcer = '``';
+    protected $escapeCharacter = '``';
 
     public function setClientTimezone(Connection $db)
     {
