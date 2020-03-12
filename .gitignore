@@ -1,12 +1,9 @@
-# Exclude all hidden files...
+# Exclude all hidden files
 .*
 
-# Except those related to Git and GitHub
+# Except those related to Git (and GitHub)
 !.git*
-!.github*
 
-# Exclude build and packaging leftovers
-/debian
-/vendor
-build/*
+# Exclude files from composer install
+vendor/
 composer.lock
