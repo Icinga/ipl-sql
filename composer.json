@@ -4,7 +4,7 @@
   "description": "Icinga PHP Library - SQL abstraction layer",
   "keywords": ["sql", "database"],
   "homepage": "https://github.com/Icinga/ipl-sql",
-  "license": "GPL-2.0-or-later",
+  "license": "MIT",
   "require": {
     "php": ">=5.6.0",
     "ext-pdo": "*",
