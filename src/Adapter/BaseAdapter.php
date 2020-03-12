@@ -20,11 +20,7 @@ abstract class BaseAdapter implements Adapter
      */
     protected $quoteCharacter = ['"', '"'];
 
-    /**
-     * Character to use for escaping quote characters
-     *
-     * @var string
-     */
+    /** @var string Character to use for escaping quote characters */
     protected $escapeCharacter = '\\"';
 
     /** @var array Default PDO connect options */

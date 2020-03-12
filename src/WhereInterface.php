@@ -10,7 +10,7 @@ interface WhereInterface
     /**
      * Get the WHERE part of the query
      *
-     * @return  array|null
+     * @return array|null
      */
     public function getWhere();
 
@@ -30,11 +30,11 @@ interface WhereInterface
      * Note that this method does not override an already set WHERE part. Instead, multiple calls to this function add
      * the specified WHERE part using the AND operator.
      *
-     * @param   string|ExpressionInterface|Select|array $condition  The WHERE condition
-     * @param   string                                  $operator   The operator to combine multiple conditions with,
-     *                                                              if the condition is in the array format
+     * @param string|ExpressionInterface|Select|array $condition The WHERE condition
+     * @param string                                  $operator  The operator to combine multiple conditions with,
+     *                                                           if the condition is in the array format
      *
-     * @return  $this
+     * @return $this
      */
     public function where($condition, $operator = Sql::ALL);
 
@@ -43,11 +43,11 @@ interface WhereInterface
      *
      * Please see {@link where()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param   string|ExpressionInterface|Select|array $condition  The WHERE condition
-     * @param   string                                  $operator   The operator to combine multiple conditions with,
-     *                                                              if the condition is in the array format
+     * @param string|ExpressionInterface|Select|array $condition The WHERE condition
+     * @param string                                  $operator  The operator to combine multiple conditions with,
+     *                                                           if the condition is in the array format
      *
-     * @return  $this
+     * @return $this
      */
     public function orWhere($condition, $operator = Sql::ALL);
 
@@ -56,11 +56,11 @@ interface WhereInterface
      *
      * Please see {@link where()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param   string|ExpressionInterface|Select|array $condition  The WHERE condition
-     * @param   string                                  $operator   The operator to combine multiple conditions with,
-     *                                                              if the condition is in the array format
+     * @param string|ExpressionInterface|Select|array $condition The WHERE condition
+     * @param string                                  $operator  The operator to combine multiple conditions with,
+     *                                                           if the condition is in the array format
      *
-     * @return  $this
+     * @return $this
      */
     public function notWhere($condition, $operator = Sql::ALL);
 
@@ -69,11 +69,11 @@ interface WhereInterface
      *
      * Please see {@link where()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param   string|ExpressionInterface|Select|array $condition  The WHERE condition
-     * @param   string                                  $operator   The operator to combine multiple conditions with,
-     *                                                              if the condition is in the array format
+     * @param string|ExpressionInterface|Select|array $condition The WHERE condition
+     * @param string                                  $operator  The operator to combine multiple conditions with,
+     *                                                           if the condition is in the array format
      *
-     * @return  $this
+     * @return $this
      */
     public function orNotWhere($condition, $operator = Sql::ALL);
 }

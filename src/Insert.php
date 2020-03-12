@@ -3,7 +3,6 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
-
 use function ipl\Stdlib\arrayval;
 
 /**
@@ -28,7 +27,7 @@ class Insert implements CommonTableExpressionInterface
     /**
      * Get the table for the INSERT INTo query
      *
-     * @return  string|null
+     * @return string|null
      */
     public function getInto()
     {
@@ -44,10 +43,10 @@ class Insert implements CommonTableExpressionInterface
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param   string  $table  The table to insert data into. The table specification must be in one of the following
-     *                          formats: 'table' or 'schema.table'
+     * @param string $table The table to insert data into. The table specification must be in one of the following
+     *                      formats: 'table' or 'schema.table'
      *
-     * @return  $this
+     * @return $this
      */
     public function into($table)
     {
@@ -59,7 +58,7 @@ class Insert implements CommonTableExpressionInterface
     /**
      * Get the columns for which the statement provides values
      *
-     * @return  array
+     * @return array
      */
     public function getColumns()
     {
@@ -86,9 +85,9 @@ class Insert implements CommonTableExpressionInterface
      * If you do not set the columns for which the query provides values using this method, you must pass the values to
      * {@link values()} in terms of column-value pairs in order to provide the column names.
      *
-     * @param   array   $columns
+     * @param array $columns
      *
-     * @return  $this
+     * @return $this
      */
     public function columns(array $columns)
     {
@@ -100,7 +99,7 @@ class Insert implements CommonTableExpressionInterface
     /**
      * Get the values to insert
      *
-     * @return  array
+     * @return array
      */
     public function getValues()
     {
@@ -115,11 +114,11 @@ class Insert implements CommonTableExpressionInterface
      * restriction regarding quoting applies here. If you use {@link columns()} to set the columns and specify the
      * values in terms of column-value pairs, the columns from {@link columns()} will be used nonetheless.
      *
-     * @param   array|object|\Traversable   $values List of values or associative set of column-value pairs
+     * @param array|object|\Traversable $values List of values or associative set of column-value pairs
      *
-     * @return  $this
+     * @return $this
      *
-     * @throws  InvalidArgumentException   If values type is invalid
+     * @throws InvalidArgumentException If values type is invalid
      */
     public function values($values)
     {
@@ -131,9 +130,9 @@ class Insert implements CommonTableExpressionInterface
     /**
      * Create a INSERT INTO ... SELECT statement
      *
-     * @param   Select  $select
+     * @param Select $select
      *
-     * @return  $this
+     * @return $this
      */
     public function select(Select $select)
     {
@@ -145,7 +144,7 @@ class Insert implements CommonTableExpressionInterface
     /**
      * Get the select query for the INSERT INTO ... SELECT statement
      *
-     * @return  Select|null
+     * @return Select|null
      */
     public function getSelect()
     {

@@ -16,8 +16,8 @@ class Expression implements ExpressionInterface
     /**
      * Create a new database expression
      *
-     * @param   string  $statement  The statement of the expression
-     * @param   mixed   ...$values  The values for the expression
+     * @param string $statement The statement of the expression
+     * @param mixed  ...$values The values for the expression
      */
     public function __construct($statement, $values = null)
     {

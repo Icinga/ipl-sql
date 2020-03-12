@@ -9,9 +9,9 @@ interface Quoter
      *
      * The quote character depends on the underlying database adapter that is being used.
      *
-     * @param   string  $identifier
+     * @param string $identifier
      *
-     * @return  string
+     * @return string
      */
     public function quoteIdentifier($identifier);
 }

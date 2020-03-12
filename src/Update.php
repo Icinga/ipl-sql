@@ -3,7 +3,6 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
-
 use function ipl\Stdlib\arrayval;
 
 /**
@@ -23,7 +22,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     /**
      * Get the table for the UPDATE query
      *
-     * @return  array|null
+     * @return array|null
      */
     public function getTable()
     {
@@ -39,10 +38,10 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param   string|array    $table  The table to update. The table specification must be in one of the
-     *                                  following formats: 'table', 'table alias', ['alias' => 'table']
+     * @param string|array $table The table to update. The table specification must be in one of the
+     *                            following formats: 'table', 'table alias', ['alias' => 'table']
      *
-     * @return  $this
+     * @return $this
      */
     public function table($table)
     {
@@ -54,7 +53,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     /**
      * Get the columns to update in terms of column-value pairs
      *
-     * @return  array|null
+     * @return array|null
      */
     public function getSet()
     {
@@ -72,11 +71,11 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param   array|object|\Traversable   $set    Associative set of column-value pairs
+     * @param array|object|\Traversable $set Associative set of column-value pairs
      *
-     * @return  $this
+     * @return $this
      *
-     * @throws  InvalidArgumentException   If set type is invalid
+     * @throws InvalidArgumentException If set type is invalid
      */
     public function set($set)
     {

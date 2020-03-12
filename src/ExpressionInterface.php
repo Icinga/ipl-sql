@@ -10,14 +10,14 @@ interface ExpressionInterface
     /**
      * Get the statement of the expression
      *
-     * @return  string
+     * @return string
      */
     public function getStatement();
 
     /**
      * Get the values for the expression
      *
-     * @return  array
+     * @return array
      */
     public function getValues();
 }

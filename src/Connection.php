@@ -7,9 +7,9 @@ use Exception;
 use InvalidArgumentException;
 use ipl\Sql\Contract\Adapter;
 use ipl\Sql\Contract\Quoter;
+use ipl\Stdlib\Plugins;
 use PDO;
 use PDOStatement;
-use ipl\Stdlib\Plugins;
 
 /**
  * Connection to a SQL database using the native PDO for database access
@@ -35,9 +35,9 @@ class Connection implements Quoter
      *
      * {@link init()} is called after construction.
      *
-     * @param   Config|\Traversable|array   $config
+     * @param Config|\Traversable|array $config
      *
-     * @throws  InvalidArgumentException    If there's no adapter for the given database available
+     * @throws InvalidArgumentException If there's no adapter for the given database available
      */
     public function __construct($config)
     {
@@ -60,12 +60,12 @@ class Connection implements Quoter
     /**
      * Proxy PDO method calls
      *
-     * @param   string  $name           The name of the PDO method to call
-     * @param   array   $arguments      Arguments for the method to call
+     * @param string $name      The name of the PDO method to call
+     * @param array  $arguments Arguments for the method to call
      *
-     * @return  mixed
+     * @return mixed
      *
-     * @throws  BadMethodCallException  If the called method does not exist
+     * @throws BadMethodCallException If the called method does not exist
      *
      */
     public function __call($name, array $arguments)
@@ -94,7 +94,7 @@ class Connection implements Quoter
     /**
      * Get the database adapter
      *
-     * @return  Adapter
+     * @return Adapter
      */
     public function getAdapter()
     {
@@ -104,7 +104,7 @@ class Connection implements Quoter
     /**
      * Get the connection configuration
      *
-     * @return  Config
+     * @return Config
      */
     public function getConfig()
     {
@@ -114,7 +114,7 @@ class Connection implements Quoter
     /**
      * Get the query builder for the database connection
      *
-     * @return  QueryBuilder
+     * @return QueryBuilder
      */
     public function getQueryBuilder()
     {
@@ -150,7 +150,7 @@ class Connection implements Quoter
     /**
      * Connect to the database, if not already connected
      *
-     * @return  $this
+     * @return $this
      */
     public function connect()
     {
@@ -172,7 +172,7 @@ class Connection implements Quoter
     /**
      * Disconnect from the database
      *
-     * @return  $this
+     * @return $this
      */
     public function disconnect()
     {
@@ -184,9 +184,9 @@ class Connection implements Quoter
     /**
      * Check whether the connection to the database is still available
      *
-     * @param   bool    $reconnect  Whether to automatically reconnect
+     * @param bool $reconnect Whether to automatically reconnect
      *
-     * @return  bool
+     * @return bool
      */
     public function ping($reconnect = true)
     {
@@ -208,11 +208,10 @@ class Connection implements Quoter
     /**
      * Fetch and return all result rows as sequential array
      *
-     * @param   Select|string   $stmt   The SQL statement to prepare and execute.
+     * @param Select|string $stmt   The SQL statement to prepare and execute.
+     * @param array         $values Values to bind to the statement
      *
-     * @param   array           $values Values to bind to the statement
-     *
-     * @return  array
+     * @return array
      */
     public function fetchAll($stmt, array $values = null)
     {
@@ -223,11 +222,10 @@ class Connection implements Quoter
     /**
      * Fetch and return the first column of all result rows as sequential array
      *
-     * @param   Select|string   $stmt   The SQL statement to prepare and execute.
+     * @param Select|string $stmt   The SQL statement to prepare and execute.
+     * @param array         $values Values to bind to the statement
      *
-     * @param   array           $values Values to bind to the statement
-     *
-     * @return  array
+     * @return array
      */
     public function fetchCol($stmt, array $values = null)
     {
@@ -238,11 +236,10 @@ class Connection implements Quoter
     /**
      * Fetch and return the first row of the result rows
      *
-     * @param   Select|string   $stmt   The SQL statement to prepare and execute.
+     * @param Select|string $stmt   The SQL statement to prepare and execute.
+     * @param array         $values Values to bind to the statement
      *
-     * @param   array           $values Values to bind to the statement
-     *
-     * @return  array
+     * @return array
      */
     public function fetchOne($stmt, array $values = null)
     {
@@ -264,11 +261,10 @@ class Connection implements Quoter
      *
      * First column is the key and the second column is the value.
      *
-     * @param   Select|string   $stmt   The SQL statement to prepare and execute.
+     * @param Select|string $stmt   The SQL statement to prepare and execute.
+     * @param array         $values Values to bind to the statement
      *
-     * @param   array           $values Values to bind to the statement
-     *
-     * @return  array
+     * @return array
      */
     public function fetchPairs($stmt, array $values = null)
     {
@@ -279,11 +275,10 @@ class Connection implements Quoter
     /**
      * Fetch and return the first column of the first result row
      *
-     * @param   Select|string   $stmt   The SQL statement to prepare and execute.
+     * @param Select|string $stmt   The SQL statement to prepare and execute.
+     * @param array         $values Values to bind to the statement
      *
-     * @param   array           $values Values to bind to the statement
-     *
-     * @return  string
+     * @return string
      */
     public function fetchScalar($stmt, array $values = null)
     {
@@ -294,10 +289,10 @@ class Connection implements Quoter
     /**
      * Prepare and execute the given statement
      *
-     * @param   Delete|Insert|Select|Update|string  $stmt   The SQL statement to prepare and execute
-     * @param   string|array                        $values Values to bind to the statement, if any
+     * @param Delete|Insert|Select|Update|string $stmt   The SQL statement to prepare and execute
+     * @param string|array                       $values Values to bind to the statement, if any
      *
-     * @return  PDOStatement
+     * @return PDOStatement
      */
     public function prepexec($stmt, $values = null)
     {
@@ -320,9 +315,9 @@ class Connection implements Quoter
     /**
      * Prepare and execute the given Select query
      *
-     * @param   Select  $select
+     * @param Select $select
      *
-     * @return  PDOStatement
+     * @return PDOStatement
      */
     public function select(Select $select)
     {
@@ -334,13 +329,13 @@ class Connection implements Quoter
     /**
      * Insert a table row with the specified data
      *
-     * @param   string                      $table  The table to insert data into. The table specification must be in
-     *                                              one of the following formats: 'table' or 'schema.table'
-     * @param   array|object|\Traversable   $data   Row data in terms of column-value pairs
+     * @param string                    $table The table to insert data into. The table specification must be in
+     *                                         one of the following formats: 'table' or 'schema.table'
+     * @param array|object|\Traversable $data  Row data in terms of column-value pairs
      *
-     * @return  PDOStatement
+     * @return PDOStatement
      *
-     * @throws  InvalidArgumentException   If data type is invalid
+     * @throws InvalidArgumentException If data type is invalid
      */
     public function insert($table, $data)
     {
@@ -354,17 +349,17 @@ class Connection implements Quoter
     /**
      * Update table rows with the specified data, optionally based on a given condition
      *
-     * @param   string|array                $table      The table to update. The table specification must be in one of
-     *                                                  the following formats:
-     *                                                  'table', 'table alias', ['alias' => 'table']
-     * @param   array|object|\Traversable   $data       The columns to update in terms of column-value pairs
-     * @param   mixed                       $condition  The WHERE condition
-     * @param   string                      $operator   The operator to combine multiple conditions with,
-     *                                                  if the condition is in the array format
+     * @param string|array              $table     The table to update. The table specification must be in one of
+     *                                             the following formats:
+     *                                             'table', 'table alias', ['alias' => 'table']
+     * @param array|object|\Traversable $data      The columns to update in terms of column-value pairs
+     * @param mixed                     $condition The WHERE condition
+     * @param string                    $operator  The operator to combine multiple conditions with,
+     *                                             if the condition is in the array format
      *
-     * @return  PDOStatement
+     * @return PDOStatement
      *
-     * @throws  InvalidArgumentException   If data type is invalid
+     * @throws InvalidArgumentException If data type is invalid
      */
     public function update($table, $data, $condition = null, $operator = Sql::ALL)
     {
@@ -382,13 +377,13 @@ class Connection implements Quoter
     /**
      * Delete table rows, optionally based on a given condition
      *
-     * @param   string|array    $table      The table to delete data from. The table specification must be in one of the
-     *                                      following formats: 'table', 'table alias', ['alias' => 'table']
-     * @param   mixed           $condition  The WHERE condition
-     * @param   string          $operator   The operator to combine multiple conditions with,
-     *                                      if the condition is in the array format
+     * @param string|array $table     The table to delete data from. The table specification must be in one of the
+     *                                following formats: 'table', 'table alias', ['alias' => 'table']
+     * @param mixed        $condition The WHERE condition
+     * @param string       $operator  The operator to combine multiple conditions with,
+     *                                if the condition is in the array format
      *
-     * @return  PDOStatement
+     * @return PDOStatement
      */
     public function delete($table, $condition = null, $operator = Sql::ALL)
     {
@@ -405,7 +400,7 @@ class Connection implements Quoter
     /**
      * Begin a transaction
      *
-     * @return  bool    Whether the transaction was started successfully
+     * @return bool Whether the transaction was started successfully
      */
     public function beginTransaction()
     {
@@ -417,7 +412,7 @@ class Connection implements Quoter
     /**
      * Commit a transaction
      *
-     * @return  bool    Whether the transaction was committed successfully
+     * @return bool Whether the transaction was committed successfully
      */
     public function commitTransaction()
     {
@@ -427,7 +422,7 @@ class Connection implements Quoter
     /**
      * Roll back a transaction
      *
-     * @return  bool    Whether the transaction was rolled back successfully
+     * @return bool Whether the transaction was rolled back successfully
      */
     public function rollBackTransaction()
     {
@@ -437,12 +432,12 @@ class Connection implements Quoter
     /**
      * Run the given callback in a transaction
      *
-     * @param   callable    $callback   The callback to run in a transaction.
-     *                                  This connection instance is passed as parameter to the callback
+     * @param callable $callback The callback to run in a transaction.
+     *                           This connection instance is passed as parameter to the callback
      *
-     * @return  mixed                   The return value of the callback
+     * @return  mixed The return value of the callback
      *
-     * @throws  Exception               If and error occurs when running the callback
+     * @throws  Exception If an error occurs when running the callback
      */
     public function transaction(callable $callback)
     {

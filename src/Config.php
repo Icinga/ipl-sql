@@ -13,7 +13,7 @@ class Config
     /**
      * Create a new SQL connection configuration from the given configuration key-value pairs
      *
-     * @param   array|Traversable   $config Configuration key-value pairs
+     * @param array|Traversable $config Configuration key-value pairs
      */
     public function __construct($config)
     {
@@ -26,46 +26,22 @@ class Config
         }
     }
 
-    /**
-     * Type of the DBMS
-     *
-     * @var string
-     */
+    /** @var string Type of the DBMS */
     public $db;
 
-    /**
-     * Database host
-     *
-     * @var string
-     */
+    /** @var string Database host */
     public $host;
 
-    /**
-     * Database port
-     *
-     * @var int
-     */
+    /** @var int Database port */
     public $port;
 
-    /**
-     * Database name
-     *
-     * @var string
-     */
+    /** @var string Database name */
     public $dbname;
 
-    /**
-     * Username to use for authentication
-     *
-     * @var string
-     */
+    /** @var string Username to use for authentication */
     public $username;
 
-    /**
-     * Password to use for authentication
-     *
-     * @var string
-     */
+    /** @var string Password to use for authentication */
     public $password;
 
     /**
