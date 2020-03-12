@@ -19,10 +19,8 @@ class Expression implements ExpressionInterface
      * @param string $statement The statement of the expression
      * @param mixed  ...$values The values for the expression
      */
-    public function __construct($statement, $values = null)
+    public function __construct($statement, ...$values)
     {
-        $values = func_get_args();
-        array_shift($values);
         $this->statement = $statement;
         $this->values = $values;
     }
