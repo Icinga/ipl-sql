@@ -4,10 +4,10 @@ namespace ipl\Sql\Adapter;
 
 use DateTime;
 use DateTimeZone;
+use ipl\Sql\Config;
+use ipl\Sql\Connection;
 use ipl\Sql\Contract\Adapter;
 use PDO;
-use ipl\Sql\Connection;
-use ipl\Sql\Config;
 
 abstract class BaseAdapter implements Adapter
 {

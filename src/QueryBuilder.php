@@ -4,6 +4,7 @@ namespace ipl\Sql;
 
 use InvalidArgumentException;
 use ipl\Sql\Contract\Adapter;
+
 use function ipl\Stdlib\get_php_type;
 
 class QueryBuilder

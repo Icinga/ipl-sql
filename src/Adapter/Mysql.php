@@ -2,8 +2,8 @@
 
 namespace ipl\Sql\Adapter;
 
-use ipl\Sql\Connection;
 use ipl\Sql\Config;
+use ipl\Sql\Connection;
 use PDO;
 
 class Mysql extends BaseAdapter

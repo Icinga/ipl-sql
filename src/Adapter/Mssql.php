@@ -2,9 +2,9 @@
 
 namespace ipl\Sql\Adapter;
 
+use ipl\Sql\Config;
 use PDO;
 use RuntimeException;
-use ipl\Sql\Config;
 
 class Mssql extends BaseAdapter
 {

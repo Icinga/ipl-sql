@@ -3,6 +3,7 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
+
 use function ipl\Stdlib\arrayval;
 
 /**
