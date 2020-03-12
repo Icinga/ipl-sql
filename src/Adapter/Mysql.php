@@ -10,7 +10,7 @@ class Mysql extends BaseAdapter
 {
     protected $quoteCharacter = ['`', '`'];
 
-    protected $escapeCharatcer = '``';
+    protected $escapeCharacter = '``';
 
     public function setClientTimezone(Connection $db)
     {
