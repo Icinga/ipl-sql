@@ -35,7 +35,7 @@ class Connection implements Quoter
      *
      * {@link init()} is called after construction.
      *
-     * @param Config|\Traversable|array $config
+     * @param Config|iterable $config
      *
      * @throws InvalidArgumentException If there's no adapter for the given database available
      */
@@ -329,9 +329,9 @@ class Connection implements Quoter
     /**
      * Insert a table row with the specified data
      *
-     * @param string                    $table The table to insert data into. The table specification must be in
-     *                                         one of the following formats: 'table' or 'schema.table'
-     * @param array|object|\Traversable $data  Row data in terms of column-value pairs
+     * @param string   $table The table to insert data into. The table specification must be in
+     *                        one of the following formats: 'table' or 'schema.table'
+     * @param iterable $data  Row data in terms of column-value pairs
      *
      * @return PDOStatement
      *
@@ -349,13 +349,13 @@ class Connection implements Quoter
     /**
      * Update table rows with the specified data, optionally based on a given condition
      *
-     * @param string|array              $table     The table to update. The table specification must be in one of
-     *                                             the following formats:
-     *                                             'table', 'table alias', ['alias' => 'table']
-     * @param array|object|\Traversable $data      The columns to update in terms of column-value pairs
-     * @param mixed                     $condition The WHERE condition
-     * @param string                    $operator  The operator to combine multiple conditions with,
-     *                                             if the condition is in the array format
+     * @param string|array $table     The table to update. The table specification must be in one of
+     *                                the following formats:
+     *                                'table', 'table alias', ['alias' => 'table']
+     * @param iterable     $data      The columns to update in terms of column-value pairs
+     * @param mixed        $condition The WHERE condition
+     * @param string       $operator  The operator to combine multiple conditions with,
+     *                                if the condition is in the array format
      *
      * @return PDOStatement
      *

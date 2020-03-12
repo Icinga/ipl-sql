@@ -114,7 +114,7 @@ class Insert implements CommonTableExpressionInterface
      * restriction regarding quoting applies here. If you use {@link columns()} to set the columns and specify the
      * values in terms of column-value pairs, the columns from {@link columns()} will be used nonetheless.
      *
-     * @param array|object|\Traversable $values List of values or associative set of column-value pairs
+     * @param iterable $values List of values or associative set of column-value pairs
      *
      * @return $this
      *

@@ -71,7 +71,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param array|object|\Traversable $set Associative set of column-value pairs
+     * @param iterable $set Associative set of column-value pairs
      *
      * @return $this
      *
