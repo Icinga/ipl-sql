@@ -469,6 +469,15 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertCorrectStatementAndValues('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?) DESC', [1]);
     }
 
+    public function testLimit()
+    {
+        $this->query = (new Select())->columns(['a'])->from('b')->limit(4);
+        $this->assertCorrectStatementAndValues(
+            'SELECT a FROM b LIMIT 4',
+            []
+        );
+    }
+
     public function testUnion()
     {
         $unionQuery = (new Select())

@@ -12,6 +12,8 @@ class Mssql extends BaseAdapter
 
     protected $escapeCharacter = '[[]';
 
+    protected $limitRequiresOrder = true;
+
     public function getDsn(Config $config)
     {
         $drivers = array_intersect(['dblib', 'mssql', 'sybase', 'freetds'], PDO::getAvailableDrivers());
@@ -39,5 +41,17 @@ class Mssql extends BaseAdapter
         }
 
         return $dsn;
+    }
+
+    public function renderLimitReturnedRows($limit, $offset)
+    {
+        if ($offset === null && $limit === null) {
+            return '';
+        }
+
+        $limit = (int) $limit;
+        $offset = (int) $offset;
+
+        return "OFFSET $offset ROWS FETCH NEXT $limit ROWS ONLY";
     }
 }

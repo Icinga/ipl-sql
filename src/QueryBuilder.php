@@ -106,6 +106,10 @@ class QueryBuilder
      */
     public function assembleSelect(Select $select, array &$values = [])
     {
+        if ($select->hasLimit() && $this->adapter->getLimitRequiresOrder() && ! $select->hasOrderBy()) {
+            $select->orderBy(1);
+        }
+
         $sql = array_filter([
             $this->buildWith($select->getWith(), $values),
             $this->buildSelect($select->getColumns(), $select->getDistinct(), $values),
@@ -115,10 +119,10 @@ class QueryBuilder
             $this->buildGroupBy($select->getGroupBy(), $values),
             $this->buildHaving($select->getHaving(), $values),
             $this->buildOrderBy($select->getOrderBy(), $values),
-            $this->buildLimitOffset($select->getLimit(), $select->getOffset())
+            $this->adapter->renderLimitReturnedRows($select->getLimit(), $select->getOffset())
         ]);
 
-        $sql = implode($this->separator, $sql);
+        $sql = \implode($this->separator, \array_filter($sql, 'strlen'));
 
         $unions = $this->buildUnions($select->getUnion(), $values);
         if ($unions) {

@@ -32,6 +32,8 @@ abstract class BaseAdapter implements Adapter
         PDO::ATTR_STRINGIFY_FETCHES => false
     ];
 
+    protected $limitRequiresOrder = false;
+
     public function getDsn(Config $config)
     {
         $dsn = "{$config->db}:";
@@ -71,6 +73,26 @@ abstract class BaseAdapter implements Adapter
         return $this->quoteCharacter[0]
             . str_replace('.', "{$this->quoteCharacter[0]}.{$this->quoteCharacter[1]}", $identifier)
             . $this->quoteCharacter[1];
+    }
+
+    public function getLimitRequiresOrder()
+    {
+        return $this->limitRequiresOrder;
+    }
+
+    public function renderLimitReturnedRows($limit, $offset)
+    {
+        $sql = [];
+
+        if ($limit !== null) {
+            $sql[] = 'LIMIT ' . (int) $limit;
+        }
+
+        if ($offset !== null) {
+            $sql[] = 'OFFSET ' . (int) $offset;
+        }
+
+        return \implode(' ', $sql);
     }
 
     protected function getTimezoneOffset()
