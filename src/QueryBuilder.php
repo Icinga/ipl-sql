@@ -633,12 +633,24 @@ class QueryBuilder
     {
         $sql = [];
 
-        if ($limit !== null) {
-            $sql[] = "LIMIT $limit";
-        }
+        if ($this->adapter instanceof Mssql) {
+            if ($offset !== null || $limit !== null) {
+                // If offset is null, sprintf will convert it to 0
+                $sql[] = sprintf('OFFSET %d ROWS', $offset);
+            }
 
-        if ($offset !== null) {
-            $sql[] = "OFFSET $offset";
+            if ($limit !== null) {
+                // FETCH FIRST n ROWS ONLY for OFFSET 0 would be an alternative here
+                $sql[] = "FETCH NEXT $limit ROWS ONLY";
+            }
+        } else {
+            if ($limit !== null) {
+                $sql[] = "LIMIT $limit";
+            }
+
+            if ($offset !== null) {
+                $sql[] = "OFFSET $offset";
+            }
         }
 
         return implode($this->separator, $sql);
