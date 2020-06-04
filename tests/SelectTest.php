@@ -469,6 +469,33 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertCorrectStatementAndValues('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?) DESC', [1]);
     }
 
+    public function testLimitOffset()
+    {
+        $this->query = (new Select())->columns(['a'])->from('b')->limit(4)->offset(1);
+        $this->assertCorrectStatementAndValues(
+            'SELECT a FROM b LIMIT 4 OFFSET 1',
+            []
+        );
+    }
+
+    public function testLimitWithoutOffset()
+    {
+        $this->query = (new Select())->columns(['a'])->from('b')->limit(4);
+        $this->assertCorrectStatementAndValues(
+            'SELECT a FROM b LIMIT 4',
+            []
+        );
+    }
+
+    public function testOffsetWithoutLimit()
+    {
+        $this->query = (new Select())->columns(['a'])->from('b')->offset(1);
+        $this->assertCorrectStatementAndValues(
+            'SELECT a FROM b OFFSET 1',
+            []
+        );
+    }
+
     public function testUnion()
     {
         $unionQuery = (new Select())
