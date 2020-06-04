@@ -42,6 +42,13 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertCorrectStatementAndValues('SELECT a FROM b ORDER BY a OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY');
     }
 
+    public function testOffsetWithoutLimit()
+    {
+        $this->query->columns('a')->from('b')->orderBy('a')->offset(20);
+
+        $this->assertCorrectStatementAndValues('SELECT a FROM b ORDER BY a OFFSET 20 ROWS');
+    }
+
     public function testAutomaticallyFixesLimitWithoutOrder()
     {
         $this->query->columns('a')->from('b')->limit(10)->offset(30);

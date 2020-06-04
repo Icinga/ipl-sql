@@ -111,7 +111,7 @@ class QueryBuilder
 
         if (
             $this->adapter instanceof Mssql
-            && $select->hasLimit()
+            && ($select->hasLimit() || $select->hasOffset())
             && ! $select->hasOrderBy()
         ) {
             $select->orderBy(1);
