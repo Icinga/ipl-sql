@@ -3,6 +3,7 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
+use ipl\Sql\Adapter\Mssql;
 use ipl\Sql\Contract\Adapter;
 
 use function ipl\Stdlib\get_php_type;
@@ -106,6 +107,16 @@ class QueryBuilder
      */
     public function assembleSelect(Select $select, array &$values = [])
     {
+        $select = clone $select;
+
+        if (
+            $this->adapter instanceof Mssql
+            && $select->hasLimit()
+            && ! $select->hasOrderBy()
+        ) {
+            $select->orderBy(1);
+        }
+
         $sql = array_filter([
             $this->buildWith($select->getWith(), $values),
             $this->buildSelect($select->getColumns(), $select->getDistinct(), $values),
