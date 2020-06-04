@@ -15,29 +15,33 @@ trait Where
         return $this->where;
     }
 
-    public function where($condition, $operator = Sql::ALL)
+    public function where($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ALL);
 
         return $this;
     }
 
-    public function orWhere($condition, $operator = Sql::ALL)
+    public function orWhere($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ANY);
 
         return $this;
     }
 
-    public function notWhere($condition, $operator = Sql::ALL)
+    public function notWhere($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
 
         return $this;
     }
 
-    public function orNotWhere($condition, $operator = Sql::ALL)
+    public function orNotWhere($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
 
         return $this;
@@ -90,6 +94,30 @@ trait Where
                 $base = [$operator, [$base, $condition]];
             }
         }
+    }
+
+    /**
+     * This prepares arguments in a backward-compatible way according the
+     * description in the WhereInterface
+     *
+     * @param mixed $condition
+     * @param array $args
+     * @return array
+     */
+    protected function prepareConditionArguments($condition, $args)
+    {
+        if (\is_string($condition) && \count($args)) {
+            $condition = [$condition => $args];
+            $operator = Sql::ALL;
+        } else {
+            $operator = \array_shift($args);
+        }
+
+        if ($operator === null) {
+            $operator = Sql::ALL; // default operator
+        }
+
+        return [$condition, $operator];
     }
 
     /**
