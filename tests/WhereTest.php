@@ -75,6 +75,48 @@ class WhereTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testWhereWithArrayBeforeScalar()
+    {
+        $this->query->where(['INTERVAL(a, ?) < ?' => [[1, 2, 3], 4]]);
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE INTERVAL(a, ?, ?, ?) < ?',
+            [1, 2, 3, 4]
+        );
+    }
+
+    public function testWhereWithArrayAfterScalar()
+    {
+        $this->query->where(['? < INTERVAL(a, ?)' => [1, [2, 3, 4]]]);
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE ? < INTERVAL(a, ?, ?, ?)',
+            [1, 2, 3, 4]
+        );
+    }
+
+    public function testWhereWithArrayAfterArray()
+    {
+        $this->query->where(['a IN (?) AND b IN (?)' => [[1, 2], [3, 4]]]);
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE a IN (?, ?) AND b IN (?, ?)',
+            [1, 2, 3, 4]
+        );
+    }
+
+    public function testWhereWithManyPlaceholders()
+    {
+        $this->query->where([
+            'c1 IN(?) AND c2 = ? AND INTERVAL(?, ?, 10, 100, ?) < ?' => [[1, 2, 3], 4, [5, 6], 7, 8, 9]
+        ]);
+
+        $this->assertCorrectStatementAndValues(
+            'WHERE c1 IN(?, ?, ?) AND c2 = ? AND INTERVAL(?, ?, ?, 10, 100, ?) < ?',
+            [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        );
+    }
+
     public function testMixedWhere()
     {
         $this->query->where('c1 = 1');

@@ -270,19 +270,20 @@ class QueryBuilder
 
         foreach ($matches as $match) {
             $value = array_shift($values);
-            $left = substr($expression, $offset, $match[1][1]);
+            $unpackedExpression[] = substr($expression, $offset, $match[1][1] - $offset);
             if (is_array($value)) {
-                $unpackedExpression[] = $left
-                    . implode(', ', array_fill(0, count($value), '?'));
+                $unpackedExpression[] = implode(', ', array_fill(0, count($value), '?'));
                 $unpackedValues = array_merge($unpackedValues, $value);
             } else {
-                $unpackedExpression[] = $left;
+                $unpackedExpression[] = '?';
                 $unpackedValues[] = $value;
             }
-            $offset = $match[1][1] + 1;
+            $offset = $match[1][1] + 1; // 1 is the length of '?'
         }
 
-        return [implode('', $unpackedExpression), $unpackedValues];
+        $unpackedExpression[] = substr($expression, $offset);
+
+        return [implode('', array_filter($unpackedExpression)), $unpackedValues];
     }
 
     /**
@@ -681,7 +682,7 @@ class QueryBuilder
             }
 
             $unionKeywords[] = ($all ? 'UNION ALL' : 'UNION');
-            $selects[] =  $select;
+            $selects[] = $select;
         }
 
         return [$unionKeywords, $selects];
