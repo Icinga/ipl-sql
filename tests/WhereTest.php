@@ -226,6 +226,17 @@ class WhereTest extends \PHPUnit\Framework\TestCase
         $this->assertCorrectStatementAndValues('WHERE EXISTS (SELECT 1 FROM t1 WHERE c2 = ? LIMIT 1)', [1]);
     }
 
+    public function testWhereWithExpressionThatCanBeRenderedToString()
+    {
+        $this->query->where(
+            new ExpressionThatCanBeRenderedToString("COALESCE('a', ?) = ?"),
+            [1, 2],
+            1
+        );
+
+        $this->assertCorrectStatementAndValues("WHERE COALESCE('a', ?, ?) = ?", [1, 2, 1]);
+    }
+
     public function testResetWhere()
     {
         $this->query->where('c1 = x');

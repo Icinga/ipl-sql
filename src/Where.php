@@ -97,24 +97,24 @@ trait Where
     }
 
     /**
-     * This prepares arguments in a backward-compatible way according the
-     * description in the WhereInterface
+     * Prepare condition arguments from the different supported where styles
      *
      * @param mixed $condition
      * @param array $args
+     *
      * @return array
      */
-    protected function prepareConditionArguments($condition, $args)
+    protected function prepareConditionArguments($condition, array $args)
     {
-        if (\is_string($condition) && \count($args)) {
-            $condition = [$condition => $args];
-            $operator = Sql::ALL;
-        } else {
-            $operator = \array_shift($args);
-        }
+        // Default operator
+        $operator = Sql::ALL;
 
-        if ($operator === null) {
-            $operator = Sql::ALL; // default operator
+        if (! is_array($condition) && ! empty($args)) {
+            // Variadic
+            $condition = [(string) $condition => $args];
+        } else {
+            // Array or string format
+            $operator = array_shift($args) ?: $operator;
         }
 
         return [$condition, $operator];
