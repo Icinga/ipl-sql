@@ -286,6 +286,58 @@ class Connection implements Quoter
             ->fetchColumn(0);
     }
 
+    /**
+     * Yield each result row
+     *
+     * `Connection::yieldAll(Select|string $stmt [[, array $values], int $fetchMode [, mixed ...$fetchModeOptions]])`
+     *
+     * @param Select|string $stmt    The SQL statement to prepare and execute.
+     * @param mixed         ...$args Values to bind to the statement, fetch mode for the statement, fetch mode options
+     *
+     * @return \Generator
+     */
+    public function yieldAll($stmt, ...$args)
+    {
+        $values = null;
+
+        if (! empty($args)) {
+            if (is_array($args[0])) {
+                $values = array_shift($args);
+            }
+        }
+
+        $fetchMode = null;
+
+        if (! empty($args)) {
+            $fetchMode = array_shift($args);
+
+            switch ($fetchMode) {
+                case PDO::FETCH_KEY_PAIR:
+                    foreach ($this->yieldPairs($stmt, $values) as $key => $value) {
+                        yield $key => $value;
+                    }
+
+                    return;
+                case PDO::FETCH_COLUMN:
+                    if (empty($args)) {
+                        $args[] = 0;
+                    }
+
+                    break;
+            }
+        }
+
+        $sth = $this->prepexec($stmt, $values);
+
+        if ($fetchMode !== null) {
+            $sth->setFetchMode($fetchMode, ...$args);
+        }
+
+        foreach ($sth as $key => $row) {
+            yield $key => $row;
+        }
+    }
+
     public function yieldCol($stmt, array $values = null)
     {
         $sth = $this->prepexec($stmt, $values);
