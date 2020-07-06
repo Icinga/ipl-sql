@@ -672,6 +672,20 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testCountDistinct()
+    {
+        $this->query = $this->query
+            ->distinct()
+            ->from('table')
+            ->columns('column')
+            ->getCountQuery();
+
+        $this->assertCorrectStatementAndValues(
+            'SELECT COUNT(*) AS cnt FROM (SELECT DISTINCT column FROM table) s',
+            []
+        );
+    }
+
     protected function assertCorrectStatementAndValues($statement, $values)
     {
         list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);

@@ -535,8 +535,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
         $countQuery->limit = null;
         $countQuery->offset = null;
 
-        if (! empty($countQuery->groupBy)) {
+        if (! empty($countQuery->groupBy) || $countQuery->getDistinct()) {
             $countQuery = (new Select())->from(['s' => $countQuery]);
+            $countQuery->distinct(false);
         }
 
         $countQuery->columns = ['cnt' => 'COUNT(*)'];
