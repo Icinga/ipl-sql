@@ -5,9 +5,9 @@ namespace ipl\Sql;
 use ipl\Stdlib\Contract\Paginatable;
 
 /**
- * Pagination adapter for ipl SQL queries
+ * Cursor for ipl SQL queries
  */
-class PaginationAdapter implements Paginatable
+class Cursor implements Paginatable
 {
     /** @var Connection */
     protected $db;
@@ -16,7 +16,7 @@ class PaginationAdapter implements Paginatable
     protected $select;
 
     /**
-     * Create a new SQL pagination adapter from the given connection and query
+     * Create a new cursor for the given connection and query
      *
      * @param Connection $db
      * @param Select     $select
