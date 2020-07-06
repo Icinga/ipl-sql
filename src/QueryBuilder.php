@@ -3,6 +3,7 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
+use ipl\Sql\Adapter\Mssql;
 use ipl\Sql\Contract\Adapter;
 
 use function ipl\Stdlib\get_php_type;
@@ -106,6 +107,16 @@ class QueryBuilder
      */
     public function assembleSelect(Select $select, array &$values = [])
     {
+        $select = clone $select;
+
+        if (
+            $this->adapter instanceof Mssql
+            && ($select->hasLimit() || $select->hasOffset())
+            && ! $select->hasOrderBy()
+        ) {
+            $select->orderBy(1);
+        }
+
         $sql = array_filter([
             $this->buildWith($select->getWith(), $values),
             $this->buildSelect($select->getColumns(), $select->getDistinct(), $values),
@@ -622,12 +633,24 @@ class QueryBuilder
     {
         $sql = [];
 
-        if ($limit !== null) {
-            $sql[] = "LIMIT $limit";
-        }
+        if ($this->adapter instanceof Mssql) {
+            if ($offset !== null || $limit !== null) {
+                // If offset is null, sprintf will convert it to 0
+                $sql[] = sprintf('OFFSET %d ROWS', $offset);
+            }
 
-        if ($offset !== null) {
-            $sql[] = "OFFSET $offset";
+            if ($limit !== null) {
+                // FETCH FIRST n ROWS ONLY for OFFSET 0 would be an alternative here
+                $sql[] = "FETCH NEXT $limit ROWS ONLY";
+            }
+        } else {
+            if ($limit !== null) {
+                $sql[] = "LIMIT $limit";
+            }
+
+            if ($offset !== null) {
+                $sql[] = "OFFSET $offset";
+            }
         }
 
         return implode($this->separator, $sql);
