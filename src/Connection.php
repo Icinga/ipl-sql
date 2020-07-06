@@ -297,6 +297,19 @@ class Connection implements Quoter
         }
     }
 
+    public function yieldPairs($stmt, array $values = null)
+    {
+        $sth = $this->prepexec($stmt, $values);
+
+        $sth->setFetchMode(PDO::FETCH_NUM);
+
+        foreach ($sth as $row) {
+            list($key, $value) = $row;
+
+            yield $key => $value;
+        }
+    }
+
     /**
      * Prepare and execute the given statement
      *
