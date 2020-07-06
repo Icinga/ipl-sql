@@ -15,6 +15,9 @@ class Cursor implements Paginatable
     /** @var Select */
     protected $select;
 
+    /** @var array */
+    protected $fetchModeAndArgs = [];
+
     /**
      * Create a new cursor for the given connection and query
      *
@@ -25,6 +28,34 @@ class Cursor implements Paginatable
     {
         $this->db = $db;
         $this->select = $select;
+    }
+
+    /**
+     * Get the fetch mode
+     *
+     * @return array
+     */
+    public function getFetchMode()
+    {
+        return $this->fetchModeAndArgs;
+    }
+
+    /**
+     * Set the fetch mode
+     *
+     * @param int   $fetchMode Fetch mode as one of the PDO fetch mode constants.
+     *                         Please see {@link https://www.php.net/manual/en/pdostatement.setfetchmode} for details
+     * @param mixed ...$args   Fetch mode arguments
+     *
+     * @return $this
+     */
+    public function setFetchMode($fetchMode, ...$args)
+    {
+        array_unshift($args, $fetchMode);
+
+        $this->fetchModeAndArgs = $args;
+
+        return $this;
     }
 
     public function hasLimit()
