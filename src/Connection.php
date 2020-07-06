@@ -286,6 +286,17 @@ class Connection implements Quoter
             ->fetchColumn(0);
     }
 
+    public function yieldCol($stmt, array $values = null)
+    {
+        $sth = $this->prepexec($stmt, $values);
+
+        $sth->setFetchMode(PDO::FETCH_COLUMN, 0);
+
+        foreach ($sth as $key => $row) {
+            yield $key => $row;
+        }
+    }
+
     /**
      * Prepare and execute the given statement
      *
