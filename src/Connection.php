@@ -357,6 +357,14 @@ class Connection implements Quoter
         }
     }
 
+    /**
+     * Yield key-value pairs with the first column as key and the second column as value for each result row
+     *
+     * @param Select|string $stmt   The SQL statement to prepare and execute
+     * @param array         $values Values to bind to the statement
+     *
+     * @return \Generator
+     */
     public function yieldPairs($stmt, array $values = null)
     {
         $sth = $this->prepexec($stmt, $values);
