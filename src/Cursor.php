@@ -3,11 +3,12 @@
 namespace ipl\Sql;
 
 use ipl\Stdlib\Contract\Paginatable;
+use IteratorAggregate;
 
 /**
  * Cursor for ipl SQL queries
  */
-class Cursor implements Paginatable
+class Cursor implements IteratorAggregate, Paginatable
 {
     /** @var Connection */
     protected $db;
@@ -56,6 +57,16 @@ class Cursor implements Paginatable
         $this->fetchModeAndArgs = $args;
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return \Generator
+     */
+    public function getIterator()
+    {
+        return $this->db->yieldAll($this->select, ...$this->getFetchMode());
     }
 
     public function hasLimit()
