@@ -338,6 +338,14 @@ class Connection implements Quoter
         }
     }
 
+    /**
+     * Yield the first column of each result row
+     *
+     * @param Select|string $stmt   The SQL statement to prepare and execute
+     * @param array         $values Values to bind to the statement
+     *
+     * @return \Generator
+     */
     public function yieldCol($stmt, array $values = null)
     {
         $sth = $this->prepexec($stmt, $values);
