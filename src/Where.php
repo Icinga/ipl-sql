@@ -15,29 +15,33 @@ trait Where
         return $this->where;
     }
 
-    public function where($condition, $operator = Sql::ALL)
+    public function where($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ALL);
 
         return $this;
     }
 
-    public function orWhere($condition, $operator = Sql::ALL)
+    public function orWhere($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ANY);
 
         return $this;
     }
 
-    public function notWhere($condition, $operator = Sql::ALL)
+    public function notWhere($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
 
         return $this;
     }
 
-    public function orNotWhere($condition, $operator = Sql::ALL)
+    public function orNotWhere($condition, ...$args)
     {
+        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
 
         return $this;
@@ -90,6 +94,30 @@ trait Where
                 $base = [$operator, [$base, $condition]];
             }
         }
+    }
+
+    /**
+     * Prepare condition arguments from the different supported where styles
+     *
+     * @param mixed $condition
+     * @param array $args
+     *
+     * @return array
+     */
+    protected function prepareConditionArguments($condition, array $args)
+    {
+        // Default operator
+        $operator = Sql::ALL;
+
+        if (! is_array($condition) && ! empty($args)) {
+            // Variadic
+            $condition = [(string) $condition => $args];
+        } else {
+            // Array or string format
+            $operator = array_shift($args) ?: $operator;
+        }
+
+        return [$condition, $operator];
     }
 
     /**

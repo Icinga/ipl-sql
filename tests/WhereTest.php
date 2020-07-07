@@ -62,6 +62,23 @@ class WhereTest extends \PHPUnit\Framework\TestCase
         $this->assertCorrectStatementAndValues('WHERE NOT (foo = bar)', []);
     }
 
+    public function testVariadicWhereUsedVariadic()
+    {
+        $this->query->where('a IN (?) AND b < ?', [1, 2, 3], 4);
+        $this->assertCorrectStatementAndValues('WHERE a IN (?, ?, ?) AND b < ?', [1, 2, 3, 4]);
+    }
+
+    public function testNotWhereCombiningVariadicAndArrayStyle()
+    {
+        $this->query->where('a = ?', 1);
+        $this->query->notWhere('a IN (?) AND b < ?', [2, 3, 4], 5);
+        $this->query->notWhere(['a = ?' => 6, 'b = ?' => 7], Sql::ANY);
+        $this->assertCorrectStatementAndValues(
+            'WHERE ((a = ?) AND (NOT (a IN (?, ?, ?) AND b < ?))) AND (NOT ((a = ?) OR (b = ?)))',
+            [1, 2, 3, 4, 5, 6, 7]
+        );
+    }
+
     public function testNotWhereArrayFormat()
     {
         $this->query->notWhere(['c1 = x']);
@@ -207,6 +224,17 @@ class WhereTest extends \PHPUnit\Framework\TestCase
         $this->query->where(['EXISTS ?' => $select]);
 
         $this->assertCorrectStatementAndValues('WHERE EXISTS (SELECT 1 FROM t1 WHERE c2 = ? LIMIT 1)', [1]);
+    }
+
+    public function testWhereWithExpressionThatCanBeRenderedToString()
+    {
+        $this->query->where(
+            new ExpressionThatCanBeRenderedToString("COALESCE('a', ?) = ?"),
+            [1, 2],
+            1
+        );
+
+        $this->assertCorrectStatementAndValues("WHERE COALESCE('a', ?, ?) = ?", [1, 2, 1]);
     }
 
     public function testResetWhere()

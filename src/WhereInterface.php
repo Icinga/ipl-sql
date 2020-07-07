@@ -18,8 +18,8 @@ interface WhereInterface
      * Add a WHERE part of the query
      *
      * This method lets you specify the WHERE part of the query using one of the two following supported formats:
-     * * String format, e.g. 'id = 1'
-     * * Array format, e.g. ['id = ?' => 1, ...]
+     * * String format, e.g. 'id = 1', i.e. `where(string $condition [, mixed ...$args])`
+     * * Array format, e.g. ['id = ?' => 1, ...], i.e. `where(array $condition [, string $operator])`
      *
      * This method does NOT quote the columns you specify for the WHERE.
      * If you allow user input here, you must protected yourself against SQL injection using
@@ -31,12 +31,13 @@ interface WhereInterface
      * the specified WHERE part using the AND operator.
      *
      * @param string|ExpressionInterface|Select|array $condition The WHERE condition
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param mixed $args If condition is a string, parameter values for placeholders in the condition can be passed.
+     *                    If condition is an array, the only argument that is allowed is the operator to use to combine
+     *                    these conditions. By default, this operator is {@link Sql::ALL} (AND)
      *
      * @return $this
      */
-    public function where($condition, $operator = Sql::ALL);
+    public function where($condition, ...$args);
 
     /**
      * Add a OR part to the WHERE part of the query
@@ -44,12 +45,11 @@ interface WhereInterface
      * Please see {@link where()} for the supported formats and restrictions regarding quoting of the field names.
      *
      * @param string|ExpressionInterface|Select|array $condition The WHERE condition
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param mixed                                   ...$args   Please see {@link where()} for details
      *
      * @return $this
      */
-    public function orWhere($condition, $operator = Sql::ALL);
+    public function orWhere($condition, ...$args);
 
     /**
      * Add a AND NOT part to the WHERE part of the query
@@ -57,12 +57,11 @@ interface WhereInterface
      * Please see {@link where()} for the supported formats and restrictions regarding quoting of the field names.
      *
      * @param string|ExpressionInterface|Select|array $condition The WHERE condition
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param mixed                                   ...$args   Please see {@link where()} for details
      *
      * @return $this
      */
-    public function notWhere($condition, $operator = Sql::ALL);
+    public function notWhere($condition, ...$args);
 
     /**
      * Add a OR NOT part to the WHERE part of the query
@@ -70,10 +69,9 @@ interface WhereInterface
      * Please see {@link where()} for the supported formats and restrictions regarding quoting of the field names.
      *
      * @param string|ExpressionInterface|Select|array $condition The WHERE condition
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param mixed                                   ...$args   Please see {@link where()} for details
      *
      * @return $this
      */
-    public function orNotWhere($condition, $operator = Sql::ALL);
+    public function orNotWhere($condition, ...$args);
 }
