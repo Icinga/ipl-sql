@@ -29,7 +29,7 @@ $connection = new Connection([                                   // (1)
 
 $connection->connect();                                 // optional (12)
 
-var_dump($connection->exec(
+var_dump($connection->prepexec(
     'SELECT * FROM customer WHERE id = ?;', [42]                 // (13)
 )->fetchRow());
 
@@ -45,7 +45,7 @@ the SSL certificates (9-11) are likely not to be neccessary depending on your
 database driver (2). Explicit initialization (12) and disconnecting (14) are 
 always optional.
 
-`$connection->exec()` returns a 
+`$connection->prepexec()` returns a 
 [PDOStatement](https://secure.php.net/manual/en/class.pdostatement.php) - see 
 its documentation for details.
 
@@ -61,30 +61,30 @@ use ipl\Sql\Insert;
 use ipl\Sql\Select;
 use ipl\Sql\Update;
 
-$connection->exec(
+$connection->prepexec(
     (new Insert())
         ->into('customer')
         ->values([
             'id'   => 42,
-            'name' => 'John Deo'
+            'name' => 'John Doe'
         ])
 );
 
-$connection->exec(
+$connection->prepexec(
     (new Select())
         ->columns(['name'])
         ->from('customer')
-        ->where(['id = ?' => 42])
+        ->where(['id IN (?)' => [42]])
 )->fetchAll();
 
-$connection->exec(
+$connection->prepexec(
     (new Update())
         ->table('customer')
         ->set(['name' => 'John Doe'])
         ->where(['id = ?' => 42])
 );
 
-$connection->exec(
+$connection->prepexec(
     (new Delete())
         ->from('customer')
         ->where(['id = ?' => 42])
@@ -100,12 +100,12 @@ Insert data into a table, provided either explicitly ...
     ->into('customer')
     ->values([
         'id'   => 42,
-        'name' => 'John Deo'
+        'name' => 'John Doe'
     ])
 ```
 
 ```mysql
-INSERT INTO customer (id,name) VALUES(42,'John Deo')
+INSERT INTO customer (id,name) VALUES(42,'John Doe')
 ```
 
 ... or by a [select](#sql-select) query:
