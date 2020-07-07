@@ -54,4 +54,36 @@ class ConnectionTest extends \PHPUnit\Framework\TestCase
     {
         new Connection(['db' => 'exception']);
     }
+
+    public function testYieldCol()
+    {
+        $generator = $this->getFixturesDb()->yieldCol('SELECT username, id, password FROM user');
+
+        $this->assertInstanceOf(\Generator::class, $generator);
+
+        $this->assertSame(['admin', 'guest'], iterator_to_array($generator));
+    }
+
+    public function testYieldPairs()
+    {
+        $generator = $this->getFixturesDb()->yieldPairs('SELECT username, id, password FROM user');
+
+        $this->assertInstanceOf(\Generator::class, $generator);
+
+        $this->assertSame(['admin' => '1', 'guest' => '2'], iterator_to_array($generator));
+    }
+
+    protected function getFixturesDb()
+    {
+        $db = new Connection([
+            'db'     => 'sqlite',
+            'dbname' => ':memory:'
+        ]);
+
+        $fixtures = file_get_contents(__DIR__ . '/fixtures.sql');
+
+        $db->exec($fixtures);
+
+        return $db;
+    }
 }

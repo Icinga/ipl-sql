@@ -73,7 +73,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: phpunit:${{ matrix.phpunit-version || env.phpunit-version }}
-          extensions: pdo
+          extensions: pdo, pdo-sqlite
 
       - name: Setup dependencies
         run: composer install -n --no-progress

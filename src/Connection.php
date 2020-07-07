@@ -287,6 +287,98 @@ class Connection implements Quoter
     }
 
     /**
+     * Yield each result row
+     *
+     * `Connection::yieldAll(Select|string $stmt [[, array $values], int $fetchMode [, mixed ...$fetchModeOptions]])`
+     *
+     * @param Select|string $stmt    The SQL statement to prepare and execute.
+     * @param mixed         ...$args Values to bind to the statement, fetch mode for the statement, fetch mode options
+     *
+     * @return \Generator
+     */
+    public function yieldAll($stmt, ...$args)
+    {
+        $values = null;
+
+        if (! empty($args)) {
+            if (is_array($args[0])) {
+                $values = array_shift($args);
+            }
+        }
+
+        $fetchMode = null;
+
+        if (! empty($args)) {
+            $fetchMode = array_shift($args);
+
+            switch ($fetchMode) {
+                case PDO::FETCH_KEY_PAIR:
+                    foreach ($this->yieldPairs($stmt, $values) as $key => $value) {
+                        yield $key => $value;
+                    }
+
+                    return;
+                case PDO::FETCH_COLUMN:
+                    if (empty($args)) {
+                        $args[] = 0;
+                    }
+
+                    break;
+            }
+        }
+
+        $sth = $this->prepexec($stmt, $values);
+
+        if ($fetchMode !== null) {
+            $sth->setFetchMode($fetchMode, ...$args);
+        }
+
+        foreach ($sth as $key => $row) {
+            yield $key => $row;
+        }
+    }
+
+    /**
+     * Yield the first column of each result row
+     *
+     * @param Select|string $stmt   The SQL statement to prepare and execute
+     * @param array         $values Values to bind to the statement
+     *
+     * @return \Generator
+     */
+    public function yieldCol($stmt, array $values = null)
+    {
+        $sth = $this->prepexec($stmt, $values);
+
+        $sth->setFetchMode(PDO::FETCH_COLUMN, 0);
+
+        foreach ($sth as $key => $row) {
+            yield $key => $row;
+        }
+    }
+
+    /**
+     * Yield key-value pairs with the first column as key and the second column as value for each result row
+     *
+     * @param Select|string $stmt   The SQL statement to prepare and execute
+     * @param array         $values Values to bind to the statement
+     *
+     * @return \Generator
+     */
+    public function yieldPairs($stmt, array $values = null)
+    {
+        $sth = $this->prepexec($stmt, $values);
+
+        $sth->setFetchMode(PDO::FETCH_NUM);
+
+        foreach ($sth as $row) {
+            list($key, $value) = $row;
+
+            yield $key => $value;
+        }
+    }
+
+    /**
      * Prepare and execute the given statement
      *
      * @param Delete|Insert|Select|Update|string $stmt   The SQL statement to prepare and execute
