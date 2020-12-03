@@ -2,27 +2,25 @@
 
 namespace ipl\Sql\Compat;
 
-use Icinga\Data\Filter\Filter;
-use Icinga\Data\Filter\FilterAnd;
-use Icinga\Data\Filter\FilterExpression;
-use Icinga\Data\Filter\FilterNot;
-use Icinga\Data\Filter\FilterOr;
 use InvalidArgumentException;
 use ipl\Sql\Expression;
+use ipl\Sql\Filter\Exists;
+use ipl\Sql\Filter\NotExists;
 use ipl\Sql\Sql;
+use ipl\Stdlib\Filter;
 
 class FilterProcessor
 {
-    public static function assembleFilter(Filter $filter, $level = 0)
+    public static function assembleFilter(Filter\Rule $filter, $level = 0)
     {
         $condition = null;
 
-        if ($filter->isChain()) {
-            if ($filter instanceof FilterAnd) {
+        if ($filter instanceof Filter\Chain) {
+            if ($filter instanceof Filter\All) {
                 $operator = Sql::ALL;
-            } elseif ($filter instanceof FilterOr) {
+            } elseif ($filter instanceof Filter\Any) {
                 $operator = Sql::ANY;
-            } elseif ($filter instanceof FilterNot) {
+            } elseif ($filter instanceof Filter\None) {
                 $operator = Sql::NOT_ALL;
             }
 
@@ -31,7 +29,7 @@ class FilterProcessor
             }
 
             if (! $filter->isEmpty()) {
-                foreach ($filter->filters() as $filterPart) {
+                foreach ($filter as $filterPart) {
                     $part = static::assembleFilter($filterPart, $level + 1);
                     if ($part) {
                         if ($condition === null) {
@@ -53,48 +51,60 @@ class FilterProcessor
                 // TODO(el): Explicitly return the empty string due to the FilterNot case?
             }
         } else {
-            /** @var FilterExpression $filter */
-            $condition = [Sql::ALL,
-                static::assemblePredicate($filter->getColumn(), $filter->getSign(), $filter->getExpression())
-            ];
+            /** @var Filter\Condition $filter */
+            $condition = [Sql::ALL, static::assemblePredicate($filter)];
         }
 
         return $condition;
     }
 
-    public static function assemblePredicate($column, $operator, $expression)
+    public static function assemblePredicate(Filter\Condition $filter)
     {
+        $column = $filter->getColumn();
+        $expression = $filter->getValue();
+
         if (is_array($expression)) {
-            if ($operator === '=') {
-                return ["$column IN (?)" => $expression];
-            } elseif ($operator === '!=') {
+            if ($filter instanceof Filter\UnEqual) {
                 return ["($column NOT IN (?) OR $column IS NULL)" => $expression];
+            } elseif ($filter instanceof Filter\Equal) {
+                return ["$column IN (?)" => $expression];
             }
 
             throw new InvalidArgumentException(
                 'Unable to render array expressions with operators other than equal or not equal'
             );
-        } elseif ($operator === '=' && strpos($expression, '*') !== false) {
+        } elseif ($filter instanceof Filter\Equal && strpos($expression, '*') !== false) {
             if ($expression === '*') {
                 // We'll ignore such filters as it prevents index usage and because "*" means anything. So whether we're
                 // using a real column with a valid comparison here or just an expression which can only be evaluated to
                 // true makes no difference, except for performance reasons
-                return [new Expression('TRUE')];
+                return [new Expression($filter instanceof Filter\Unequal ? 'FALSE' : 'TRUE')];
+            } elseif ($filter instanceof Filter\Unequal) {
+                return ["($column NOT LIKE ? OR $column IS NULL)" => str_replace('*', '%', $expression)];
+            } else {
+                return ["$column LIKE ?" => str_replace('*', '%', $expression)];
             }
-
-            return ["$column LIKE ?" => str_replace('*', '%', $expression)];
-        } elseif ($operator === '!=' && strpos($expression, '*') !== false) {
-            if ($expression === '*') {
-                // We'll ignore such filters as it prevents index usage and because "*" means nothing. So whether we're
-                // using a real column with a valid comparison here or just an expression which cannot be evaluated to
-                // true makes no difference, except for performance reasons
-                return [new Expression('FALSE')];
-            }
-
-            return ["($column NOT LIKE ? OR $column IS NULL)" => str_replace('*', '%', $expression)];
-        } elseif ($operator === '!=') {
+        } elseif ($filter instanceof Filter\Unequal) {
             return ["($column != ? OR $column IS NULL)" => $expression];
         } else {
+            if ($filter instanceof Filter\Equal) {
+                $operator = '=';
+            } elseif ($filter instanceof Filter\GreaterThan) {
+                $operator = '>';
+            } elseif ($filter instanceof Filter\GreaterThanOrEqual) {
+                $operator = '>=';
+            } elseif ($filter instanceof Filter\LessThan) {
+                $operator = '<';
+            } elseif ($filter instanceof Filter\LessThanOrEqual) {
+                $operator = '<=';
+            } elseif ($filter instanceof Exists) {
+                $operator = 'EXISTS';
+            } elseif ($filter instanceof NotExists) {
+                $operator = 'NOT EXISTS';
+            } else {
+                throw new InvalidArgumentException(sprintf('Cannot render filter: %s', get_class($filter)));
+            }
+
             return ["$column $operator ?" => $expression];
         }
     }
