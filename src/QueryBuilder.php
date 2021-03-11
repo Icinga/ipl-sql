@@ -313,8 +313,7 @@ class QueryBuilder
                 }
             } else {
                 if ($value instanceof ExpressionInterface) {
-                    $sql[] = $value->getStatement();
-                    $values = array_merge($values, $value->getValues());
+                    $sql[] = $this->buildExpression($value, $values);
                 } elseif ($value instanceof Select) {
                     $stmt = '(' . $this->assembleSelect($value, $values)[0] . ')';
                     if (is_int($expression)) {
@@ -407,8 +406,7 @@ class QueryBuilder
 
         foreach ($insertValues as $value) {
             if ($value instanceof ExpressionInterface) {
-                $preparedValues[] = $value->getStatement();
-                $values = array_merge($values, $value->getValues());
+                $preparedValues[] = $this->buildExpression($value, $values);
             } elseif ($value instanceof Select) {
                 $preparedValues[] = "({$this->assembleSelect($value, $values)[0]})";
             } else {
@@ -451,8 +449,7 @@ class QueryBuilder
 
         foreach ($columns as $alias => $column) {
             if ($column instanceof ExpressionInterface) {
-                $values = array_merge($values, $column->getValues());
-                $column = "({$column->getStatement()})";
+                $column = "({$this->buildExpression($column, $values)})";
             } elseif ($column instanceof Select) {
                 $column = "({$this->assembleSelect($column, $values)[0]})";
             }
@@ -559,8 +556,7 @@ class QueryBuilder
 
         foreach ($groupBy as &$column) {
             if ($column instanceof ExpressionInterface) {
-                $values = array_merge($values, $column->getValues());
-                $column = $column->getStatement();
+                $column = $this->buildExpression($column, $values);
             } elseif ($column instanceof Select) {
                 $column = "({$this->assembleSelect($column, $values)[0]})";
             }
@@ -606,8 +602,7 @@ class QueryBuilder
             list($column, $direction) = $column;
 
             if ($column instanceof ExpressionInterface) {
-                $values = array_merge($values, $column->getValues());
-                $column = $column->getStatement();
+                $column = $this->buildExpression($column, $values);
             } elseif ($column instanceof Select) {
                 $column = "({$this->assembleSelect($column, $values)[0]})";
             }
@@ -734,8 +729,7 @@ class QueryBuilder
 
         foreach ($set as $column => $value) {
             if ($value instanceof ExpressionInterface) {
-                $sql[] = "$column = {$value->getStatement()}";
-                $values = array_merge($values, $value->getValues());
+                $sql[] = "$column = {$this->buildExpression($value, $values)}";
             } elseif ($value instanceof Select) {
                 $sql[] = "$column = ({$this->assembleSelect($value, $values)[0]})";
             } else {
@@ -745,5 +739,26 @@ class QueryBuilder
         }
 
         return 'SET ' . implode(', ', $sql);
+    }
+
+    /**
+     * Build expression
+     *
+     * @param ExpressionInterface $expression
+     * @param array $values
+     *
+     * @return string The expression's statement
+     */
+    public function buildExpression(ExpressionInterface $expression, array &$values = [])
+    {
+        $stmt = $expression->getStatement();
+        $columns = $expression->getColumns();
+        if (! empty($columns)) {
+            $stmt = vsprintf($stmt, $columns);
+        }
+
+        $values = array_merge($values, $expression->getValues());
+
+        return $stmt;
     }
 }
