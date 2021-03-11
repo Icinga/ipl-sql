@@ -3,7 +3,6 @@
 namespace ipl\Sql\Compat;
 
 use InvalidArgumentException;
-use ipl\Sql\Expression;
 use ipl\Sql\Filter\Exists;
 use ipl\Sql\Filter\IsNull;
 use ipl\Sql\Filter\NotExists;
@@ -74,12 +73,12 @@ class FilterProcessor
             throw new InvalidArgumentException(
                 'Unable to render array expressions with operators other than equal or not equal'
             );
-        } elseif ($filter instanceof Filter\Equal && strpos($expression, '*') !== false) {
+        } elseif (
+            ($filter instanceof Filter\Equal || $filter instanceof Filter\Unequal)
+            && strpos($expression, '*') !== false
+        ) {
             if ($expression === '*') {
-                // We'll ignore such filters as it prevents index usage and because "*" means anything. So whether we're
-                // using a real column with a valid comparison here or just an expression which can only be evaluated to
-                // true makes no difference, except for performance reasons
-                return [new Expression($filter instanceof Filter\Unequal ? 'FALSE' : 'TRUE')];
+                return ["$column IS " . ($filter instanceof Filter\Equal ? 'NOT ' : '') . 'NULL'];
             } elseif ($filter instanceof Filter\Unequal) {
                 return ["($column NOT LIKE ? OR $column IS NULL)" => str_replace('*', '%', $expression)];
             } else {
