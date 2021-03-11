@@ -62,7 +62,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testExpressionValue()
     {
-        $value = new Expression('x = ?', 1);
+        $value = new Expression('x = ?', null, 1);
         $this->query->set(['c1' => $value]);
 
         $this->assertSame(['c1' => $value], $this->query->getSet());

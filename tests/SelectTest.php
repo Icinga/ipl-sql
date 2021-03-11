@@ -73,7 +73,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testColumnsWithExpression()
     {
-        $columns = ['three' => new Expression('? + ?', 1, 2)];
+        $columns = ['three' => new Expression('? + ?', null, 1, 2)];
         $this->query->columns($columns);
 
         $this->assertSame($columns, $this->query->getColumns());
@@ -209,7 +209,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithExpressionCondition()
     {
-        $condition = new Expression('t2.table1_id = ?', 1);
+        $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->join('table2', $condition);
 
         $this->assertCorrectStatementAndValues('INNER JOIN table2 ON t2.table1_id = ?', [1]);
@@ -300,7 +300,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithExpressionCondition()
     {
-        $condition = new Expression('t2.table1_id = ?', 1);
+        $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->joinLeft('table2', $condition);
 
         $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON t2.table1_id = ?', [1]);
@@ -391,7 +391,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithExpressionCondition()
     {
-        $condition = new Expression('t2.table1_id = ?', 1);
+        $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->joinRight('table2', $condition);
 
         $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON t2.table1_id = ?', [1]);
@@ -424,7 +424,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testGroupByWithExpression()
     {
-        $column = new Expression('x = ?', 1);
+        $column = new Expression('x = ?', null, 1);
         $this->query->groupBy([$column]);
 
         $this->assertCorrectStatementAndValues('GROUP BY x = ?', [1]);
@@ -447,7 +447,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testOrderByWithExpression()
     {
-        $column = new Expression('x = ?', 1);
+        $column = new Expression('x = ?', null, 1);
         $this->query->orderBy($column, 'DESC');
 
         $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);
@@ -455,7 +455,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testOrderByWithExpressionAndExplicitDirection()
     {
-        $column = new Expression('x = ?', 1);
+        $column = new Expression('x = ?', null, 1);
         $this->query->orderBy([[$column, 'DESC']]);
 
         $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);

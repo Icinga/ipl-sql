@@ -204,7 +204,7 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithExpression()
     {
-        $expression = new Expression('c2 = ?', 1);
+        $expression = new Expression('c2 = ?', null, 1);
         $this->query->where($expression);
 
         $this->assertCorrectStatementAndValues('WHERE c2 = ?', [1]);
