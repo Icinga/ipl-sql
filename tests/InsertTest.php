@@ -74,7 +74,7 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testExpressionValue()
     {
-        $value = new Expression('x = ?', 1);
+        $value = new Expression('x = ?', null, 1);
         $this->query->values(['c1' => $value]);
 
         $this->assertSame(['c1'], $this->query->getColumns());
