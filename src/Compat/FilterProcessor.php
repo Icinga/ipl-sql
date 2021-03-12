@@ -4,7 +4,6 @@ namespace ipl\Sql\Compat;
 
 use InvalidArgumentException;
 use ipl\Sql\Filter\Exists;
-use ipl\Sql\Filter\IsNull;
 use ipl\Sql\Filter\NotExists;
 use ipl\Sql\Sql;
 use ipl\Stdlib\Filter;
@@ -101,13 +100,11 @@ class FilterProcessor
                 $operator = 'EXISTS';
             } elseif ($filter instanceof NotExists) {
                 $operator = 'NOT EXISTS';
-            } elseif ($filter instanceof IsNull) {
-                $operator = 'IS NULL';
             } else {
                 throw new InvalidArgumentException(sprintf('Cannot render filter: %s', get_class($filter)));
             }
 
-            return $expression !== null ? ["$column $operator ?" => $expression] : ["$column $operator"];
+            return ["$column $operator ?" => $expression];
         }
     }
 }
