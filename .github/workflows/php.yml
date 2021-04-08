@@ -51,7 +51,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      phpunit-version: 7.5.20
+      phpunit-version: 8.5.15
 
     strategy:
       fail-fast: false
@@ -63,6 +63,8 @@ jobs:
             phpunit-version: 5.7.27
           - php: '7.0'
             phpunit-version: 6.5.14
+          - php: '7.1'
+            phpunit-version: 7.5.20
 
     steps:
       - name: Checkout code base
