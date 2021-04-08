@@ -21,7 +21,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    public function setupTestTest()
     {
         $this->query = new Delete();
         $this->queryBuilder = new QueryBuilder(new TestAdapter());
@@ -29,6 +29,8 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
     public function testFrom()
     {
+        $this->setupTestTest();
+
         $this->query->from('table');
         $this->assertSame(['table'], $this->query->getFrom());
         $this->assertCorrectStatementAndValues('DELETE FROM table', []);
@@ -36,6 +38,8 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
     public function testFromWithAlias()
     {
+        $this->setupTestTest();
+
         $this->query->from('table t1');
         $this->assertSame(['table t1'], $this->query->getFrom());
         $this->assertCorrectStatementAndValues('DELETE FROM table t1', []);
@@ -43,6 +47,8 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
     public function testFromWithArray()
     {
+        $this->setupTestTest();
+
         $this->query->from(['t1' => 'table']);
         $this->assertSame(['t1' => 'table'], $this->query->getFrom());
         $this->assertCorrectStatementAndValues('DELETE FROM table t1', []);

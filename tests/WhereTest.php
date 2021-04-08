@@ -23,7 +23,7 @@ class WhereTest extends \PHPUnit\Framework\TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    public function setupTest()
     {
         $this->query = new Select();
         $this->queryBuilder = new QueryBuilder(new TestAdapter());
@@ -31,6 +31,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereStringFormat()
     {
+        $this->setupTest();
+
         $this->query->where('c1 = x');
         $this->query->where('c2 IS NULL');
         $this->query->where('c3 IS NOT NULL');
@@ -40,6 +42,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereArrayFormat()
     {
+        $this->setupTest();
+
         $this->query->where(['c1 = x']);
         $this->query->where(['c2 = ?' => 1]);
         $this->query->where(['c3 > ?' => 1]);
@@ -57,6 +61,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testSingleNotWhere()
     {
+        $this->setupTest();
+
         $this->query->notWhere('foo = bar');
 
         $this->assertCorrectStatementAndValues('WHERE NOT (foo = bar)', []);
@@ -64,12 +70,16 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testVariadicWhereUsedVariadic()
     {
+        $this->setupTest();
+
         $this->query->where('a IN (?) AND b < ?', [1, 2, 3], 4);
         $this->assertCorrectStatementAndValues('WHERE a IN (?, ?, ?) AND b < ?', [1, 2, 3, 4]);
     }
 
     public function testNotWhereCombiningVariadicAndArrayStyle()
     {
+        $this->setupTest();
+
         $this->query->where('a = ?', 1);
         $this->query->notWhere('a IN (?) AND b < ?', [2, 3, 4], 5);
         $this->query->notWhere(['a = ?' => 6, 'b = ?' => 7], Sql::ANY);
@@ -81,6 +91,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testNotWhereArrayFormat()
     {
+        $this->setupTest();
+
         $this->query->notWhere(['c1 = x']);
         $this->query->notWhere(['c2 = ?' => 1]);
         $this->query->notWhere(['c3 IN (?)' => [1, 2, 3]]);
@@ -94,6 +106,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithArrayBeforeScalar()
     {
+        $this->setupTest();
+
         $this->query->where(['INTERVAL(a, ?) < ?' => [[1, 2, 3], 4]]);
 
         $this->assertCorrectStatementAndValues(
@@ -104,6 +118,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithArrayAfterScalar()
     {
+        $this->setupTest();
+
         $this->query->where(['? < INTERVAL(a, ?)' => [1, [2, 3, 4]]]);
 
         $this->assertCorrectStatementAndValues(
@@ -114,6 +130,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithArrayAfterArray()
     {
+        $this->setupTest();
+
         $this->query->where(['a IN (?) AND b IN (?)' => [[1, 2], [3, 4]]]);
 
         $this->assertCorrectStatementAndValues(
@@ -124,6 +142,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithManyPlaceholders()
     {
+        $this->setupTest();
+
         $this->query->where([
             'c1 IN(?) AND c2 = ? AND INTERVAL(?, ?, 10, 100, ?) < ?' => [[1, 2, 3], 4, [5, 6], 7, 8, 9]
         ]);
@@ -136,6 +156,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testMixedWhere()
     {
+        $this->setupTest();
+
         $this->query->where('c1 = 1');
         $this->query->orWhere(['c2 = ?' => 2]);
         $this->query->notWhere(['c3 = 3', 'c4 = ?' => 4]);
@@ -151,6 +173,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereNestedArrays()
     {
+        $this->setupTest();
+
         $this->query->where([
             Sql::ANY,
             [
@@ -179,6 +203,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testPartiallyPreparedWhere()
     {
+        $this->setupTest();
+
         $this->query->where([
             [
                 Sql::ALL,
@@ -204,6 +230,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithExpression()
     {
+        $this->setupTest();
+
         $expression = new Expression('c2 = ?', null, 1);
         $this->query->where($expression);
 
@@ -212,6 +240,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithSelect()
     {
+        $this->setupTest();
+
         $select = (new Select())->columns('COUNT(*)')->from('t1')->where(['c2 = ?' => 1]);
         $this->query->where($select);
 
@@ -220,6 +250,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithSelectAndExpression()
     {
+        $this->setupTest();
+
         $select = (new Select())->columns('1')->from('t1')->where(['c2 = ?' => 1])->limit(1);
         $this->query->where(['EXISTS ?' => $select]);
 
@@ -228,6 +260,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithExpressionThatCanBeRenderedToString()
     {
+        $this->setupTest();
+
         $this->query->where(
             new ExpressionThatCanBeRenderedToString("COALESCE('a', ?) = ?"),
             [1, 2],
@@ -239,6 +273,8 @@ class WhereTest extends \PHPUnit\Framework\TestCase
 
     public function testResetWhere()
     {
+        $this->setupTest();
+
         $this->query->where('c1 = x');
         $this->assertSame(
             ['AND', [['AND', ['c1 = x']]]],

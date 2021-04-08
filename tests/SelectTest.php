@@ -23,7 +23,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    public function setupTest()
     {
         $this->query = new Select();
         $this->queryBuilder = new QueryBuilder(new TestAdapter());
@@ -31,6 +31,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testDistinct()
     {
+        $this->setupTest();
+
         $this->query
             ->distinct()
             ->columns('1');
@@ -41,6 +43,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testColumns()
     {
+        $this->setupTest();
+
         $this->query->columns('1');
 
         $this->assertSame(['1'], $this->query->getColumns());
@@ -49,6 +53,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testColumnsWithAlias()
     {
+        $this->setupTest();
+
         $this->query->columns('1 AS one');
 
         $this->assertSame(['1 AS one'], $this->query->getColumns());
@@ -57,6 +63,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testColumnsWithArray()
     {
+        $this->setupTest();
+
         $this->query->columns(['1', '2']);
 
         $this->assertSame(['1', '2'], $this->query->getColumns());
@@ -65,6 +73,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testColumnsWithArrayAndAlias()
     {
+        $this->setupTest();
+
         $this->query->columns(['one' => '1', '2']);
 
         $this->assertSame(['one' => '1', '2'], $this->query->getColumns());
@@ -73,6 +83,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testColumnsWithExpression()
     {
+        $this->setupTest();
+
         $columns = ['three' => new Expression('? + ?', null, 1, 2)];
         $this->query->columns($columns);
 
@@ -82,6 +94,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testColumnsWithSelect()
     {
+        $this->setupTest();
+
         $columns = [
             'customers' => (new Select())
                 ->columns('COUNT(*)')
@@ -100,6 +114,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testFrom()
     {
+        $this->setupTest();
+
         $this->query->from('table');
 
         $this->assertSame(['table'], $this->query->getFrom());
@@ -108,6 +124,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testFromWithAlias()
     {
+        $this->setupTest();
+
         $this->query->from('table t1');
 
         $this->assertSame(['table t1'], $this->query->getFrom());
@@ -116,6 +134,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testFromWithArray()
     {
+        $this->setupTest();
+
         $this->query->from(['t1' => 'table']);
 
         $this->assertSame(['t1' => 'table'], $this->query->getFrom());
@@ -124,6 +144,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testFromWithSelect()
     {
+        $this->setupTest();
+
         $from = ['t1' => (new Select())
             ->columns('*')
             ->from('table')
@@ -137,6 +159,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoin()
     {
+        $this->setupTest();
+
         $this->query->join('table2', 'table2.table1_id = table1.id');
 
         $this->assertCorrectStatementAndValues('INNER JOIN table2 ON table2.table1_id = table1.id', []);
@@ -144,6 +168,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithAlias()
     {
+        $this->setupTest();
+
         $this->query->join('table2 t2', 't2.table1_id = t1.id');
 
         $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
@@ -151,6 +177,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithArray()
     {
+        $this->setupTest();
+
         $this->query->join(['t2' => 'table2'], 't2.table1_id = t1.id');
 
         $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
@@ -158,6 +186,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithComplexCondition()
     {
+        $this->setupTest();
+
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
 
         $this->assertCorrectStatementAndValues(
@@ -168,6 +198,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithOperatorAll()
     {
+        $this->setupTest();
+
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
 
         $this->assertCorrectStatementAndValues(
@@ -178,6 +210,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithOperatorAny()
     {
+        $this->setupTest();
+
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
 
         $this->assertCorrectStatementAndValues(
@@ -188,6 +222,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithParametrizedCondition()
     {
+        $this->setupTest();
+
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
 
         $this->assertCorrectStatementAndValues(
@@ -198,6 +234,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithSelect()
     {
+        $this->setupTest();
+
         $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
         $this->query->join($table2, 't2.table1_id = t1.id');
 
@@ -209,6 +247,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithExpressionCondition()
     {
+        $this->setupTest();
+
         $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->join('table2', $condition);
 
@@ -217,6 +257,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testInnerJoinWithSelectCondition()
     {
+        $this->setupTest();
+
         $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->join('table2', $condition);
 
@@ -228,6 +270,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoin()
     {
+        $this->setupTest();
+
         $this->query->joinLeft('table2', 'table2.table1_id = table1.id');
 
         $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON table2.table1_id = table1.id', []);
@@ -235,6 +279,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithAlias()
     {
+        $this->setupTest();
+
         $this->query->joinLeft('table2 t2', 't2.table1_id = t1.id');
 
         $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
@@ -242,6 +288,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithArray()
     {
+        $this->setupTest();
+
         $this->query->joinLeft(['t2' => 'table2'], 't2.table1_id = t1.id');
 
         $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
@@ -249,6 +297,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithComplexCondition()
     {
+        $this->setupTest();
+
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
 
         $this->assertCorrectStatementAndValues(
@@ -259,6 +309,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithOperatorAll()
     {
+        $this->setupTest();
+
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
 
         $this->assertCorrectStatementAndValues(
@@ -269,6 +321,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithOperatorAny()
     {
+        $this->setupTest();
+
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
 
         $this->assertCorrectStatementAndValues(
@@ -279,6 +333,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithParametrizedCondition()
     {
+        $this->setupTest();
+
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
 
         $this->assertCorrectStatementAndValues(
@@ -289,6 +345,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithSelect()
     {
+        $this->setupTest();
+
         $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
         $this->query->joinLeft($table2, 't2.table1_id = t1.id');
 
@@ -300,6 +358,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithExpressionCondition()
     {
+        $this->setupTest();
+
         $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->joinLeft('table2', $condition);
 
@@ -308,6 +368,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLeftJoinWithSelectCondition()
     {
+        $this->setupTest();
+
         $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->joinLeft('table2', $condition);
 
@@ -319,6 +381,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoin()
     {
+        $this->setupTest();
+
         $this->query->joinRight('table2', 'table2.table1_id = table1.id');
 
         $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON table2.table1_id = table1.id', []);
@@ -326,6 +390,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithAlias()
     {
+        $this->setupTest();
+
         $this->query->joinRight('table2 t2', 't2.table1_id = t1.id');
 
         $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
@@ -333,6 +399,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithArray()
     {
+        $this->setupTest();
+
         $this->query->joinRight(['t2' => 'table2'], 't2.table1_id = t1.id');
 
         $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
@@ -340,6 +408,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithComplexCondition()
     {
+        $this->setupTest();
+
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
 
         $this->assertCorrectStatementAndValues(
@@ -350,6 +420,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithOperatorAll()
     {
+        $this->setupTest();
+
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
 
         $this->assertCorrectStatementAndValues(
@@ -360,6 +432,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithOperatorAny()
     {
+        $this->setupTest();
+
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
 
         $this->assertCorrectStatementAndValues(
@@ -370,6 +444,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithParametrizedCondition()
     {
+        $this->setupTest();
+
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
 
         $this->assertCorrectStatementAndValues(
@@ -380,6 +456,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithSelect()
     {
+        $this->setupTest();
+
         $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
         $this->query->joinRight($table2, 't2.table1_id = t1.id');
 
@@ -391,6 +469,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithExpressionCondition()
     {
+        $this->setupTest();
+
         $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->joinRight('table2', $condition);
 
@@ -399,6 +479,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRightJoinWithSelectCondition()
     {
+        $this->setupTest();
+
         $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->joinRight('table2', $condition);
 
@@ -410,6 +492,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testGroupBy()
     {
+        $this->setupTest();
+
         $this->query->groupBy(['a', 'b']);
 
         $this->assertCorrectStatementAndValues('GROUP BY a, b', []);
@@ -417,6 +501,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testGroupByWithAlias()
     {
+        $this->setupTest();
+
         $this->query->groupBy(['t.a', 't.b']);
 
         $this->assertCorrectStatementAndValues('GROUP BY t.a, t.b', []);
@@ -424,6 +510,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testGroupByWithExpression()
     {
+        $this->setupTest();
+
         $column = new Expression('x = ?', null, 1);
         $this->query->groupBy([$column]);
 
@@ -432,6 +520,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testGroupByWithSelect()
     {
+        $this->setupTest();
+
         $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->groupBy([$column]);
 
@@ -440,6 +530,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testOrderBy()
     {
+        $this->setupTest();
+
         $this->query->orderBy(['a', 'b' => 'ASC'], 'DESC');
 
         $this->assertCorrectStatementAndValues('ORDER BY a DESC, b ASC', []);
@@ -447,6 +539,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testOrderByWithExpression()
     {
+        $this->setupTest();
+
         $column = new Expression('x = ?', null, 1);
         $this->query->orderBy($column, 'DESC');
 
@@ -455,6 +549,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testOrderByWithExpressionAndExplicitDirection()
     {
+        $this->setupTest();
+
         $column = new Expression('x = ?', null, 1);
         $this->query->orderBy([[$column, 'DESC']]);
 
@@ -463,6 +559,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testOrderByWithSelect()
     {
+        $this->setupTest();
+
         $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->orderBy($column, 'DESC');
 
@@ -471,6 +569,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLimitOffset()
     {
+        $this->setupTest();
+
         $this->query = (new Select())->columns(['a'])->from('b')->limit(4)->offset(1);
         $this->assertCorrectStatementAndValues(
             'SELECT a FROM b LIMIT 4 OFFSET 1',
@@ -480,6 +580,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testLimitWithoutOffset()
     {
+        $this->setupTest();
+
         $this->query = (new Select())->columns(['a'])->from('b')->limit(4);
         $this->assertCorrectStatementAndValues(
             'SELECT a FROM b LIMIT 4',
@@ -489,6 +591,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testOffsetWithoutLimit()
     {
+        $this->setupTest();
+
         $this->query = (new Select())->columns(['a'])->from('b')->offset(1);
         $this->assertCorrectStatementAndValues(
             'SELECT a FROM b OFFSET 1',
@@ -498,6 +602,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testUnion()
     {
+        $this->setupTest();
+
         $unionQuery = (new Select())
             ->columns('a')
             ->from('table2')
@@ -517,6 +623,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testUnionAll()
     {
+        $this->setupTest();
+
         $unionQuery = (new Select())
             ->columns('a')
             ->from('table2')
@@ -536,6 +644,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testElementOrder()
     {
+        $this->setupTest();
+
         $this->query
             ->distinct()
             ->columns(['c.id', 'c.name', 'orders' => 'COUNT(o.customer)'])
@@ -564,6 +674,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRollupMysql()
     {
+        $this->setupTest();
+
         $this->query
             ->columns([
                 'division' => 'di.name',
@@ -587,6 +699,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testRollupPostgresql()
     {
+        $this->setupTest();
+
         $this->query
             ->columns([
                 'division' => 'di.name',
@@ -610,6 +724,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testJustAUnionRendersAsSelect()
     {
+        $this->setupTest();
+
         $unionQuery = (new Select())
             ->columns('a')
             ->from('table2')
@@ -626,6 +742,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testMoreThanOneUnionWithoutSelect()
     {
+        $this->setupTest();
+
         $union1 = (new Select())
             ->columns('a')
             ->from('table1')
@@ -648,6 +766,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testMoreThanOneUnionWithSelect()
     {
+        $this->setupTest();
+
         $union1 = (new Select())
             ->columns('a')
             ->from('table1')
@@ -674,6 +794,8 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testCountDistinct()
     {
+        $this->setupTest();
+
         $this->query = $this->query
             ->distinct()
             ->from('table')
