@@ -23,7 +23,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    public function setupTest()
     {
         $this->query = new Update();
         $this->queryBuilder = new QueryBuilder(new TestAdapter());
@@ -31,6 +31,8 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testEmptyUpdateTable()
     {
+        $this->setupTest();
+
         $this->assertSame(null, $this->query->getTable());
         $this->assertSame([], $this->query->getSet());
         $this->assertCorrectStatementAndValues('SET ', []);
@@ -38,6 +40,8 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testTableSpecification()
     {
+        $this->setupTest();
+
         $this->query->table('table');
 
         $this->assertSame(['table'], $this->query->getTable());
@@ -46,6 +50,8 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testTableSpecificationWithSchema()
     {
+        $this->setupTest();
+
         $this->query->table('schema.table');
 
         $this->assertSame(['schema.table'], $this->query->getTable());
@@ -54,6 +60,8 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testSet()
     {
+        $this->setupTest();
+
         $this->query->set(['c1' => 'v1', 'c2' => 'v2']);
 
         $this->assertSame(['c1' => 'v1', 'c2' => 'v2'], $this->query->getSet());
@@ -62,6 +70,8 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testExpressionValue()
     {
+        $this->setupTest();
+
         $value = new Expression('x = ?', null, 1);
         $this->query->set(['c1' => $value]);
 
@@ -71,6 +81,8 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectValue()
     {
+        $this->setupTest();
+
         $value = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->set(['c1' => $value]);
 
@@ -80,6 +92,8 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     public function testUpdateStatementWithSet()
     {
+        $this->setupTest();
+
         $this->query
             ->table('table')
             ->set(['c1' => 'v1', 'c2' => 'v2']);

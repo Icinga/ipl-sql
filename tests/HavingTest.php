@@ -23,7 +23,7 @@ class HavingTest extends \PHPUnit\Framework\TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    public function setupTest()
     {
         $this->query = new Select();
         $this->queryBuilder = new QueryBuilder(new TestAdapter());
@@ -31,6 +31,8 @@ class HavingTest extends \PHPUnit\Framework\TestCase
 
     public function testHavingStringFormat()
     {
+        $this->setupTest();
+
         $this->query->having('c1 = x');
         $this->query->having('c2 IS NULL');
         $this->query->having('c3 IS NOT NULL');
@@ -40,6 +42,8 @@ class HavingTest extends \PHPUnit\Framework\TestCase
 
     public function testHavingArrayFormat()
     {
+        $this->setupTest();
+
         $this->query->having(['c1 = x']);
         $this->query->having(['c2 = ?' => 1]);
         $this->query->having(['c3 > ?' => 1]);
@@ -57,6 +61,8 @@ class HavingTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithExpression()
     {
+        $this->setupTest();
+
         $expression = new Expression('c2 = ?', null, 1);
         $this->query->having($expression);
 
@@ -65,6 +71,8 @@ class HavingTest extends \PHPUnit\Framework\TestCase
 
     public function testWhereWithSelect()
     {
+        $this->setupTest();
+
         $select = (new Select())->columns('COUNT(*)')->from('t1')->where(['c2 = ?' => 1]);
         $this->query->having($select);
 
@@ -73,6 +81,8 @@ class HavingTest extends \PHPUnit\Framework\TestCase
 
     public function testResetHaving()
     {
+        $this->setupTest();
+
         $this->query->having('c1 = x');
         $this->assertSame(
             ['AND', [['AND', ['c1 = x']]]],

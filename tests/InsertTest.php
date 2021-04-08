@@ -23,7 +23,7 @@ class InsertTest extends \PHPUnit\Framework\TestCase
      */
     protected $queryBuilder;
 
-    public function setUp()
+    public function setupTest()
     {
         $this->query = new Insert();
         $this->queryBuilder = new QueryBuilder(new TestAdapter());
@@ -31,6 +31,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testEmptyInsertInto()
     {
+        $this->setupTest();
+
         $this->assertSame(null, $this->query->getInto());
         $this->assertSame([], $this->query->getColumns());
         $this->assertSame([], $this->query->getValues());
@@ -40,6 +42,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testIntoTableSpecification()
     {
+        $this->setupTest();
+
         $this->query->into('table');
 
         $this->assertSame('table', $this->query->getInto());
@@ -48,6 +52,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testIntoTableSpecificationWithSchema()
     {
+        $this->setupTest();
+
         $this->query->into('schema.table');
 
         $this->assertSame('schema.table', $this->query->getInto());
@@ -56,6 +62,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testColumns()
     {
+        $this->setupTest();
+
         $columns = ['c1', 'c2'];
         $this->query->columns($columns);
 
@@ -65,6 +73,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testValues()
     {
+        $this->setupTest();
+
         $this->query->values(['c1' => 'v1']);
 
         $this->assertSame(['c1'], $this->query->getColumns());
@@ -74,6 +84,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testExpressionValue()
     {
+        $this->setupTest();
+
         $value = new Expression('x = ?', null, 1);
         $this->query->values(['c1' => $value]);
 
@@ -84,6 +96,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectValue()
     {
+        $this->setupTest();
+
         $value = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->values(['c1' => $value]);
 
@@ -94,6 +108,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testColumnsAndValues()
     {
+        $this->setupTest();
+
         $this->query->columns(['c1', 'c2']);
         $this->query->values(['v1', 'v2']);
 
@@ -104,6 +120,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testInsertIntoSelectStatement()
     {
+        $this->setupTest();
+
         $select = (new Select())
             ->from('table')
             ->columns(['c1', 'c2']);
@@ -119,6 +137,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testInsertIntoStatementWithValues()
     {
+        $this->setupTest();
+
         $this->query
             ->into('table')
             ->values(['c1' => 'v1', 'c2' => 'v2']);
@@ -128,6 +148,8 @@ class InsertTest extends \PHPUnit\Framework\TestCase
 
     public function testInsertIntoStatementWithColumnsAndValues()
     {
+        $this->setupTest();
+
         $this->query
             ->into('table')
             ->columns(['c1', 'c2'])
