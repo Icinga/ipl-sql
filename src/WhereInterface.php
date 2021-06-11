@@ -74,4 +74,11 @@ interface WhereInterface
      * @return $this
      */
     public function orNotWhere($condition, ...$args);
+
+    /**
+     * Reset the WHERE part of the query
+     *
+     * @return $this
+     */
+    public function resetWhere();
 }

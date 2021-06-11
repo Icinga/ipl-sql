@@ -475,18 +475,6 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
-     * Reset the WHERE part of the query
-     *
-     * @return $this
-     */
-    public function resetWhere()
-    {
-        $this->where = null;
-
-        return $this;
-    }
-
-    /**
      * Get the count query
      *
      * @return Select
