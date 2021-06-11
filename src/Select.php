@@ -475,30 +475,6 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
-     * Reset the limit of the query
-     *
-     * @return $this
-     */
-    public function resetLimit()
-    {
-        $this->limit = null;
-
-        return $this;
-    }
-
-    /**
-     * Reset the offset of the query
-     *
-     * @return $this
-     */
-    public function resetOffset()
-    {
-        $this->offset = null;
-
-        return $this;
-    }
-
-    /**
      * Reset queries combined with UNION and UNION ALL
      *
      * @return $this
