@@ -463,42 +463,6 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
-     * Reset the ORDER BY part of the query
-     *
-     * @return $this
-     */
-    public function resetOrderBy()
-    {
-        $this->orderBy = null;
-
-        return $this;
-    }
-
-    /**
-     * Reset the limit of the query
-     *
-     * @return $this
-     */
-    public function resetLimit()
-    {
-        $this->limit = null;
-
-        return $this;
-    }
-
-    /**
-     * Reset the offset of the query
-     *
-     * @return $this
-     */
-    public function resetOffset()
-    {
-        $this->offset = null;
-
-        return $this;
-    }
-
-    /**
      * Reset queries combined with UNION and UNION ALL
      *
      * @return $this
@@ -506,18 +470,6 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     public function resetUnion()
     {
         $this->union = null;
-
-        return $this;
-    }
-
-    /**
-     * Reset the WHERE part of the query
-     *
-     * @return $this
-     */
-    public function resetWhere()
-    {
-        $this->where = null;
 
         return $this;
     }

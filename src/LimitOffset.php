@@ -49,6 +49,13 @@ trait LimitOffset
         return $this;
     }
 
+    public function resetLimit()
+    {
+        $this->limit = null;
+
+        return $this;
+    }
+
     public function hasOffset()
     {
         return $this->offset !== null;
@@ -69,6 +76,13 @@ trait LimitOffset
         }
 
         $this->offset = $offset;
+
+        return $this;
+    }
+
+    public function resetOffset()
+    {
+        $this->offset = null;
 
         return $this;
     }

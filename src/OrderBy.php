@@ -48,6 +48,13 @@ trait OrderBy
         return $this;
     }
 
+    public function resetOrderBy()
+    {
+        $this->orderBy = null;
+
+        return $this;
+    }
+
     /**
      * Clone the properties provided by this trait
      *

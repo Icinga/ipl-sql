@@ -41,4 +41,11 @@ interface OrderByInterface
      * @return $this
      */
     public function orderBy($orderBy, $direction = null);
+
+    /**
+     * Reset the ORDER BY part of the query
+     *
+     * @return $this
+     */
+    public function resetOrderBy();
 }

@@ -47,6 +47,13 @@ trait Where
         return $this;
     }
 
+    public function resetWhere()
+    {
+        $this->where = null;
+
+        return $this;
+    }
+
     /**
      * Make $condition an array and build an array like this: [$operator, [$condition]]
      *

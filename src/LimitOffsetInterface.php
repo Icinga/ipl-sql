@@ -32,6 +32,13 @@ interface LimitOffsetInterface
     public function limit($limit);
 
     /**
+     * Reset the limit
+     *
+     * @return $this
+     */
+    public function resetLimit();
+
+    /**
      * Get whether an offset is configured
      *
      * @return bool
@@ -54,4 +61,11 @@ interface LimitOffsetInterface
      * @return $this
      */
     public function offset($offset);
+
+    /**
+     * Reset the offset
+     *
+     * @return $this
+     */
+    public function resetOffset();
 }
