@@ -43,6 +43,13 @@ class Mysql extends BaseAdapter
             if (isset($config->ssl_cipher)) {
                 $options[PDO::MYSQL_ATTR_SSL_CIPHER] = $config->ssl_cipher;
             }
+
+            if (
+                defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')
+                && isset($config->ssl_do_not_verify_server_cert)
+            ) {
+                $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = (bool) $config->ssl_do_not_verify_server_cert;
+            }
         }
 
         return $options;
