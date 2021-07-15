@@ -48,7 +48,7 @@ class Mysql extends BaseAdapter
                 defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')
                 && isset($config->ssl_do_not_verify_server_cert)
             ) {
-                $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = (bool) $config->ssl_do_not_verify_server_cert;
+                $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
             }
         }
 
