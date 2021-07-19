@@ -14,7 +14,7 @@ class Mysql extends BaseAdapter
 
     public function setClientTimezone(Connection $db)
     {
-        $db->prepexec('SET time_zone = ?', [$this->getTimezoneOffset()]);
+        $db->exec('SET time_zone = ' . $db->quote($this->getTimezoneOffset()));
 
         return $this;
     }
