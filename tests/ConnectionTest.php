@@ -47,11 +47,10 @@ class ConnectionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($db->getAdapter() instanceof Sqlite);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testConstructException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new Connection(['db' => 'exception']);
     }
 
