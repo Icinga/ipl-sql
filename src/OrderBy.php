@@ -10,6 +10,9 @@ trait OrderBy
     /** @var array ORDER BY part of the query */
     protected $orderBy;
 
+    /** @var bool Whether to disable the default sorts of the model */
+    private $disableDefaultSort = false;
+
     public function hasOrderBy()
     {
         return $this->orderBy !== null;
@@ -53,6 +56,32 @@ trait OrderBy
         $this->orderBy = null;
 
         return $this;
+    }
+
+    /**
+     * Disable default sorts
+     *
+     * Prevents from being used the default sorts of the source model
+     *
+     * @param bool $disable
+     *
+     * @return $this
+     */
+    public function disableDefaultSort($disable = true)
+    {
+        $this->disableDefaultSort = (bool) $disable;
+
+        return $this;
+    }
+
+    /**
+     * Get whether to use the default sorts of the source model
+     *
+     * @return bool
+     */
+    public function defaultSortDisabled()
+    {
+        return $this->disableDefaultSort;
     }
 
     /**
