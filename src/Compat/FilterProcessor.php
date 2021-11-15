@@ -76,15 +76,17 @@ class FilterProcessor
             ($filter instanceof Filter\Equal || $filter instanceof Filter\Unequal)
             && strpos($expression, '*') !== false
         ) {
-            if ($expression === '*') {
-                return ["$column IS " . ($filter instanceof Filter\Equal ? 'NOT ' : '') . 'NULL'];
-            } elseif ($filter instanceof Filter\Unequal) {
+            if ($filter instanceof Filter\Unequal) {
                 return ["($column NOT LIKE ? OR $column IS NULL)" => str_replace('*', '%', $expression)];
             } else {
                 return ["$column LIKE ?" => str_replace('*', '%', $expression)];
             }
         } elseif ($filter instanceof Filter\Unequal) {
             return ["($column != ? OR $column IS NULL)" => $expression];
+        } elseif ($filter instanceof Filter\HasNotValue) {
+            return ["$column IS NULL"];
+        } elseif ($filter instanceof  Filter\HasValue) {
+            return ["$column IS NOT NULL"];
         } else {
             if ($filter instanceof Filter\Equal) {
                 $operator = '=';
