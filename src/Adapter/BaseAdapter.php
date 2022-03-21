@@ -60,17 +60,23 @@ abstract class BaseAdapter implements Adapter
     {
     }
 
-    public function quoteIdentifier($identifier)
+    public function quoteIdentifier($identifiers)
     {
-        if ($identifier === '*') {
-            return $identifier;
+        if (is_string($identifiers)) {
+            $identifiers = explode('.', $identifiers);
         }
 
-        $identifier = str_replace($this->quoteCharacter[0], $this->escapeCharacter, $identifier);
+        foreach ($identifiers as $i => $identifier) {
+            if ($identifier === '*') {
+                continue;
+            }
 
-        return $this->quoteCharacter[0]
-            . str_replace('.', "{$this->quoteCharacter[0]}.{$this->quoteCharacter[1]}", $identifier)
-            . $this->quoteCharacter[1];
+            $identifiers[$i] = $this->quoteCharacter[0]
+                . str_replace($this->quoteCharacter[0], $this->escapeCharacter, $identifier)
+                . $this->quoteCharacter[1];
+        }
+
+        return implode('.', $identifiers);
     }
 
     protected function getTimezoneOffset()
