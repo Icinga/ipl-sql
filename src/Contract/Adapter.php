@@ -4,6 +4,7 @@ namespace ipl\Sql\Contract;
 
 use ipl\Sql\Config;
 use ipl\Sql\Connection;
+use ipl\Sql\QueryBuilder;
 
 interface Adapter extends Quoter
 {
@@ -33,4 +34,13 @@ interface Adapter extends Quoter
      * @return $this
      */
     public function setClientTimezone(Connection $db);
+
+    /**
+     * Register callbacks for query builder events
+     *
+     * @param QueryBuilder $queryBuilder
+     *
+     * @return $this
+     */
+    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder);
 }

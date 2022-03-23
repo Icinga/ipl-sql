@@ -7,6 +7,7 @@ use DateTimeZone;
 use ipl\Sql\Config;
 use ipl\Sql\Connection;
 use ipl\Sql\Contract\Adapter;
+use ipl\Sql\QueryBuilder;
 use PDO;
 
 abstract class BaseAdapter implements Adapter
@@ -77,6 +78,10 @@ abstract class BaseAdapter implements Adapter
         }
 
         return implode('.', $identifiers);
+    }
+
+    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
+    {
     }
 
     protected function getTimezoneOffset()

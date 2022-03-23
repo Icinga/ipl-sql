@@ -22,6 +22,8 @@ class QueryBuilder
      */
     public function __construct(Adapter $adapter)
     {
+        $adapter->registerQueryBuilderCallbacks($this);
+
         $this->adapter = $adapter;
     }
 
