@@ -145,14 +145,6 @@ class QueryBuilder
     {
         $select = clone $select;
 
-        if (
-            $this->adapter instanceof Mssql
-            && ($select->hasLimit() || $select->hasOffset())
-            && ! $select->hasOrderBy()
-        ) {
-            $select->orderBy(1);
-        }
-
         $this->emit(static::ON_ASSEMBLE_SELECT, [$select]);
 
         $sql = array_filter([
