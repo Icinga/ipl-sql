@@ -17,13 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1']
         os: ['ubuntu-latest']
-        include:
-          - php: '5.6'
-            allow_failure: true
-          - php: '7.0'
-            allow_failure: true
 
     steps:
       - name: Checkout code base
@@ -51,20 +46,13 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      phpunit-version: 8.5.15
+      phpunit-version: 8.5
 
     strategy:
       fail-fast: false
       matrix:
-        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1']
         os: ['ubuntu-latest']
-        include:
-          - php: '5.6'
-            phpunit-version: 5.7.27
-          - php: '7.0'
-            phpunit-version: 6.5.14
-          - php: '7.1'
-            phpunit-version: 7.5.20
 
     steps:
       - name: Checkout code base

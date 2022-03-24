@@ -9,6 +9,7 @@ use ipl\Sql\Adapter\Pgsql;
 use ipl\Sql\Adapter\Sqlite;
 use ipl\Sql\Connection;
 use InvalidArgumentException;
+use PDO;
 
 class ConnectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -75,8 +76,11 @@ class ConnectionTest extends \PHPUnit\Framework\TestCase
     protected function getFixturesDb()
     {
         $db = new Connection([
-            'db'     => 'sqlite',
-            'dbname' => ':memory:'
+            'db'      => 'sqlite',
+            'dbname'  => ':memory:',
+            'options' => [
+                PDO::ATTR_STRINGIFY_FETCHES => true
+            ]
         ]);
 
         $fixtures = file_get_contents(__DIR__ . '/fixtures.sql');

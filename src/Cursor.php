@@ -4,6 +4,7 @@ namespace ipl\Sql;
 
 use ipl\Stdlib\Contract\Paginatable;
 use IteratorAggregate;
+use Traversable;
 
 /**
  * Cursor for ipl SQL queries
@@ -59,12 +60,7 @@ class Cursor implements IteratorAggregate, Paginatable
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     *
-     * @return \Generator
-     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return $this->db->yieldAll($this->select, ...$this->getFetchMode());
     }
@@ -103,7 +99,7 @@ class Cursor implements IteratorAggregate, Paginatable
         return $this;
     }
 
-    public function count()
+    public function count(): int
     {
         return $this->db->select($this->select->getCountQuery())->fetchColumn(0);
     }
