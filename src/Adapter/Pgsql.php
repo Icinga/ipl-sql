@@ -34,6 +34,28 @@ class Pgsql extends BaseAdapter
 
                 $select->groupBy(array_diff($candidates, $groupBy));
             }
+
+            if ($select->getDistinct() && $select->hasOrderBy()) {
+                // For SELECT DISTINCT, ORDER BY expressions must appear in SELECT list.
+                $candidates = [];
+                foreach ($select->getOrderBy() as list($column, $_)) {
+                    if ($column instanceof Expression) {
+                        // TODO(lippserd): I'm not sure about PostgreSQL's interpretation here, but since expressions
+                        // can be anything, including non-aggregate functions, such expressions must be in the SELECT
+                        // list and referenced manually with an alias in ORDER BY.
+                        continue;
+                    }
+
+                    $candidates[] = $column;
+                }
+
+                $columns = [];
+                foreach ($select->getColumns() as $alias => $column) {
+                    $columns[] = is_int($alias) ? $column : $alias;
+                }
+
+                $select->columns(array_diff($candidates, $columns));
+            }
         });
     }
 }
