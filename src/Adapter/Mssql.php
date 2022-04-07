@@ -3,6 +3,8 @@
 namespace ipl\Sql\Adapter;
 
 use ipl\Sql\Config;
+use ipl\Sql\QueryBuilder;
+use ipl\Sql\Select;
 use PDO;
 use RuntimeException;
 
@@ -39,5 +41,17 @@ class Mssql extends BaseAdapter
         }
 
         return $dsn;
+    }
+
+    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
+    {
+        $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select) {
+            if (
+                ($select->hasLimit() || $select->hasOffset())
+                && ! $select->hasOrderBy()
+            ) {
+                $select->orderBy(1);
+            }
+        });
     }
 }

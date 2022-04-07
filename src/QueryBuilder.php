@@ -5,11 +5,45 @@ namespace ipl\Sql;
 use InvalidArgumentException;
 use ipl\Sql\Adapter\Mssql;
 use ipl\Sql\Contract\Adapter;
+use ipl\Stdlib\Events;
 
 use function ipl\Stdlib\get_php_type;
 
 class QueryBuilder
 {
+    use Events;
+
+    /**
+     * Event raised when a {@link Select} object is assembled into a SQL statement string
+     *
+     * The {@link Select} object is passed as parameter to the event callbacks.
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select) {
+     *     // ...
+     * });
+     * ```
+     */
+    const ON_ASSEMBLE_SELECT = 'assembleSelect';
+
+    /**
+     * Event raised after a {@link Select} object is assembled into a SQL statement string
+     *
+     * The assembled SQL statement string and the values to bind to the statement are passed as parameters by reference
+     * to the event callbacks.
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_SELECT_ASSEMBLED, function (&$sql, &$values) {
+     *     // ...
+     * });
+     * ```
+     */
+    const ON_SELECT_ASSEMBLED = 'selectAssembled';
+
     /** @var Adapter */
     protected $adapter;
 
@@ -22,6 +56,8 @@ class QueryBuilder
      */
     public function __construct(Adapter $adapter)
     {
+        $adapter->registerQueryBuilderCallbacks($this);
+
         $this->adapter = $adapter;
     }
 
@@ -109,13 +145,7 @@ class QueryBuilder
     {
         $select = clone $select;
 
-        if (
-            $this->adapter instanceof Mssql
-            && ($select->hasLimit() || $select->hasOffset())
-            && ! $select->hasOrderBy()
-        ) {
-            $select->orderBy(1);
-        }
+        $this->emit(static::ON_ASSEMBLE_SELECT, [$select]);
 
         $sql = array_filter([
             $this->buildWith($select->getWith(), $values),
@@ -156,6 +186,8 @@ class QueryBuilder
                 $requiresUnionKeyword = true;
             } while (! empty($unionKeywords));
         }
+
+        $this->emit(static::ON_SELECT_ASSEMBLED, [&$sql, &$values]);
 
         return [$sql, $values];
     }
