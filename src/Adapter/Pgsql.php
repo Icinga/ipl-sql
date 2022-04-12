@@ -19,20 +19,29 @@ class Pgsql extends BaseAdapter
     public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
     {
         $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select) {
-            $groupBy = $select->getGroupBy();
-            if (! empty($groupBy)) {
+            if ($select->hasGroupBy()) {
                 // All SELECT columns must appear in the GROUP BY clause or be used in an aggregate function.
                 $candidates = [];
                 foreach ($select->getColumns() as $alias => $column) {
                     if ($column instanceof Expression) {
-                        // Assume an aggregate function here.
+                        // Assume an aggregate function here, which does not need to be added to the GROUP BY.
                         continue;
                     }
 
-                    $candidates[] = is_int($alias) ? $column : $alias;
+                    $candidates[$alias] = $column;
                 }
 
-                $select->groupBy(array_diff($candidates, $groupBy));
+                $groupBy = [];
+                foreach ($select->getGroupBy() as $column) {
+                    // TODO(lippserd): This is experimental at the moment.
+                    if ($column instanceof Expression) {
+                        $groupBy = array_merge($groupBy, $column->getColumns());
+                    } else {
+                        $groupBy[] = $column;
+                    }
+                }
+
+                $select->groupBy(array_diff($candidates, array_diff($groupBy, array_flip($candidates))));
             }
 
             if ($select->getDistinct() && $select->hasOrderBy()) {

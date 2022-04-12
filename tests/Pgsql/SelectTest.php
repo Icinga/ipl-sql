@@ -56,6 +56,20 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->assertCorrectStatementAndValues('SELECT (MAX(b)), a, c FROM d GROUP BY c, a');
     }
 
+    public function testAutoAppendGroupBySelectColumnsRespectsAliases()
+    {
+        $this->setupTest();
+
+        $this->query
+            ->columns(['a_aliased' => 'a', 'b_aliased' => 'b', 'c_aliased' => 'c'])
+            ->from('d')
+            ->groupBy(['b', 'c_aliased']);
+
+        $this->assertCorrectStatementAndValues(
+            'SELECT a AS a_aliased, b AS b_aliased, c AS c_aliased FROM d GROUP BY b, c_aliased, a'
+        );
+    }
+
     protected function assertCorrectStatementAndValues($statement, array $values = [])
     {
         list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
