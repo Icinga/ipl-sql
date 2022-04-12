@@ -224,6 +224,16 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
+     * Get whether a GROUP BY part is configured
+     *
+     * @return bool
+     */
+    public function hasGroupBy()
+    {
+        return ! empty($this->groupBy);
+    }
+
+    /**
      * Get the GROUP BY part of the query
      *
      * @return array|null
