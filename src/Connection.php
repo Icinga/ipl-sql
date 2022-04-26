@@ -191,7 +191,7 @@ class Connection implements Quoter
     public function ping($reconnect = true)
     {
         try {
-            $this->exec('SELECT 1');
+            $this->query('SELECT 1')->closeCursor();
         } catch (Exception $e) {
             if (! $reconnect) {
                 return false;
