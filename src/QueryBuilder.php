@@ -156,7 +156,8 @@ class QueryBuilder
             $this->buildGroupBy($select->getGroupBy(), $values),
             $this->buildHaving($select->getHaving(), $values),
             $this->buildOrderBy($select->getOrderBy(), $values),
-            $this->buildLimitOffset($select->getLimit(), $select->getOffset())
+            $this->buildLimitOffset($select->getLimit(), $select->getOffset()),
+            $this->buildFor($select->getFor())
         ]);
 
         $sql = implode($this->separator, $sql);
@@ -679,6 +680,24 @@ class QueryBuilder
             if ($offset !== null) {
                 $sql[] = "OFFSET $offset";
             }
+        }
+
+        return implode($this->separator, $sql);
+    }
+
+    /**
+     * Build the locking clause of a query
+     *
+     * @param ?string $lockStrength
+     *
+     * @return string
+     */
+    public function buildFor($lockStrength)
+    {
+        $sql = [];
+
+        if (! empty($lockStrength)) {
+            $sql[] = "FOR $lockStrength";
         }
 
         return implode($this->separator, $sql);
