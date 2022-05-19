@@ -44,6 +44,102 @@ class QueryBuilder
      */
     const ON_SELECT_ASSEMBLED = 'selectAssembled';
 
+    /**
+     * Event raised before an {@see Insert} object is assembled into a SQL statement string
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_INSERT, function (Insert $insert) {
+     *     // ...
+     * });
+     * ```
+     *
+     * @var string
+     */
+    const ON_ASSEMBLE_INSERT = 'assembleInsert';
+
+    /**
+     * Event raised after an {@see Insert} object is assembled into a SQL statement string
+     *
+     * The assembled SQL statement string and the prepared values are passed by reference to the event callbacks
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_INSERT_ASSEMBLED, function (&$sql, &$values) {
+     *     // ...
+     * });
+     * ```
+     *
+     * @var string
+     */
+    const ON_INSERT_ASSEMBLED = 'insertAssembled';
+
+    /**
+     * Event raised before an {@see Update} object is assembled into a SQL statement string
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_UPDATE, function (Update $update) {
+     *     // ...
+     * });
+     * ```
+     *
+     * @var string
+     */
+    const ON_ASSEMBLE_UPDATE = 'assembleUpdate';
+
+    /**
+     * Event raised after an {@see Update} object is assembled into a SQL statement string
+     *
+     * The assembled SQL statement string and the prepared values are passed by reference to the event callbacks
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_UPDATE_ASSEMBLED, function (&$sql, &$values) {
+     *     // ...
+     * });
+     * ```
+     *
+     * @var string
+     */
+    const ON_UPDATE_ASSEMBLED = 'updateAssembled';
+
+    /**
+     * Event raised before a {@see Delete} object is assembled into a SQL statement string
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_DELETE, function (Delete $delete) {
+     *     // ...
+     * });
+     * ```
+     *
+     * @var string
+     */
+    const ON_ASSEMBLE_DELETE = 'assembleDelete';
+
+    /**
+     * Event raised after a {@see Delete} object is assembled into a SQL statement string
+     *
+     * The assembled SQL statement string and the prepared values are passed by reference to the event callbacks
+     *
+     * **Example usage:**
+     *
+     * ```
+     * $queryBuilder->on(QueryBuilder::ON_DELETE_ASSEMBLED, function (&$sql, &$values) {
+     *     // ...
+     * });
+     * ```
+     *
+     * @var string
+     */
+    const ON_DELETE_ASSEMBLED = 'deleteAssembled';
+
     /** @var Adapter */
     protected $adapter;
 
@@ -100,13 +196,19 @@ class QueryBuilder
     {
         $values = [];
 
+        $this->emit(self::ON_ASSEMBLE_DELETE, [$delete]);
+
         $sql = array_filter([
             $this->buildWith($delete->getWith(), $values),
             $this->buildDeleteFrom($delete->getFrom()),
             $this->buildWhere($delete->getWhere(), $values)
         ]);
 
-        return [implode($this->separator, $sql), $values];
+        $sql = implode($this->separator, $sql);
+
+        $this->emit(static::ON_DELETE_ASSEMBLED, [&$sql, &$values]);
+
+        return [$sql, $values];
     }
 
     /**
@@ -120,6 +222,8 @@ class QueryBuilder
     {
         $values = [];
 
+        $this->emit(static::ON_ASSEMBLE_INSERT, [$insert]);
+
         $select = $insert->getSelect();
 
         $sql = array_filter([
@@ -130,7 +234,11 @@ class QueryBuilder
                 : $this->buildInsertColumnsAndValues($insert->getColumns(), $insert->getValues(), $values)
         ]);
 
-        return [implode($this->separator, $sql), $values];
+        $sql = implode($this->separator, $sql);
+
+        $this->emit(static::ON_INSERT_ASSEMBLED, [&$sql, &$values]);
+
+        return [$sql, $values];
     }
 
     /**
@@ -203,6 +311,8 @@ class QueryBuilder
     {
         $values = [];
 
+        $this->emit(self::ON_ASSEMBLE_UPDATE, [$update]);
+
         $sql = array_filter([
             $this->buildWith($update->getWith(), $values),
             $this->buildUpdateTable($update->getTable()),
@@ -210,7 +320,11 @@ class QueryBuilder
             $this->buildWhere($update->getWhere(), $values)
         ]);
 
-        return [implode($this->separator, $sql), $values];
+        $sql = implode($this->separator, $sql);
+
+        $this->emit(static::ON_UPDATE_ASSEMBLED, [&$sql, &$values]);
+
+        return [$sql, $values];
     }
 
     /**
