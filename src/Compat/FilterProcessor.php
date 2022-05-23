@@ -65,7 +65,7 @@ class FilterProcessor
         if (is_array($expression)) {
             if ($filter instanceof Filter\UnEqual || $filter instanceof Filter\Unlike) {
                 return ["($column NOT IN (?) OR $column IS NULL)" => $expression];
-            } elseif ($filter instanceof Filter\Equal || $filter instanceof Filter\Similar) {
+            } elseif ($filter instanceof Filter\Equal || $filter instanceof Filter\Like) {
                 return ["$column IN (?)" => $expression];
             }
 
@@ -73,11 +73,11 @@ class FilterProcessor
                 'Unable to render array expressions with operators other than equal or not equal'
             );
         } elseif (
-            ($filter instanceof Filter\Similar || $filter instanceof Filter\Unlike)
+            ($filter instanceof Filter\Like || $filter instanceof Filter\Unlike)
             && strpos($expression, '*') !== false
         ) {
             if ($expression === '*') {
-                return ["$column IS " . ($filter instanceof Filter\Similar ? 'NOT ' : '') . 'NULL'];
+                return ["$column IS " . ($filter instanceof Filter\Like ? 'NOT ' : '') . 'NULL'];
             } elseif ($filter instanceof Filter\Unlike) {
                 return ["($column NOT LIKE ? OR $column IS NULL)" => str_replace('*', '%', $expression)];
             } else {
@@ -86,7 +86,7 @@ class FilterProcessor
         } elseif ($filter instanceof Filter\Unequal || $filter instanceof Filter\Unlike) {
             return ["($column != ? OR $column IS NULL)" => $expression];
         } else {
-            if ($filter instanceof Filter\Similar || $filter instanceof Filter\Equal) {
+            if ($filter instanceof Filter\Like || $filter instanceof Filter\Equal) {
                 $operator = '=';
             } elseif ($filter instanceof Filter\GreaterThan) {
                 $operator = '>';
