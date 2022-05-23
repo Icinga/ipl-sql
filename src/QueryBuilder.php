@@ -298,7 +298,7 @@ class QueryBuilder
 
         $unpackedExpression = [];
         $unpackedValues = [];
-        $offset = null;
+        $offset = 0;
 
         foreach ($matches as $match) {
             $value = array_shift($values);
