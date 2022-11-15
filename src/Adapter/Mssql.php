@@ -16,7 +16,7 @@ class Mssql extends BaseAdapter
 
     public function getDsn(Config $config)
     {
-        $drivers = array_intersect(['dblib', 'mssql', 'sybase', 'freetds'], PDO::getAvailableDrivers());
+        $drivers = array_intersect(['dblib', 'mssql', 'sybase'], PDO::getAvailableDrivers());
 
         if (empty($drivers)) {
             throw new RuntimeException('No PDO driver available for connecting to a Microsoft SQL Server');
