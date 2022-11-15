@@ -1,10 +1,10 @@
-# Features <a id="features"></a>
+# Features
 
-## Connection <a id="sql-connection"></a>
+## Connection
 
-While using plain [PDO](https://secure.php.net/manual/en/class.pdo.php) you have
-to do formalities like assembling the platform-dependend DSN string and enabling 
-exceptions throwing on statement failures.
+While using plain [PDO](https://secure.php.net/manual/en/class.pdo.php) you
+have to do formalities like assembling the platform-dependent DSN string and
+enabling exceptions throwing on statement failures.
 
 With `ipl\Sql\Connection` you just do your thing straightforward:
 
@@ -36,24 +36,23 @@ var_dump($connection->exec(
 $connection->disconnect();                              // optional (14)
 ```
 
-Build (1) and explicitly initialize (12) a secure (9-11) connection to a 
-database (2-5) providing authentication credentials (6-7). Use UTF-8 as charset 
-(8), fetch one customer (13) and finally explicitly disconnect (14).
+Build (1) and initialize (12) a secure (9-11) connection to a database (2-5)
+providing authentication credentials (6-7). Use UTF-8 as charset (8), fetch
+one customer (13) and finally disconnect (14).
 
-The authentication credentials (6-7) may be not neccessary and the charset and 
-the SSL certificates (9-11) are likely not to be neccessary depending on your 
-database driver (2). Explicit initialization (12) and disconnecting (14) are 
-always optional.
+The authentication credentials (6-7) may not be necessary. The SSL options
+(9-11) are only supported by the `mysql` database driver (2). Explicit
+initialization (12) and disconnection (14) are always optional.
 
-`$connection->exec()` returns a 
-[PDOStatement](https://secure.php.net/manual/en/class.pdostatement.php) - see 
+`$connection->exec()` returns a
+[PDOStatement](https://secure.php.net/manual/en/class.pdostatement.php) - see
 its documentation for details.
 
-## Queries <a id="sql-queries"></a>
+## Queries
 
-Almost hardcoded queries like the one in the [above example](#sql-connection) 
-are as easy as 1-2-3. But more complex and dynamic queries either must be assembled 
-via a lot of string concats, implodes and conditional statements - or ...
+Almost hardcoded queries like the one in the [above example](#connection) are
+as easy as 1-2-3. But more complex and dynamic queries either must be assembled
+via a lot of string concatenations, implodes and conditional statements - or:
 
 ```php
 use ipl\Sql\Delete;
@@ -61,7 +60,7 @@ use ipl\Sql\Insert;
 use ipl\Sql\Select;
 use ipl\Sql\Update;
 
-$connection->exec(
+$connection->prepexec(
     (new Insert())
         ->into('customer')
         ->values([
@@ -70,28 +69,28 @@ $connection->exec(
         ])
 );
 
-$connection->exec(
+$connection->prepexec(
     (new Select())
         ->columns(['name'])
         ->from('customer')
         ->where(['id = ?' => 42])
 )->fetchAll();
 
-$connection->exec(
+$connection->prepexec(
     (new Update())
         ->table('customer')
         ->set(['name' => 'John Doe'])
         ->where(['id = ?' => 42])
 );
 
-$connection->exec(
+$connection->prepexec(
     (new Delete())
         ->from('customer')
         ->where(['id = ?' => 42])
 );
 ```
 
-### Insert <a id="sql-insert"></a>
+### Insert
 
 Insert data into a table, provided either explicitly ...
 
@@ -125,7 +124,7 @@ INSERT INTO customer (id,name) VALUES(42,'John Deo')
 INSERT INTO customer (id,name) SELECT id, name FROM temp_customer
 ```
 
-### Select <a id="sql-select"></a>
+### Select
 
 Select the name of one customer:
 
@@ -142,8 +141,8 @@ SELECT name FROM customer WHERE id = 42
 
 Select the ID, the name and the amount of resolved orders (3, 5, 7) of all
 customers (4) whose name contains "Doe" (6) and with at least 42 orders (8).
-Order the data by amount of orders and customer name (9), skip the first 75 rows
-(10) and limit to 25 rows (11):
+Order the data by amount of orders and customer name (9), skip the first 75
+rows (10) and limit to 25 rows (11):
 
 ```php
 (new Select())                                                     // (1)
@@ -174,7 +173,7 @@ LIMIT 25
 OFFSET 75
 ```
 
-### Update <a id="sql-update"></a>
+### Update
 
 Update specific rows of a table ...
 
@@ -201,7 +200,7 @@ UPDATE customer SET name = 'John Doe' WHERE id = 42
 UPDATE customer SET name = 'John Doe'
 ```
 
-### Delete <a id="sql-delete"></a>
+### Delete
 
 Delete specific rows from a table ...
 
