@@ -4,30 +4,14 @@ namespace ipl\Tests\Sql;
 
 use ipl\Sql\Expression;
 use ipl\Sql\Insert;
-use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 
-class InsertTest extends \PHPUnit\Framework\TestCase
+class InsertTest extends TestCase
 {
-    /**
-     * The INSERT query to test
-     *
-     * @var Insert
-     */
+    protected $queryClass = Insert::class;
+
+    /** @var Insert */
     protected $query;
-
-    /**
-     * The SQL query builder
-     *
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
-
-    public function setupTest()
-    {
-        $this->query = new Insert();
-        $this->queryBuilder = new QueryBuilder(new TestAdapter());
-    }
 
     public function testEmptyInsertInto()
     {
@@ -156,13 +140,5 @@ class InsertTest extends \PHPUnit\Framework\TestCase
             ->values(['v1', 'v2']);
 
         $this->assertCorrectStatementAndValues('INSERT INTO table (c1,c2) VALUES(?,?)', ['v1', 'v2']);
-    }
-
-    protected function assertCorrectStatementAndValues($statement, $values)
-    {
-        list($actualStatement, $actualValues) = $this->queryBuilder->assembleInsert($this->query);
-
-        $this->assertSame($statement, $actualStatement);
-        $this->assertSame($values, $actualValues);
     }
 }

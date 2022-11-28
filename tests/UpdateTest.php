@@ -3,31 +3,15 @@
 namespace ipl\Tests\Sql;
 
 use ipl\Sql\Expression;
-use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Update;
 
-class UpdateTest extends \PHPUnit\Framework\TestCase
+class UpdateTest extends TestCase
 {
-    /**
-     * The UPDATE query to test
-     *
-     * @var Update
-     */
+    protected $queryClass = Update::class;
+
+    /** @var Update */
     protected $query;
-
-    /**
-     * The SQL query builder
-     *
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
-
-    public function setupTest()
-    {
-        $this->query = new Update();
-        $this->queryBuilder = new QueryBuilder(new TestAdapter());
-    }
 
     public function testEmptyUpdateTable()
     {
@@ -99,13 +83,5 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
             ->set(['c1' => 'v1', 'c2' => 'v2']);
 
         $this->assertCorrectStatementAndValues('UPDATE table SET c1 = ?, c2 = ?', ['v1', 'v2']);
-    }
-
-    protected function assertCorrectStatementAndValues($statement, $values)
-    {
-        list($actualStatement, $actualValues) = $this->queryBuilder->assembleUpdate($this->query);
-
-        $this->assertSame($statement, $actualStatement);
-        $this->assertSame($values, $actualValues);
     }
 }

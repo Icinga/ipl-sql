@@ -3,32 +3,11 @@
 namespace ipl\Tests\Sql;
 
 use ipl\Sql\Expression;
-use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Sql;
 
-class WhereTest extends \PHPUnit\Framework\TestCase
+class WhereTest extends TestCase
 {
-    /**
-     * The SELECT query to test
-     *
-     * @var Select
-     */
-    protected $query;
-
-    /**
-     * The SQL query builder
-     *
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
-
-    public function setupTest()
-    {
-        $this->query = new Select();
-        $this->queryBuilder = new QueryBuilder(new TestAdapter());
-    }
-
     public function testWhereStringFormat()
     {
         $this->setupTest();
@@ -286,13 +265,5 @@ class WhereTest extends \PHPUnit\Framework\TestCase
             null,
             $this->query->getWhere()
         );
-    }
-
-    protected function assertCorrectStatementAndValues($statement, $values)
-    {
-        list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
-
-        $this->assertSame($statement, $actualStatement);
-        $this->assertSame($values, $actualValues);
     }
 }
