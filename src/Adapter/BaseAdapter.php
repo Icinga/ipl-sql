@@ -8,7 +8,9 @@ use ipl\Sql\Config;
 use ipl\Sql\Connection;
 use ipl\Sql\Contract\Adapter;
 use ipl\Sql\QueryBuilder;
+use ipl\Sql\Select;
 use PDO;
+use UnexpectedValueException;
 
 abstract class BaseAdapter implements Adapter
 {
@@ -82,6 +84,22 @@ abstract class BaseAdapter implements Adapter
 
     public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
     {
+        $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select): void {
+            if ($select->hasOrderBy()) {
+                foreach ($select->getOrderBy() as list($_, $direction)) {
+                    switch (strtolower($direction ?? '')) {
+                        case '':
+                        case 'asc':
+                        case 'desc':
+                            break;
+                        default:
+                            throw new UnexpectedValueException(
+                                sprintf('Invalid direction "%s" in ORDER BY', $direction)
+                            );
+                    }
+                }
+            }
+        });
     }
 
     protected function getTimezoneOffset()
