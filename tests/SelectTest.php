@@ -6,6 +6,7 @@ use ipl\Sql\Expression;
 use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
 use ipl\Sql\Sql;
+use UnexpectedValueException;
 
 class SelectTest extends \PHPUnit\Framework\TestCase
 {
@@ -806,6 +807,19 @@ class SelectTest extends \PHPUnit\Framework\TestCase
             'SELECT COUNT(*) AS cnt FROM (SELECT DISTINCT column FROM table) s',
             []
         );
+    }
+
+    public function testInvalidOderByDirectionsThrowAnError()
+    {
+        $this->setupTest();
+
+        $this->query = $this->query
+            ->orderBy([['foo', 'bar']]);
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Invalid direction "bar" in ORDER BY');
+
+        $this->queryBuilder->assembleSelect($this->query);
     }
 
     protected function assertCorrectStatementAndValues($statement, $values)

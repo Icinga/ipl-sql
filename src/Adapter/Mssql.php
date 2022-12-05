@@ -45,6 +45,8 @@ class Mssql extends BaseAdapter
 
     public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
     {
+        parent::registerQueryBuilderCallbacks($queryBuilder);
+
         $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select) {
             if (
                 ($select->hasLimit() || $select->hasOffset())
