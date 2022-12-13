@@ -16,16 +16,27 @@ class Mssql extends BaseAdapter
 
     public function getDsn(Config $config)
     {
-        $drivers = array_intersect(['dblib', 'mssql', 'sybase', 'freetds'], PDO::getAvailableDrivers());
+        $drivers = array_intersect(['sqlsrv', 'dblib', 'mssql', 'sybase'], PDO::getAvailableDrivers());
 
         if (empty($drivers)) {
             throw new RuntimeException('No PDO driver available for connecting to a Microsoft SQL Server');
         }
 
-        $dsn = "{$drivers[0]}:host={$config->host}";
+        $driver = reset($drivers); // array_intersect preserves keys, so the first may not be indexed at 0
+
+        $isSqlSrv = $driver === 'sqlsrv';
+        if ($isSqlSrv) {
+            $hostOption = 'Server';
+            $dbOption = 'Database';
+        } else {
+            $hostOption = 'host';
+            $dbOption = 'dbname';
+        }
+
+        $dsn = "{$driver}:{$hostOption}={$config->host}";
 
         if (! empty($config->port)) {
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            if ($isSqlSrv || strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
                 $seperator = ',';
             } else {
                 $seperator = ':';
@@ -34,10 +45,18 @@ class Mssql extends BaseAdapter
             $dsn .= "{$seperator}{$config->port}";
         }
 
-        $dsn .= ";dbname={$config->dbname}";
+        $dsn .= ";{$dbOption}={$config->dbname}";
 
-        if (! empty($config->charset)) {
+        if (! empty($config->charset) && ! $isSqlSrv) {
             $dsn .= ";charset={$config->charset}";
+        }
+
+        if (isset($config->use_ssl) && $isSqlSrv) {
+            $dsn .= ';Encrypt=' . ($config->use_ssl ? 'true' : 'false');
+        }
+
+        if (isset($config->ssl_do_not_verify_server_cert) && $isSqlSrv) {
+            $dsn .= ';TrustServerCertificate=' . ($config->ssl_do_not_verify_server_cert ? 'true' : 'false');
         }
 
         return $dsn;
