@@ -867,7 +867,7 @@ class QueryBuilder
      */
     public function buildUpdateSet(array $set = null, array &$values = [])
     {
-        if ($set === null) {
+        if (empty($set)) {
             return '';
         }
 

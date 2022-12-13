@@ -35,7 +35,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(null, $this->query->getTable());
         $this->assertSame([], $this->query->getSet());
-        $this->assertCorrectStatementAndValues('SET ', []);
+        $this->assertCorrectStatementAndValues('', []);
     }
 
     public function testTableSpecification()
@@ -45,7 +45,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->query->table('table');
 
         $this->assertSame(['table'], $this->query->getTable());
-        $this->assertCorrectStatementAndValues('UPDATE table SET ', []);
+        $this->assertCorrectStatementAndValues('UPDATE table', []);
     }
 
     public function testTableSpecificationWithSchema()
@@ -55,7 +55,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->query->table('schema.table');
 
         $this->assertSame(['schema.table'], $this->query->getTable());
-        $this->assertCorrectStatementAndValues('UPDATE schema.table SET ', []);
+        $this->assertCorrectStatementAndValues('UPDATE schema.table', []);
     }
 
     public function testSet()
