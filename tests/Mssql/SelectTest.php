@@ -3,30 +3,11 @@
 namespace ipl\Tests\Sql\Mssql;
 
 use ipl\Sql\Adapter\Mssql;
-use ipl\Sql\QueryBuilder;
-use ipl\Sql\Select;
+use ipl\Tests\Sql\TestCase;
 
-class SelectTest extends \PHPUnit\Framework\TestCase
+class SelectTest extends TestCase
 {
-    /**
-     * The SELECT query to test
-     *
-     * @var Select
-     */
-    protected $query;
-
-    /**
-     * The SQL query builder
-     *
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
-
-    public function setupTest()
-    {
-        $this->query = new Select();
-        $this->queryBuilder = new QueryBuilder(new Mssql());
-    }
+    protected $adapterClass = Mssql::class;
 
     public function testLimitOffset()
     {
@@ -62,13 +43,5 @@ class SelectTest extends \PHPUnit\Framework\TestCase
         $this->query->columns('a')->from('b')->limit(10)->offset(30);
 
         $this->assertCorrectStatementAndValues('SELECT a FROM b ORDER BY 1 OFFSET 30 ROWS FETCH NEXT 10 ROWS ONLY');
-    }
-
-    protected function assertCorrectStatementAndValues($statement, array $values = [])
-    {
-        list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
-
-        $this->assertSame($statement, $actualStatement);
-        $this->assertSame($values, $actualValues);
     }
 }

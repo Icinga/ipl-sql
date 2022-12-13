@@ -5,22 +5,8 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Delete;
 use ipl\Sql\QueryBuilder;
 
-class DeleteTest extends \PHPUnit\Framework\TestCase
+class DeleteTest extends TestCase
 {
-    /**
-     * The DELETE query to test
-     *
-     * @var Delete
-     */
-    protected $query;
-
-    /**
-     * The SQL query builder
-     *
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
-
     public function setupTestTest()
     {
         $this->query = new Delete();
@@ -52,13 +38,5 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->query->from(['t1' => 'table']);
         $this->assertSame(['t1' => 'table'], $this->query->getFrom());
         $this->assertCorrectStatementAndValues('DELETE FROM table t1', []);
-    }
-
-    protected function assertCorrectStatementAndValues($statement, $values)
-    {
-        list($actualStatement, $actualValues) = $this->queryBuilder->assembleDelete($this->query);
-
-        $this->assertSame($statement, $actualStatement);
-        $this->assertSame($values, $actualValues);
     }
 }

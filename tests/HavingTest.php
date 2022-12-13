@@ -3,32 +3,10 @@
 namespace ipl\Tests\Sql;
 
 use ipl\Sql\Expression;
-use ipl\Sql\QueryBuilder;
 use ipl\Sql\Select;
-use ipl\Sql\Sql;
 
-class HavingTest extends \PHPUnit\Framework\TestCase
+class HavingTest extends TestCase
 {
-    /**
-     * The SELECT query to test
-     *
-     * @var Select
-     */
-    protected $query;
-
-    /**
-     * The SQL query builder
-     *
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
-
-    public function setupTest()
-    {
-        $this->query = new Select();
-        $this->queryBuilder = new QueryBuilder(new TestAdapter());
-    }
-
     public function testHavingStringFormat()
     {
         $this->setupTest();
@@ -94,13 +72,5 @@ class HavingTest extends \PHPUnit\Framework\TestCase
             null,
             $this->query->getHaving()
         );
-    }
-
-    protected function assertCorrectStatementAndValues($statement, $values)
-    {
-        list($actualStatement, $actualValues) = $this->queryBuilder->assembleSelect($this->query);
-
-        $this->assertSame($statement, $actualStatement);
-        $this->assertSame($values, $actualValues);
     }
 }
