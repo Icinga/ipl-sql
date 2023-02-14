@@ -51,9 +51,14 @@ class Config
     /** @var string Password to use for authentication */
     public $password;
 
+    /** @var string */
+    public $type;
+
+    /** @var bool Whether to use SSL */
+    public $use_ssl;
+
     /**
      * Character set for the connection
-     *
      * If you want to use the default charset as configured by the database, don't set this property.
      *
      * @var string
@@ -62,7 +67,6 @@ class Config
 
     /**
      * PDO connect options
-     *
      * Array of key-value pairs that should be set when calling {@link Connection::connect()} in order to establish a DB
      * connection.
      *
