@@ -23,30 +23,30 @@ class Mysql extends BaseAdapter
     {
         $options = parent::getOptions($config);
 
-        if (! empty($config->use_ssl)) {
-            if (! empty($config->ssl_key)) {
-                $options[PDO::MYSQL_ATTR_SSL_KEY] = $config->ssl_key;
+        if (! empty($config->useSsl)) {
+            if (! empty($config->sslKey)) {
+                $options[PDO::MYSQL_ATTR_SSL_KEY] = $config->sslKey;
             }
 
-            if (! empty($config->ssl_cert)) {
-                $options[PDO::MYSQL_ATTR_SSL_CERT] = $config->ssl_cert;
+            if (! empty($config->sslCert)) {
+                $options[PDO::MYSQL_ATTR_SSL_CERT] = $config->sslCert;
             }
 
-            if (! empty($config->ssl_ca)) {
-                $options[PDO::MYSQL_ATTR_SSL_CA] = $config->ssl_ca;
+            if (! empty($config->sslCa)) {
+                $options[PDO::MYSQL_ATTR_SSL_CA] = $config->sslCa;
             }
 
-            if (! empty($config->ssl_capath)) {
-                $options[PDO::MYSQL_ATTR_SSL_CAPATH] = $config->ssl_capath;
+            if (! empty($config->sslCapath)) {
+                $options[PDO::MYSQL_ATTR_SSL_CAPATH] = $config->sslCapath;
             }
 
-            if (! empty($config->ssl_cipher)) {
-                $options[PDO::MYSQL_ATTR_SSL_CIPHER] = $config->ssl_cipher;
+            if (! empty($config->sslCipher)) {
+                $options[PDO::MYSQL_ATTR_SSL_CIPHER] = $config->sslCipher;
             }
 
             if (
                 defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')
-                && ! empty($config->ssl_do_not_verify_server_cert)
+                && ! empty($config->sslDoNotVerifyServerCert)
             ) {
                 $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
             }
