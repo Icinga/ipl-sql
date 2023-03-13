@@ -11,22 +11,22 @@ class Sql
     /**
      * SQL AND operator
      */
-    const ALL = 'AND';
+    public const ALL = 'AND';
 
     /**
      * SQL OR operator
      */
-    const ANY = 'OR';
+    public const ANY = 'OR';
 
     /**
      * SQL AND NOT operator
      */
-    const NOT_ALL = 'AND NOT';
+    public const NOT_ALL = 'AND NOT';
 
     /**
      * SQL OR NOT operator
      */
-    const NOT_ANY = 'OR NOT';
+    public const NOT_ANY = 'OR NOT';
 
     /**
      * Create and return a DELETE statement
