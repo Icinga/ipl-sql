@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<ruleset name="IPL">
-    <description>Sniff our code a while</description>
-
-    <file>src/</file>
-    <file>tests/</file>
+<ruleset name="PSR12">
+    <!-- Test all PHP files except those in vendor/ -->
+    <file>./</file>
+    <arg name="extensions" value="php"/>
+    <exclude-pattern>vendor/*</exclude-pattern>
 
     <arg name="report-width" value="auto"/>
     <arg name="report-full"/>
@@ -11,9 +11,7 @@
     <arg name="report-summary"/>
     <arg name="encoding" value="UTF-8"/>
 
-    <rule ref="PSR12">
-        <exclude name="PSR12.Properties.ConstantVisibility.NotFound"/>
-    </rule>
+    <rule ref="PSR12"/>
 
     <rule ref="Generic.Files.LineLength">
         <properties>
@@ -21,4 +19,7 @@
             <property name="absoluteLineLimit" value="0"/>
         </properties>
     </rule>
+
+    <rule ref="Generic.Formatting.SpaceAfterCast"/>
+    <rule ref="Generic.Formatting.SpaceAfterNot"/>
 </ruleset>
