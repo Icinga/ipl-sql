@@ -26,7 +26,7 @@ class QueryBuilder
      * });
      * ```
      */
-    const ON_ASSEMBLE_SELECT = 'assembleSelect';
+    public const ON_ASSEMBLE_SELECT = 'assembleSelect';
 
     /**
      * Event raised after a {@link Select} object is assembled into a SQL statement string
@@ -42,7 +42,7 @@ class QueryBuilder
      * });
      * ```
      */
-    const ON_SELECT_ASSEMBLED = 'selectAssembled';
+    public const ON_SELECT_ASSEMBLED = 'selectAssembled';
 
     /**
      * Event raised before an {@see Insert} object is assembled into a SQL statement string
@@ -57,7 +57,7 @@ class QueryBuilder
      *
      * @var string
      */
-    const ON_ASSEMBLE_INSERT = 'assembleInsert';
+    public const ON_ASSEMBLE_INSERT = 'assembleInsert';
 
     /**
      * Event raised after an {@see Insert} object is assembled into a SQL statement string
@@ -74,7 +74,7 @@ class QueryBuilder
      *
      * @var string
      */
-    const ON_INSERT_ASSEMBLED = 'insertAssembled';
+    public const ON_INSERT_ASSEMBLED = 'insertAssembled';
 
     /**
      * Event raised before an {@see Update} object is assembled into a SQL statement string
@@ -89,7 +89,7 @@ class QueryBuilder
      *
      * @var string
      */
-    const ON_ASSEMBLE_UPDATE = 'assembleUpdate';
+    public const ON_ASSEMBLE_UPDATE = 'assembleUpdate';
 
     /**
      * Event raised after an {@see Update} object is assembled into a SQL statement string
@@ -106,7 +106,7 @@ class QueryBuilder
      *
      * @var string
      */
-    const ON_UPDATE_ASSEMBLED = 'updateAssembled';
+    public const ON_UPDATE_ASSEMBLED = 'updateAssembled';
 
     /**
      * Event raised before a {@see Delete} object is assembled into a SQL statement string
@@ -121,7 +121,7 @@ class QueryBuilder
      *
      * @var string
      */
-    const ON_ASSEMBLE_DELETE = 'assembleDelete';
+    public const ON_ASSEMBLE_DELETE = 'assembleDelete';
 
     /**
      * Event raised after a {@see Delete} object is assembled into a SQL statement string
@@ -138,7 +138,7 @@ class QueryBuilder
      *
      * @var string
      */
-    const ON_DELETE_ASSEMBLED = 'deleteAssembled';
+    public const ON_DELETE_ASSEMBLED = 'deleteAssembled';
 
     /** @var Adapter */
     protected $adapter;
