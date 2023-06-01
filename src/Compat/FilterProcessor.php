@@ -79,9 +79,11 @@ class FilterProcessor
             if ($expression === '*') {
                 return ["$column IS " . ($filter instanceof Filter\Like ? 'NOT ' : '') . 'NULL'];
             } elseif ($filter instanceof Filter\Unlike) {
-                return ["($column NOT LIKE ? OR $column IS NULL)" => str_replace('*', '%', $expression)];
+                return [
+                    "($column NOT LIKE ? OR $column IS NULL)" => str_replace(['%', '*'], ['\\%', '%'], $expression)
+                ];
             } else {
-                return ["$column LIKE ?" => str_replace('*', '%', $expression)];
+                return ["$column LIKE ?" => str_replace(['%', '*'], ['\\%', '%'], $expression)];
             }
         } elseif ($filter instanceof Filter\Unequal || $filter instanceof Filter\Unlike) {
             return ["($column != ? OR $column IS NULL)" => $expression];
