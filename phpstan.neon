@@ -1,0 +1,20 @@
+parameters:
+    level: 5 # Use 'max' instead when we got the time to fix all the claims
+
+    treatPhpDocTypesAsCertain: false # ignore phpDoc failure for now, remove it later
+
+    paths:
+        - src
+
+    scanDirectories:
+        - vendor
+
+    universalObjectCratesClasses: # to ignore magic property errors
+        - ipl\Sql\Config
+
+    ignoreErrors:
+        - '#Call to an undefined method ipl\\Sql\\Connection::exec\(\)#'
+        - '#Call to an undefined method ipl\\Sql\\Connection::query\(\)#'
+        - '#Call to an undefined method ipl\\Sql\\Connection::quote\(\)#'
+
+        - "#Strict comparison using === between 'AND'|'OR' and 'OR NOT' will always evaluate to false´#"
