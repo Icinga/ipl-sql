@@ -3,6 +3,8 @@
 namespace ipl\Sql;
 
 use InvalidArgumentException;
+use ipl\Stdlib\Str;
+use OutOfRangeException;
 
 use function ipl\Stdlib\get_php_type;
 
@@ -40,6 +42,7 @@ class Config
 
     /**
      * PDO connect options
+     *
      * Array of key-value pairs that should be set when calling {@link Connection::connect()} in order to establish a DB
      * connection.
      *
@@ -47,8 +50,13 @@ class Config
      */
     public $options;
 
+    /** @var array Extra settings e.g. for SQL SSL connections */
+    protected $extraSettings = [];
+
     /**
      * Create a new SQL connection configuration from the given configuration key-value pairs
+     *
+     * Keys will be converted to camelCase, e.g. use_ssl → useSsl.
      *
      * @param iterable $config Configuration key-value pairs
      *
@@ -65,7 +73,27 @@ class Config
         }
 
         foreach ($config as $key => $value) {
+            $key = Str::camel($key);
             $this->$key = $value;
         }
+    }
+
+    public function __isset(string $name): bool
+    {
+        return isset($this->extraSettings[$name]);
+    }
+
+    public function __get(string $name)
+    {
+        if (array_key_exists($name, $this->extraSettings)) {
+            return $this->extraSettings[$name];
+        }
+
+        throw new OutOfRangeException(sprintf('Property %s does not exist', $name));
+    }
+
+    public function __set(string $name, $value): void
+    {
+        $this->extraSettings[$name] = $value;
     }
 }
