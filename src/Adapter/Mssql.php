@@ -51,12 +51,12 @@ class Mssql extends BaseAdapter
             $dsn .= ";charset={$config->charset}";
         }
 
-        if (isset($config->use_ssl) && $isSqlSrv) {
-            $dsn .= ';Encrypt=' . ($config->use_ssl ? 'true' : 'false');
+        if (isset($config->useSsl) && $isSqlSrv) {
+            $dsn .= ';Encrypt=' . ($config->useSsl ? 'true' : 'false');
         }
 
-        if (isset($config->ssl_do_not_verify_server_cert) && $isSqlSrv) {
-            $dsn .= ';TrustServerCertificate=' . ($config->ssl_do_not_verify_server_cert ? 'true' : 'false');
+        if (isset($config->sslDoNotVerifyServerCert) && $isSqlSrv) {
+            $dsn .= ';TrustServerCertificate=' . ($config->sslDoNotVerifyServerCert ? 'true' : 'false');
         }
 
         return $dsn;
