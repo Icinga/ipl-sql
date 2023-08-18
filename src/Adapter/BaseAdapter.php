@@ -61,6 +61,7 @@ abstract class BaseAdapter implements Adapter
 
     public function setClientTimezone(Connection $db)
     {
+        return $this;
     }
 
     public function quoteIdentifier($identifiers)
@@ -100,6 +101,8 @@ abstract class BaseAdapter implements Adapter
                 }
             }
         });
+
+        return $this;
     }
 
     protected function getTimezoneOffset()
