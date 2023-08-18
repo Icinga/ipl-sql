@@ -587,10 +587,6 @@ class QueryBuilder
             $select .= ' DISTINCT';
         }
 
-        if (empty($columns)) {
-            return "$select *";
-        }
-
         $sql = [];
 
         foreach ($columns as $alias => $column) {
