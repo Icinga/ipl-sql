@@ -76,7 +76,7 @@ class FilterProcessor
                 }
             }
 
-            if ($filter instanceof Filter\UnEqual || $filter instanceof NotIn) {
+            if ($filter instanceof Filter\Unequal || $filter instanceof NotIn) {
                 return [sprintf($nullVerification
                     ? '(%s NOT IN (?) OR %1$s IS NULL)'
                     : '%s NOT IN (?)', $column) => $expression];
