@@ -43,6 +43,8 @@ class Expression implements ExpressionInterface
     public function setColumns(array $columns)
     {
         $this->columns = $columns;
+
+        return $this;
     }
 
     public function getValues()
