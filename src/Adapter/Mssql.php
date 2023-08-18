@@ -74,5 +74,7 @@ class Mssql extends BaseAdapter
                 $select->orderBy(1);
             }
         });
+
+        return $this;
     }
 }
