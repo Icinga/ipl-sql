@@ -29,7 +29,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *   ...
      * ]
      *
-     * @var array
+     * @var ?array
      */
     protected $join;
 
@@ -47,7 +47,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *   ...
      * ]
      *
-     * @var array
+     * @var ?array
      */
     protected $union;
 
