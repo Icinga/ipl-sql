@@ -1,7 +1,12 @@
-parameters:
-    level: 5 # Use 'max' instead when we got the time to fix all the claims
+includes:
+	- phpstan-baseline.neon
 
-    treatPhpDocTypesAsCertain: false # ignore phpDoc failure for now, remove it later
+parameters:
+    level: max
+
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    treatPhpDocTypesAsCertain: false
 
     paths:
         - src
@@ -16,7 +21,5 @@ parameters:
         - '#Call to an undefined method ipl\\Sql\\Connection::exec\(\)#'
         - '#Call to an undefined method ipl\\Sql\\Connection::query\(\)#'
         - '#Call to an undefined method ipl\\Sql\\Connection::quote\(\)#'
-
-        - "#Strict comparison using === between 'AND'|'OR' and 'OR NOT' will always evaluate to false´#"
 
         - '#Method .*\\(In|NotIn)::getValue\(\) should return ipl\\Sql\\Select but returns mixed.$#'
