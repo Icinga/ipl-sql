@@ -10,6 +10,9 @@
     "ext-pdo": "*",
     "ipl/stdlib": ">=0.12.0"
   },
+  "require-dev": {
+    "ipl/stdlib": "dev-main"
+  },
   "autoload": {
     "psr-4": {
       "ipl\\Sql\\": "src"
