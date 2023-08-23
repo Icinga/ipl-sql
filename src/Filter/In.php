@@ -7,8 +7,18 @@ use ipl\Stdlib\Filter;
 
 class In extends Filter\Condition
 {
+    use InAndNotInUtils;
+
+    /**
+     * Create a new sql IN condition
+     *
+     * @param string[]|string $column
+     * @param Select $select
+     */
     public function __construct($column, Select $select)
     {
-        parent::__construct($column, $select);
+        $this
+            ->setColumn($column)
+            ->setValue($select);
     }
 }

@@ -18,3 +18,5 @@ parameters:
         - '#Call to an undefined method ipl\\Sql\\Connection::quote\(\)#'
 
         - "#Strict comparison using === between 'AND'|'OR' and 'OR NOT' will always evaluate to false´#"
+
+        - '#Method .*\\(In|NotIn)::getValue\(\) should return ipl\\Sql\\Select but returns mixed.$#'
