@@ -587,10 +587,6 @@ class QueryBuilder
             $select .= ' DISTINCT';
         }
 
-        if (empty($columns)) {
-            return "$select *";
-        }
-
         $sql = [];
 
         foreach ($columns as $alias => $column) {
@@ -660,6 +656,7 @@ class QueryBuilder
             list($joinType, $table, $condition) = $join;
 
             if (is_array($table)) {
+                $tableName = null;
                 foreach ($table as $alias => $tableName) {
                     break;
                 }

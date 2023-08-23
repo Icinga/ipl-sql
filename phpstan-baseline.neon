@@ -1,0 +1,1186 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Argument of an invalid type array\\|null supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: src/Adapter/BaseAdapter.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Adapter\\\\BaseAdapter\\:\\:getOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Adapter/BaseAdapter.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Adapter\\\\BaseAdapter\\:\\:getTimezoneOffset\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Adapter/BaseAdapter.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Adapter\\\\BaseAdapter\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Adapter/BaseAdapter.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Adapter\\\\BaseAdapter\\:\\:\\$quoteCharacter type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Adapter/BaseAdapter.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Adapter\\\\Mssql\\:\\:\\$quoteCharacter type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Adapter/Mssql.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Adapter\\\\Mysql\\:\\:getOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Adapter/Mysql.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Adapter\\\\Mysql\\:\\:\\$quoteCharacter type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Adapter/Mysql.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\CommonTableExpressionInterface\\:\\:getWith\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/CommonTableExpressionInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Compat\\\\FilterProcessor\\:\\:assembleFilter\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Compat/FilterProcessor.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Compat\\\\FilterProcessor\\:\\:assembleFilter\\(\\) has parameter \\$level with no type specified\\.$#"
+			count: 1
+			path: src/Compat/FilterProcessor.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Compat\\\\FilterProcessor\\:\\:assemblePredicate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Compat/FilterProcessor.php
+
+		-
+			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, mixed given\\.$#"
+			count: 1
+			path: src/Compat/FilterProcessor.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, mixed given\\.$#"
+			count: 2
+			path: src/Compat/FilterProcessor.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between 'AND'\\|'OR' and 'OR NOT' will always evaluate to false\\.$#"
+			count: 1
+			path: src/Compat/FilterProcessor.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Config\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Config\\:\\:__get\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Config\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Config\\:\\:\\$extraSettings type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Config\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Cannot call method beginTransaction\\(\\) on PDO\\|null\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Cannot call method commit\\(\\) on PDO\\|null\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Cannot call method prepare\\(\\) on PDO\\|null\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Cannot call method rollBack\\(\\) on PDO\\|null\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:__call\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:delete\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchAll\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchCol\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchCol\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchOne\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchOne\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchOne\\(\\) should return array but returns mixed\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchPairs\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchPairs\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchRow\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchRow\\(\\) has parameter \\$stmt with no type specified\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchRow\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchScalar\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:fetchScalar\\(\\) should return string but returns int\\|string\\|false\\|null\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:init\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:insert\\(\\) has parameter \\$data with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:prepexec\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:update\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:yieldCol\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:yieldPairs\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{PDO\\|null, string\\} given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#1 \\$condition of method ipl\\\\Sql\\\\Delete\\:\\:where\\(\\) expects array\\|ipl\\\\Sql\\\\ExpressionInterface\\|ipl\\\\Sql\\\\Select\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#1 \\$condition of method ipl\\\\Sql\\\\Update\\:\\:where\\(\\) expects array\\|ipl\\\\Sql\\\\ExpressionInterface\\|ipl\\\\Sql\\\\Select\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#1 \\$mode of method PDOStatement\\:\\:setFetchMode\\(\\) expects int, mixed given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#1 \\$object_or_class of function method_exists expects object\\|string, PDO\\|null given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#2 \\$className of method PDOStatement\\:\\:setFetchMode\\(\\) expects int\\|object\\|string, mixed given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#2 \\$values of method ipl\\\\Sql\\\\Connection\\:\\:prepexec\\(\\) expects array\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Parameter \\#2 \\$values of method ipl\\\\Sql\\\\Connection\\:\\:yieldPairs\\(\\) expects array\\|null, mixed given\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Connection\\:\\:\\$adapter \\(ipl\\\\Sql\\\\Contract\\\\Adapter\\) does not accept object\\.$#"
+			count: 1
+			path: src/Connection.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Contract\\\\Adapter\\:\\:getOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Contract/Adapter.php
+
+		-
+			message: "#^Class ipl\\\\Sql\\\\Cursor implements generic interface IteratorAggregate but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Cursor.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Cursor\\:\\:count\\(\\) should return int but returns int\\|string\\|false\\|null\\.$#"
+			count: 1
+			path: src/Cursor.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Cursor\\:\\:getFetchMode\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Cursor.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Cursor\\:\\:\\$fetchModeAndArgs type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Cursor.php
+
+		-
+			message: "#^Cannot access an offset on mixed\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Cannot access offset 0 on mixed\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Cannot access offset 1 on mixed\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:buildCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:buildCondition\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:cloneCondition\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:cloneCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:cloneCte\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:cloneWhere\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:from\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:getFrom\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:getWhere\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:getWith\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:mergeCondition\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:mergeCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:notWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:orNotWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:orWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:prepareConditionArguments\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:prepareConditionArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Delete\\:\\:where\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Delete\\:\\:\\$from type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Delete\\:\\:\\$where type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Delete\\:\\:\\$with type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Delete.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Expression\\:\\:__construct\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Expression\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Expression\\:\\:getValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Expression\\:\\:setColumns\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Expression\\:\\:\\$columns \\(array\\) does not accept array\\|null\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Expression\\:\\:\\$columns type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Expression\\:\\:\\$values type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\ExpressionInterface\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/ExpressionInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\ExpressionInterface\\:\\:getValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/ExpressionInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\ExpressionInterface\\:\\:setColumns\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/ExpressionInterface.php
+
+		-
+			message: "#^Property ipl\\\\Stdlib\\\\Filter\\\\Condition\\:\\:\\$column \\(string\\) does not accept array\\<string\\>\\|string\\.$#"
+			count: 1
+			path: src/Filter/In.php
+
+		-
+			message: "#^Property ipl\\\\Stdlib\\\\Filter\\\\Condition\\:\\:\\$column \\(string\\) does not accept array\\<string\\>\\|string\\.$#"
+			count: 1
+			path: src/Filter/NotIn.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Insert\\:\\:cloneCte\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Insert\\:\\:columns\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Insert\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Insert\\:\\:getValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Insert\\:\\:getWith\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Insert\\:\\:values\\(\\) has parameter \\$values with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Insert\\:\\:\\$columns type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Insert\\:\\:\\$values type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Insert\\:\\:\\$with type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Insert.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\OrderByInterface\\:\\:getOrderBy\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/OrderByInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\OrderByInterface\\:\\:orderBy\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/OrderByInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:assemble\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:assembleDelete\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:assembleInsert\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:assembleSelect\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:assembleSelect\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:assembleUpdate\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildCondition\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildDeleteFrom\\(\\) has parameter \\$from with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildExpression\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildFrom\\(\\) has parameter \\$from with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildFrom\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildGroupBy\\(\\) has parameter \\$groupBy with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildGroupBy\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildHaving\\(\\) has parameter \\$having with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildHaving\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildInsertColumnsAndValues\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildInsertColumnsAndValues\\(\\) has parameter \\$insertValues with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildInsertColumnsAndValues\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildInsertIntoSelect\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildInsertIntoSelect\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildJoin\\(\\) has parameter \\$joins with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildJoin\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildOrderBy\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildOrderBy\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildSelect\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildSelect\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildUnions\\(\\) has parameter \\$unions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildUnions\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildUnions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildUpdateSet\\(\\) has parameter \\$set with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildUpdateSet\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildUpdateTable\\(\\) has parameter \\$updateTable with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildWhere\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildWhere\\(\\) has parameter \\$where with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildWith\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildWith\\(\\) has parameter \\$with with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:unpackCondition\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\QueryBuilder\\:\\:unpackCondition\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Parameter \\#1 \\$joins of method ipl\\\\Sql\\\\QueryBuilder\\:\\:buildJoin\\(\\) expects array, array\\|null given\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\QueryBuilder\\:\\:\\$separator has no type specified\\.$#"
+			count: 1
+			path: src/QueryBuilder.php
+
+		-
+			message: "#^Cannot access an offset on mixed\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Cannot access offset 0 on mixed\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Cannot access offset 1 on mixed\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:buildCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:buildCondition\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:cloneCondition\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:cloneCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:cloneCte\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:cloneOrderBy\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:cloneWhere\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:columns\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:from\\(\\) has parameter \\$tables with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getFrom\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getGroupBy\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getHaving\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getJoin\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getOrderBy\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getUnion\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getWhere\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:getWith\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:groupBy\\(\\) has parameter \\$groupBy with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:having\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:join\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:join\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:joinLeft\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:joinLeft\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:joinRight\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:joinRight\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:mergeCondition\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:mergeCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:notHaving\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:notWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:orHaving\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:orNotHaving\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:orNotWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:orWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:orderBy\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:prepareConditionArguments\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:prepareConditionArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Select\\:\\:where\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Parameter \\#1 \\$condition of method ipl\\\\Sql\\\\Select\\:\\:buildCondition\\(\\) expects array\\|string, array\\|ipl\\\\Sql\\\\ExpressionInterface\\|ipl\\\\Sql\\\\Select\\|string given\\.$#"
+			count: 7
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$columns type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$from type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$groupBy type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$having type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$join type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$orderBy type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$union type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$where type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Select\\:\\:\\$with type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Select.php
+
+		-
+			message: "#^Argument of an invalid type array\\|null supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Cannot access an offset on mixed\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Cannot access offset 0 on mixed\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Cannot access offset 1 on mixed\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:buildCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:buildCondition\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:cloneCondition\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:cloneCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:cloneCte\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:cloneWhere\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:getSet\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:getTable\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:getWhere\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:getWith\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:mergeCondition\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:mergeCondition\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:notWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:orNotWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:orWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:prepareConditionArguments\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:prepareConditionArguments\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:set\\(\\) has parameter \\$set with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:table\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\Update\\:\\:where\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Update\\:\\:\\$set type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Update\\:\\:\\$table type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Update\\:\\:\\$where type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Property ipl\\\\Sql\\\\Update\\:\\:\\$with type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Update.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\WhereInterface\\:\\:getWhere\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/WhereInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\WhereInterface\\:\\:notWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/WhereInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\WhereInterface\\:\\:orNotWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/WhereInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\WhereInterface\\:\\:orWhere\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/WhereInterface.php
+
+		-
+			message: "#^Method ipl\\\\Sql\\\\WhereInterface\\:\\:where\\(\\) has parameter \\$condition with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/WhereInterface.php

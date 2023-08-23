@@ -41,6 +41,10 @@ jobs:
         if: success() || matrix.allow_failure
         run: phpcs -wps --colors
 
+      - name: PHPStan
+        uses: php-actions/phpstan@v3
+        if: success() || matrix.allow_failure
+
   test:
     name: Unit tests with php ${{ matrix.php }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

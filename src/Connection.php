@@ -21,7 +21,7 @@ class Connection implements Quoter
     /** @var Config */
     protected $config;
 
-    /** @var PDO */
+    /** @var ?PDO */
     protected $pdo;
 
     /** @var QueryBuilder */
