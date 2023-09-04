@@ -126,11 +126,6 @@ parameters:
 			path: src/Connection.php
 
 		-
-			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type iterable\\.$#"
-			count: 1
-			path: src/Connection.php
-
-		-
 			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:delete\\(\\) has parameter \\$table with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Connection.php
@@ -216,11 +211,6 @@ parameters:
 			path: src/Connection.php
 
 		-
-			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:prepexec\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Connection.php
-
-		-
 			message: "#^Method ipl\\\\Sql\\\\Connection\\:\\:update\\(\\) has parameter \\$data with no value type specified in iterable type iterable\\.$#"
 			count: 1
 			path: src/Connection.php
@@ -267,16 +257,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$className of method PDOStatement\\:\\:setFetchMode\\(\\) expects int\\|object\\|string, mixed given\\.$#"
-			count: 1
-			path: src/Connection.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of method ipl\\\\Sql\\\\Connection\\:\\:prepexec\\(\\) expects array\\|string\\|null, mixed given\\.$#"
-			count: 1
-			path: src/Connection.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of method ipl\\\\Sql\\\\Connection\\:\\:yieldPairs\\(\\) expects array\\|null, mixed given\\.$#"
 			count: 1
 			path: src/Connection.php
 

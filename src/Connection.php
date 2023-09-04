@@ -35,7 +35,7 @@ class Connection implements Quoter
      *
      * {@link init()} is called after construction.
      *
-     * @param Config|iterable $config
+     * @param Config|iterable<string, mixed> $config
      *
      * @throws InvalidArgumentException If there's no adapter for the given database available
      */
@@ -302,6 +302,7 @@ class Connection implements Quoter
 
         if (! empty($args)) {
             if (is_array($args[0])) {
+                /** @var array<int, mixed> $values */
                 $values = array_shift($args);
             }
         }
@@ -382,7 +383,7 @@ class Connection implements Quoter
      * Prepare and execute the given statement
      *
      * @param Delete|Insert|Select|Update|string $stmt   The SQL statement to prepare and execute
-     * @param string|array                       $values Values to bind to the statement, if any
+     * @param null|string|array<int, mixed>      $values Values to bind to the statement, if any
      *
      * @return PDOStatement
      */
