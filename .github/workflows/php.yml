@@ -31,7 +31,7 @@ jobs:
           tools: phpcs
 
       - name: Setup dependencies
-        run: composer require -n --no-progress overtrue/phplint
+        run: composer require -n --no-progress overtrue/phplint phpstan/phpstan
 
       - name: PHP Lint
         if: ${{ ! cancelled() }}
@@ -43,7 +43,7 @@ jobs:
 
       - name: PHPStan
         if: ${{ ! cancelled() }}
-        uses: php-actions/phpstan@v3
+        run: ./vendor/bin/phpstan analyse
 
   test:
     name: Unit tests with php ${{ matrix.php }} on ${{ matrix.os }}
