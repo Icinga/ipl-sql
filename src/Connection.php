@@ -72,14 +72,19 @@ class Connection implements Quoter
     {
         $this->connect();
 
-        if (! method_exists($this->pdo, $name)) {
+        /** @var PDO $pdo */
+        $pdo = $this->pdo;
+        if (! method_exists($pdo, $name)) {
             $class = get_class($this);
             $message = "Call to undefined method $class::$name";
 
             throw new BadMethodCallException($message);
         }
 
-        return call_user_func_array([$this->pdo, $name], $arguments);
+        /** @var callable $callback */
+        $callback = [$this->pdo, $name];
+
+        return call_user_func_array($callback, $arguments);
     }
 
     /**
@@ -211,7 +216,7 @@ class Connection implements Quoter
      * @param Select|string $stmt   The SQL statement to prepare and execute.
      * @param array         $values Values to bind to the statement
      *
-     * @return array
+     * @return array|false
      */
     public function fetchAll($stmt, array $values = null)
     {
@@ -225,7 +230,7 @@ class Connection implements Quoter
      * @param Select|string $stmt   The SQL statement to prepare and execute.
      * @param array         $values Values to bind to the statement
      *
-     * @return array
+     * @return array|false
      */
     public function fetchCol($stmt, array $values = null)
     {
@@ -264,7 +269,7 @@ class Connection implements Quoter
      * @param Select|string $stmt   The SQL statement to prepare and execute.
      * @param array         $values Values to bind to the statement
      *
-     * @return array
+     * @return array|false
      */
     public function fetchPairs($stmt, array $values = null)
     {
