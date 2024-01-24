@@ -241,11 +241,6 @@ parameters:
 			path: src/Connection.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{PDO\\|null, string\\} given\\.$#"
-			count: 1
-			path: src/Connection.php
-
-		-
 			message: "#^Parameter \\#1 \\$condition of method ipl\\\\Sql\\\\Delete\\:\\:where\\(\\) expects array\\|ipl\\\\Sql\\\\ExpressionInterface\\|ipl\\\\Sql\\\\Select\\|string, mixed given\\.$#"
 			count: 1
 			path: src/Connection.php
@@ -257,11 +252,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$mode of method PDOStatement\\:\\:setFetchMode\\(\\) expects int, mixed given\\.$#"
-			count: 1
-			path: src/Connection.php
-
-		-
-			message: "#^Parameter \\#1 \\$object_or_class of function method_exists expects object\\|string, PDO\\|null given\\.$#"
 			count: 1
 			path: src/Connection.php
 
