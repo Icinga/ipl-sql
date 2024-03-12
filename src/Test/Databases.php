@@ -117,7 +117,10 @@ trait Databases
     {
         if (method_exists($this, 'dataName') && method_exists($this, 'getProvidedData')) {
             // A small performance improvement. Though, it relies on internal methods, hence the check.
-            $this->createSchema($this->getProvidedData()[0], $this->dataName());
+            $providedData = $this->getProvidedData();
+            if (! empty($providedData)) {
+                $this->createSchema($providedData[0], $this->dataName());
+            }
         } else {
             $this->createSchema($this->createConnection('mysql'), 'mysql');
             $this->createSchema($this->createConnection('pgsql'), 'pgsql');
@@ -133,7 +136,10 @@ trait Databases
     {
         if (method_exists($this, 'dataName') && method_exists($this, 'getProvidedData')) {
             // A small performance improvement. Though, it relies on internal methods, hence the check.
-            $this->dropSchema($this->getProvidedData()[0], $this->dataName());
+            $providedData = $this->getProvidedData();
+            if (! empty($providedData)) {
+                $this->dropSchema($providedData[0], $this->dataName());
+            }
         } else {
             $this->dropSchema($this->createConnection('mysql'), 'mysql');
             $this->dropSchema($this->createConnection('pgsql'), 'pgsql');
