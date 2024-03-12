@@ -1,6 +1,6 @@
 <?php
 
-namespace ipl\Tests\Sql\Lib;
+namespace ipl\Sql\Test;
 
 use ipl\Sql\Adapter\BaseAdapter;
 

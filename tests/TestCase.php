@@ -3,13 +3,11 @@
 namespace ipl\Tests\Sql;
 
 use ipl\Sql\Select;
-use ipl\Tests\Sql\Lib\SqlAssertions;
+use ipl\Sql\Test\SqlAssertions;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
-    use SqlAssertions {
-        SqlAssertions::setUp as sqlAssertionsSetUp;
-    }
+    use SqlAssertions;
 
     /** @var string The statement to use */
     protected $queryClass = Select::class;
@@ -17,10 +15,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /** @var Select The statement in use */
     protected $query;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->query = new $this->queryClass();
-        $this->sqlAssertionsSetUp();
+        $this->setUpSqlAssertions();
     }
 
     /** @deprecated Unused. */

@@ -1,6 +1,6 @@
 <?php
 
-namespace ipl\Tests\Sql\Lib;
+namespace ipl\Sql\Test;
 
 use ipl\Sql\Delete;
 use ipl\Sql\Insert;
@@ -16,7 +16,9 @@ trait SqlAssertions
     /** @var QueryBuilder */
     protected $queryBuilder;
 
-    protected function setUp(): void
+    abstract public function setUp(): void;
+
+    protected function setUpSqlAssertions(): void
     {
         $this->queryBuilder = new QueryBuilder(new $this->adapterClass());
     }
