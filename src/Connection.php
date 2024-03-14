@@ -502,6 +502,20 @@ class Connection implements Quoter
     }
 
     /**
+     * Get transaction state of the connection
+     *
+     * @return bool Whether a transaction was previously started
+     */
+    public function inTransaction()
+    {
+        if ($this->pdo === null) {
+            return false;
+        }
+
+        return $this->pdo->inTransaction();
+    }
+    
+    /**
      * Commit a transaction
      *
      * @return bool Whether the transaction was committed successfully
