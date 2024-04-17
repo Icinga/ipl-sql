@@ -12,7 +12,7 @@ parameters:
         - src
 
     scanDirectories:
-        - vendor
+        - /usr/share/icinga-php
 
     universalObjectCratesClasses: # to ignore magic property errors
         - ipl\Sql\Config
