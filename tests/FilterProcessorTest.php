@@ -3,7 +3,9 @@
 namespace ipl\Tests\Sql;
 
 use ipl\Sql\Compat\FilterProcessor;
+use ipl\Sql\Filter\Exists;
 use ipl\Sql\Filter\In;
+use ipl\Sql\Filter\NotExists;
 use ipl\Sql\Filter\NotIn;
 use ipl\Sql\Select;
 use ipl\Stdlib\Filter;
@@ -91,6 +93,26 @@ class FilterProcessorTest extends TestCase
         $this->assertSame(
             ['( foo, bar ) NOT IN (?)' => $select],
             FilterProcessor::assemblePredicate(new NotIn(['foo', 'bar'], $select))
+        );
+    }
+
+    public function testExistsToSql()
+    {
+        $select = (new Select())->from('oof')->columns('*');
+
+        $this->assertSame(
+            [' EXISTS ?' => $select],
+            FilterProcessor::assemblePredicate(new Exists($select))
+        );
+    }
+
+    public function testNotExistsToSql()
+    {
+        $select = (new Select())->from('oof')->columns('*');
+
+        $this->assertSame(
+            [' NOT EXISTS ?' => $select],
+            FilterProcessor::assemblePredicate(new NotExists($select))
         );
     }
 }
