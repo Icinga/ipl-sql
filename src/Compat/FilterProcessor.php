@@ -65,7 +65,7 @@ class FilterProcessor
         $column = $filter->getColumn();
         $expression = $filter->getValue();
 
-        if (is_array($expression) || $expression instanceof Select) {
+        if (! empty($column) && (is_array($expression) || $expression instanceof Select)) {
             $nullVerification = true;
             if (is_array($column)) {
                 if (count($column) === 1) {
