@@ -257,7 +257,12 @@ class QueryBuilder
 
         $sql = array_filter([
             $this->buildWith($select->getWith(), $values),
-            $this->buildSelect($select->getColumns(), $select->getDistinct(), $values),
+            $this->buildSelect(
+                $this->buildComments($select->getComments(), $select->getHints()),
+                $select->getColumns(),
+                $select->getDistinct(),
+                $values
+            ),
             $this->buildFrom($select->getFrom(), $values),
             $this->buildJoin($select->getJoin(), $values),
             $this->buildWhere($select->getWhere(), $values),
@@ -355,6 +360,25 @@ class QueryBuilder
         }
 
         return ($hasRecursive ? 'WITH RECURSIVE ' : 'WITH ') . implode(', ', $ctes);
+    }
+
+    public function buildComments(array $comments, array $hints)
+    {
+        $result = '';
+
+        if (! empty($comments)) {
+            $result = '/* ' . join(', ', $comments) . ' */';
+        }
+
+        if (! empty($hints)) {
+            if ($result) {
+                $result .= ' ';
+            }
+
+            $result .= '/*+ ' . join(' ', $hints) . ' */';
+        }
+
+        return $result;
     }
 
     /**
@@ -575,13 +599,17 @@ class QueryBuilder
      *
      * @return string The SELECT part of the query
      */
-    public function buildSelect(array $columns, $distinct, array &$values)
+    public function buildSelect($comments, array $columns, $distinct, array &$values)
     {
         if (empty($columns)) {
             return '';
         }
 
         $select = 'SELECT';
+
+        if ($comments) {
+            $select .= " $comments";
+        }
 
         if ($distinct) {
             $select .= ' DISTINCT';
