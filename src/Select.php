@@ -39,6 +39,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /** @var array|null Internal representation for the HAVING part of the query */
     protected $having;
 
+    /** @var string The lock strength applied by the query */
+    protected $lockStrength;
+
     /**
      * The queries to UNION
      *
@@ -348,6 +351,30 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     public function orNotHaving($condition, $operator = Sql::ALL)
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
+
+        return $this;
+    }
+
+    /**
+     * Get the lock strength applied by the query
+     *
+     * @return string
+     */
+    public function getFor()
+    {
+        return $this->lockStrength;
+    }
+
+    /**
+     * Set a lock strength to be applied by the query
+     *
+     * @param string $lockStrength
+     *
+     * @return self
+     */
+    public function for($lockStrength)
+    {
+        $this->lockStrength = $lockStrength;
 
         return $this;
     }
