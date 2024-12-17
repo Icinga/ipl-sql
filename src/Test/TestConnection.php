@@ -36,15 +36,30 @@ class TestConnection extends Connection
 
     public function prepexec($stmt, $values = null)
     {
-        return new class extends \PDOStatement {
-            public function getIterator(): \Iterator
-            {
-                return new \ArrayIterator([]);
-            }
+        if (PHP_MAJOR_VERSION >= 8) {
+            return new class extends \PDOStatement {
+                public function getIterator(): \Iterator
+                {
+                    return new \ArrayIterator([]);
+                }
 
-            public function setFetchMode($mode, ...$args)
-            {
-            }
-        };
+                public function setFetchMode($mode, ...$args): bool
+                {
+                    return true;
+                }
+            };
+        } else {
+            return new class extends \PDOStatement {
+                public function getIterator(): \Iterator
+                {
+                    return new \ArrayIterator([]);
+                }
+
+                public function setFetchMode($mode, $params = null): bool
+                {
+                    return true;
+                }
+            };
+        }
     }
 }
