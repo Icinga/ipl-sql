@@ -1,6 +1,5 @@
 # Icinga PHP Library - SQL abstraction layer
 
-[![PHP Support](https://img.shields.io/badge/php-%3E%3D%207.2-777BB4?logo=PHP)](https://php.net/)
 ![Build Status](https://github.com/Icinga/ipl-sql/workflows/PHP%20Tests/badge.svg?branch=main)
 
 The package `ipl\Sql` provides a [database connection
