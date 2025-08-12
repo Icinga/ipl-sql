@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use ipl\Sql\Contract\Adapter;
 use ipl\Sql\Contract\Quoter;
 use ipl\Stdlib\Plugins;
+use LogicException;
 use PDO;
 use PDOStatement;
 
@@ -436,6 +437,25 @@ class Connection implements Quoter
             ->values($data);
 
         return $this->prepexec($insert);
+    }
+
+    /**
+     * Get the ID of the last inserted row
+     *
+     * @param ?string $name The name of the sequence object from which the ID should be returned.
+     *
+     * @throws LogicException If no connection to the database is established
+     * @return false|string
+     */
+    public function lastInsertId(?string $name = null): false|string
+    {
+        if ($this->pdo === null) {
+            throw new LogicException(
+                'Cannot get last insert ID because no connection to the database is established.'
+            );
+        }
+
+        return $this->pdo->lastInsertId($name);
     }
 
     /**
