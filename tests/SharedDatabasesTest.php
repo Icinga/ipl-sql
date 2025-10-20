@@ -5,6 +5,8 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Connection;
 use ipl\Sql\Select;
 use ipl\Sql\Test\SharedDatabases;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
 
 /**
  * A test for a test component! Yay!
@@ -13,7 +15,7 @@ class SharedDatabasesTest extends TestCase
 {
     use SharedDatabases;
 
-    /** @dataProvider sharedDatabases */
+    #[DataProvider('sharedDatabases')]
     public function testInsert(Connection $db)
     {
         // This is the first case, so the table must have been dropped and be empty
@@ -24,10 +26,8 @@ class SharedDatabasesTest extends TestCase
         $db->insert('test', ['name' => 'test2']);
     }
 
-    /**
-     * @depends testInsert
-     * @dataProvider sharedDatabases
-     */
+    #[Depends('testInsert')]
+    #[DataProvider('sharedDatabases')]
     public function testSelect(Connection $db)
     {
         // The previous case inserts "name=test" but tearDown removes it
@@ -36,20 +36,16 @@ class SharedDatabasesTest extends TestCase
         $this->assertSame('test2', $result[0]['name']);
     }
 
-    /**
-     * @depends testSelect
-     * @dataProvider sharedDatabases
-     */
+    #[Depends('testSelect')]
+    #[DataProvider('sharedDatabases')]
     public function testUpdate(Connection $db)
     {
         $stmt = $db->update('test', ['name' => 'test3'], ['name = ?' => 'test2']);
         $this->assertEquals(1, $stmt->rowCount());
     }
 
-    /**
-     * @depends testUpdate
-     * @dataProvider sharedDatabases
-     */
+    #[Depends('testUpdate')]
+    #[DataProvider('sharedDatabases')]
     public function testDelete(Connection $db)
     {
         $stmt = $db->delete('test', ['name = ?' => 'test3']);
