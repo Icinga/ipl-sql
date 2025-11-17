@@ -6,7 +6,7 @@
   "homepage": "https://github.com/Icinga/ipl-sql",
   "license": "MIT",
   "require": {
-    "php": ">=7.2",
+    "php": ">=8.2",
     "ext-pdo": "*",
     "ipl/stdlib": ">=0.12.0"
   },
