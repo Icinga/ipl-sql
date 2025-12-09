@@ -7,8 +7,6 @@ use ipl\Stdlib\Filter;
 
 class NotIn extends Filter\Condition
 {
-    use InAndNotInUtils;
-
     /**
      * Create a new sql NOT IN condition
      *
@@ -17,8 +15,6 @@ class NotIn extends Filter\Condition
      */
     public function __construct(array|string $column, Select $select)
     {
-        $this
-            ->setColumn($column)
-            ->setValue($select);
+        parent::__construct($column, $select);
     }
 }
