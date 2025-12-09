@@ -17,21 +17,21 @@ trait CommonTableExpression
      *
      * @var array[]
      */
-    protected $with = [];
+    protected array $with = [];
 
-    public function getWith()
+    public function getWith(): array
     {
         return $this->with;
     }
 
-    public function with(Select $query, $alias, $recursive = false)
+    public function with(Select $query, string $alias, bool $recursive = false): static
     {
         $this->with[] = [$query, $alias, $recursive];
 
         return $this;
     }
 
-    public function resetWith()
+    public function resetWith(): static
     {
         $this->with = [];
 
@@ -43,7 +43,7 @@ trait CommonTableExpression
      *
      * Shall be called by using classes in their __clone()
      */
-    protected function cloneCte()
+    protected function cloneCte(): void
     {
         foreach ($this->with as &$cte) {
             $cte[0] = clone $cte[0];

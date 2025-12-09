@@ -8,7 +8,7 @@ use ipl\Sql\Update;
 
 class UpdateTest extends TestCase
 {
-    protected $queryClass = Update::class;
+    protected string $queryClass = Update::class;
 
     /** @var Update */
     protected $query;

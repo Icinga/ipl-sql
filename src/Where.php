@@ -7,15 +7,15 @@ namespace ipl\Sql;
  */
 trait Where
 {
-    /** @var array|null Internal representation for the WHERE part of the query */
-    protected $where;
+    /** @var ?array Internal representation for the WHERE part of the query */
+    protected ?array $where = null;
 
-    public function getWhere()
+    public function getWhere(): ?array
     {
         return $this->where;
     }
 
-    public function where($condition, ...$args)
+    public function where(string|ExpressionInterface|Select|array $condition, mixed ...$args): static
     {
         [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ALL);
@@ -23,7 +23,7 @@ trait Where
         return $this;
     }
 
-    public function orWhere($condition, ...$args)
+    public function orWhere(string|ExpressionInterface|Select|array $condition, mixed ...$args): static
     {
         [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ANY);
@@ -31,7 +31,7 @@ trait Where
         return $this;
     }
 
-    public function notWhere($condition, ...$args)
+    public function notWhere(string|ExpressionInterface|Select|array $condition, mixed ...$args): static
     {
         [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
@@ -39,7 +39,7 @@ trait Where
         return $this;
     }
 
-    public function orNotWhere($condition, ...$args)
+    public function orNotWhere(string|ExpressionInterface|Select|array $condition, mixed ...$args): static
     {
         [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
@@ -47,7 +47,7 @@ trait Where
         return $this;
     }
 
-    public function resetWhere()
+    public function resetWhere(): static
     {
         $this->where = null;
 
@@ -59,12 +59,12 @@ trait Where
      *
      * If $condition is empty, replace it with a boolean constant depending on the operator.
      *
-     * @param string|array $condition
-     * @param string       $operator
+     * @param string|ExpressionInterface|Select|array $condition
+     * @param string $operator
      *
      * @return array
      */
-    protected function buildCondition($condition, $operator)
+    protected function buildCondition(string|ExpressionInterface|Select|array $condition, string $operator): array
     {
         if (is_array($condition)) {
             if (empty($condition)) {
@@ -82,11 +82,11 @@ trait Where
     /**
      * Merge the given condition with ours via the given operator
      *
-     * @param mixed  $base      Our condition
-     * @param array  $condition As returned by {@link buildCondition()}
+     * @param ?array $base Our condition
+     * @param array $condition As returned by {@link buildCondition()}
      * @param string $operator
      */
-    protected function mergeCondition(&$base, array $condition, $operator)
+    protected function mergeCondition(?array &$base, array $condition, string $operator): void
     {
         if ($base === null) {
             $base = [$operator, [$condition]];
@@ -106,12 +106,12 @@ trait Where
     /**
      * Prepare condition arguments from the different supported where styles
      *
-     * @param mixed $condition
+     * @param string|ExpressionInterface|Select|array $condition
      * @param array $args
      *
      * @return array
      */
-    protected function prepareConditionArguments($condition, array $args)
+    protected function prepareConditionArguments(string|ExpressionInterface|Select|array $condition, array $args): array
     {
         // Default operator
         $operator = Sql::ALL;
@@ -132,7 +132,7 @@ trait Where
      *
      * Shall be called by using classes in their __clone()
      */
-    protected function cloneWhere()
+    protected function cloneWhere(): void
     {
         if ($this->where !== null) {
             $this->cloneCondition($this->where);
@@ -144,7 +144,7 @@ trait Where
      *
      * @param array $condition As returned by {@link buildCondition()}
      */
-    protected function cloneCondition(array &$condition)
+    protected function cloneCondition(array &$condition): void
     {
         foreach ($condition as &$subCondition) {
             if (is_array($subCondition)) {

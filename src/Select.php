@@ -13,13 +13,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     use Where;
 
     /** @var bool Whether the query is DISTINCT */
-    protected $distinct = false;
+    protected bool $distinct = false;
 
-    /** @var array|null The columns for the SELECT query */
-    protected $columns;
+    /** @var ?array The columns for the SELECT query */
+    protected ?array $columns = null;
 
-    /** @var array|null FROM part of the query, i.e. the table names to select data from */
-    protected $from;
+    /** @var ?array FROM part of the query, i.e. the table names to select data from */
+    protected ?array $from = null;
 
     /**
      * The tables to JOIN
@@ -31,13 +31,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @var ?array
      */
-    protected $join;
+    protected ?array $join = null;
 
-    /** @var array|null The columns for the GROUP BY part of the query */
-    protected $groupBy;
+    /** @var ?array The columns for the GROUP BY part of the query */
+    protected ?array $groupBy = null;
 
-    /** @var array|null Internal representation for the HAVING part of the query */
-    protected $having;
+    /** @var ?array Internal representation for the HAVING part of the query */
+    protected ?array $having = null;
 
     /**
      * The queries to UNION
@@ -49,14 +49,14 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @var ?array
      */
-    protected $union;
+    protected ?array $union = null;
 
     /**
      * Get whether to SELECT DISTINCT
      *
      * @return bool
      */
-    public function getDistinct()
+    public function getDistinct(): bool
     {
         return $this->distinct;
     }
@@ -68,7 +68,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function distinct($distinct = true)
+    public function distinct(bool $distinct = true): static
     {
         $this->distinct = $distinct;
 
@@ -80,7 +80,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return array
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns ?: [];
     }
@@ -96,13 +96,12 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * If you are using special column names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param string|ExpressionInterface|Select|array $columns The column(s) to add to the SELECT.
-     *                                                         The items can be any mix of the following: 'column',
-     *                                                         'column as alias', ['alias' => 'column']
+     * @param string|ExpressionInterface|self|array $columns The column(s) to add to the SELECT.
+     *   The items can be any mix of the following: 'column', 'column as alias', ['alias' => 'column']
      *
      * @return $this
      */
-    public function columns($columns)
+    public function columns(string|ExpressionInterface|self|array $columns): static
     {
         if (! is_array($columns)) {
             $columns = [$columns];
@@ -116,9 +115,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the FROM part of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getFrom()
+    public function getFrom(): ?array
     {
         return $this->from;
     }
@@ -129,17 +128,17 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * Multiple calls to this method will not overwrite the previous set FROM part but append the tables to the FROM.
      *
      * Note that this method does NOT quote the tables you specify for the FROM.
-     * If you allow user input here, you must protected yourself against SQL injection using
+     * If you allow user input here, you must protect yourself against SQL injection using
      * {@link Connection::quoteIdentifier()} for the table names passed to this method.
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param string|Select|array $tables The table(s) to add to the FROM part. The items can be any mix of the
-     *                                    following: ['table', 'table alias', 'alias' => 'table']
+     * @param string|self|array $tables The table(s) to add to the FROM part. The items can be any mix of the
+     *   following: ['table', 'table alias', 'alias' => 'table']
      *
      * @return $this
      */
-    public function from($tables)
+    public function from(string|self|array $tables): static
     {
         if (! is_array($tables)) {
             $tables = [$tables];
@@ -153,29 +152,30 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the JOIN part(s) of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getJoin()
+    public function getJoin(): ?array
     {
         return $this->join;
     }
 
     /**
-     * Add a INNER JOIN part to the query
+     * Add an INNER JOIN part to the query
      *
-     * @param string|Select|array                     $table     The table to be joined, can be any of the following:
-     *                                                           'table'  'table alias'  ['alias' => 'table']
-     * @param string|ExpressionInterface|Select|array $condition The join condition, i.e. the ON part of the JOIN.
-     *                                                           Please see {@link WhereInterface::where()}
-     *                                                           for the supported formats and
-     *                                                           restrictions regarding quoting of the field names.
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param string|self|array $table The table to be joined, can be any of the following:
+     *   'table'  'table alias'  ['alias' => 'table']
+     * @param string|ExpressionInterface|self|array $condition The join condition, i.e. the ON part of the JOIN.
+     *   Please see {@link WhereInterface::where()} for the supported formats and restrictions regarding quoting of the
+     *   field names.
+     * @param string $operator The operator to combine multiple conditions with, if the condition is in the array format
      *
      * @return $this
      */
-    public function join($table, $condition, $operator = Sql::ALL)
-    {
+    public function join(
+        string|self|array $table,
+        string|ExpressionInterface|self|array $condition,
+        string $operator = Sql::ALL
+    ): static {
         $this->join[] = ['INNER', $table, $this->buildCondition($condition, $operator)];
 
         return $this;
@@ -184,19 +184,20 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a LEFT JOIN part to the query
      *
-     * @param string|Select|array                     $table     The table to be joined, can be any of the following:
-     *                                                           'table'  'table alias'  ['alias' => 'table']
-     * @param string|ExpressionInterface|Select|array $condition The join condition, i.e. the ON part of the JOIN.
-     *                                                           Please see {@link WhereInterface::where()}
-     *                                                           for the supported formats and
-     *                                                           restrictions regarding quoting of the field names.
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param string|self|array $table The table to be joined, can be any of the following:
+     *   'table'  'table alias'  ['alias' => 'table']
+     * @param string|ExpressionInterface|self|array $condition The join condition, i.e. the ON part of the JOIN.
+     *   Please see {@link WhereInterface::where()} for the supported formats and restrictions regarding quoting of the
+     *   field names.
+     * @param string $operator The operator to combine multiple conditions with, if the condition is in the array format
      *
      * @return $this
      */
-    public function joinLeft($table, $condition, $operator = Sql::ALL)
-    {
+    public function joinLeft(
+        string|self|array $table,
+        string|ExpressionInterface|self|array $condition,
+        string $operator = Sql::ALL
+    ): static {
         $this->join[] = ['LEFT', $table, $this->buildCondition($condition, $operator)];
 
         return $this;
@@ -205,19 +206,20 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Add a RIGHT JOIN part to the query
      *
-     * @param string|Select|array                     $table     The table to be joined, can be any of the following:
-     *                                                           'table'  'table alias'  ['alias' => 'table']
-     * @param string|ExpressionInterface|Select|array $condition The join condition, i.e. the ON part of the JOIN.
-     *                                                           Please see {@link WhereInterface::where()}
-     *                                                           for the supported formats and
-     *                                                           restrictions regarding quoting of the field names.
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param string|self|array $table The table to be joined, can be any of the following:
+     *   'table'  'table alias'  ['alias' => 'table']
+     * @param string|ExpressionInterface|self|array $condition The join condition, i.e. the ON part of the JOIN.
+     *   Please see {@link WhereInterface::where()} for the supported formats and restrictions regarding quoting of the
+     *   field names.
+     * @param string $operator The operator to combine multiple conditions with, if the condition is in the array format
      *
      * @return $this
      */
-    public function joinRight($table, $condition, $operator = Sql::ALL)
-    {
+    public function joinRight(
+        string|self|array $table,
+        string|ExpressionInterface|self|array $condition,
+        string $operator = Sql::ALL
+    ): static {
         $this->join[] = ['RIGHT', $table, $this->buildCondition($condition, $operator)];
 
         return $this;
@@ -226,9 +228,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the GROUP BY part of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getGroupBy()
+    public function getGroupBy(): ?array
     {
         return $this->groupBy;
     }
@@ -237,7 +239,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * Add a GROUP BY part to the query - either plain columns or expressions or scalar subqueries
      *
      * This method does NOT quote the columns you specify for the GROUP BY.
-     * If you allow user input here, you must protected yourself against SQL injection using
+     * If you allow user input here, you must protect yourself against SQL injection using
      * {@link Connection::quoteIdentifier()} for the field names passed to this method.
      * If you are using special field names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
@@ -245,14 +247,14 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * Note that this method does not override an already set GROUP BY part. Instead, multiple calls to this function
      * add the specified GROUP BY part.
      *
-     * @param string|ExpressionInterface|Select|array $groupBy
+     * @param string|ExpressionInterface|self|array $groupBy
      *
      * @return $this
      */
-    public function groupBy($groupBy)
+    public function groupBy(string|ExpressionInterface|self|array $groupBy): static
     {
         $this->groupBy = array_merge(
-            $this->groupBy === null ? [] : $this->groupBy,
+            $this->groupBy ?? [],
             is_array($groupBy) ? $groupBy : [$groupBy]
         );
 
@@ -262,9 +264,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the HAVING part of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getHaving()
+    public function getHaving(): ?array
     {
         return $this->having;
     }
@@ -277,7 +279,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * * Array format, e.g. ['id' => 1, ...]
      *
      * This method does NOT quote the columns you specify for the HAVING.
-     * If you allow user input here, you must protected yourself against SQL injection using
+     * If you allow user input here, you must protect yourself against SQL injection using
      * {@link Connection::quoteIdentifier()} for the field names passed to this method.
      * If you are using special field names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
@@ -285,13 +287,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      * Note that this method does not override an already set HAVING part. Instead, multiple calls to this function add
      * the specified HAVING part using the AND operator.
      *
-     * @param string|ExpressionInterface|Select|array $condition The HAVING condition
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param string|ExpressionInterface|self|array $condition The HAVING condition
+     * @param string $operator The operator to combine multiple conditions with,
+     *   if the condition is in the array format
      *
      * @return $this
      */
-    public function having($condition, $operator = Sql::ALL)
+    public function having(string|ExpressionInterface|self|array $condition, string $operator = Sql::ALL): static
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::ALL);
 
@@ -299,17 +301,17 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     }
 
     /**
-     * Add a OR part to the HAVING part of the query
+     * Add an OR part to the HAVING part of the query
      *
      * Please see {@link having()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param string|ExpressionInterface|Select|array $condition The HAVING condition
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param string|ExpressionInterface|self|array $condition The HAVING condition
+     * @param string $operator The operator to combine multiple conditions with,
+     *   if the condition is in the array format
      *
      * @return $this
      */
-    public function orHaving($condition, $operator = Sql::ALL)
+    public function orHaving(string|ExpressionInterface|self|array $condition, string $operator = Sql::ALL): static
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::ANY);
 
@@ -321,13 +323,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * Please see {@link having()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param   string|ExpressionInterface|Select|array $condition  The HAVING condition
-     * @param   string                                  $operator   The operator to combine multiple conditions with,
-     *                                                              if the condition is in the array format
+     * @param string|ExpressionInterface|self|array $condition The HAVING condition
+     * @param string $operator The operator to combine multiple conditions with,
+     *   if the condition is in the array format
      *
-     * @return  $this
+     * @return $this
      */
-    public function notHaving($condition, $operator = Sql::ALL)
+    public function notHaving(string|ExpressionInterface|self|array $condition, string $operator = Sql::ALL): static
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
 
@@ -339,13 +341,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * Please see {@link having()} for the supported formats and restrictions regarding quoting of the field names.
      *
-     * @param string|ExpressionInterface|Select|array $condition The HAVING condition
-     * @param string                                  $operator  The operator to combine multiple conditions with,
-     *                                                           if the condition is in the array format
+     * @param string|ExpressionInterface|self|array $condition The HAVING condition
+     * @param string $operator The operator to combine multiple conditions with,
+     *   if the condition is in the array format
      *
      * @return $this
      */
-    public function orNotHaving($condition, $operator = Sql::ALL)
+    public function orNotHaving(string|ExpressionInterface|self|array $condition, string $operator = Sql::ALL): static
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
 
@@ -355,9 +357,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the UNION parts of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getUnion()
+    public function getUnion(): ?array
     {
         return $this->union;
     }
@@ -365,11 +367,11 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Combine a query with UNION
      *
-     * @param Select|string $query
+     * @param string|self $query
      *
      * @return $this
      */
-    public function union($query)
+    public function union(string|self $query): static
     {
         $this->union[] = [$query, false];
 
@@ -379,11 +381,11 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Combine a query with UNION ALL
      *
-     * @param Select|string $query
+     * @param string|self $query
      *
      * @return $this
      */
-    public function unionAll($query)
+    public function unionAll(string|self $query): static
     {
         $this->union[] = [$query, true];
 
@@ -395,7 +397,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetDistinct()
+    public function resetDistinct(): static
     {
         $this->distinct = false;
 
@@ -407,7 +409,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetColumns()
+    public function resetColumns(): static
     {
         $this->columns = null;
 
@@ -419,7 +421,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetFrom()
+    public function resetFrom(): static
     {
         $this->from = null;
 
@@ -431,7 +433,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetJoin()
+    public function resetJoin(): static
     {
         $this->join = null;
 
@@ -443,7 +445,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetGroupBy()
+    public function resetGroupBy(): static
     {
         $this->groupBy = null;
 
@@ -455,7 +457,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetHaving()
+    public function resetHaving(): static
     {
         $this->having = null;
 
@@ -467,7 +469,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetUnion()
+    public function resetUnion(): static
     {
         $this->union = null;
 
@@ -477,9 +479,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the count query
      *
-     * @return Select
+     * @return self
      */
-    public function getCountQuery()
+    public function getCountQuery(): self
     {
         $countQuery = clone $this;
 
@@ -488,7 +490,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
         $countQuery->offset = null;
 
         if (! empty($countQuery->groupBy) || $countQuery->getDistinct()) {
-            $countQuery = (new Select())->from(['s' => $countQuery]);
+            $countQuery = (new self())->from(['s' => $countQuery]);
             $countQuery->distinct(false);
         }
 
@@ -505,7 +507,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
 
         if ($this->columns !== null) {
             foreach ($this->columns as &$value) {
-                if ($value instanceof ExpressionInterface || $value instanceof Select) {
+                if ($value instanceof ExpressionInterface || $value instanceof self) {
                     $value = clone $value;
                 }
             }
@@ -514,7 +516,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
 
         if ($this->from !== null) {
             foreach ($this->from as &$from) {
-                if ($from instanceof Select) {
+                if ($from instanceof self) {
                     $from = clone $from;
                 }
             }
@@ -525,12 +527,12 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
             foreach ($this->join as &$join) {
                 if (is_array($join[1])) {
                     foreach ($join[1] as &$table) {
-                        if ($table instanceof Select) {
+                        if ($table instanceof self) {
                             $table = clone $table;
                         }
                     }
                     unset($table);
-                } elseif ($join[1] instanceof Select) {
+                } elseif ($join[1] instanceof self) {
                     $join[1] = clone $join[1];
                 }
 
@@ -541,7 +543,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
 
         if ($this->groupBy !== null) {
             foreach ($this->groupBy as &$value) {
-                if ($value instanceof ExpressionInterface || $value instanceof Select) {
+                if ($value instanceof ExpressionInterface || $value instanceof self) {
                     $value = clone $value;
                 }
             }

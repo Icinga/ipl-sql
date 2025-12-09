@@ -8,7 +8,7 @@ use ipl\Sql\Select;
 
 class InsertTest extends TestCase
 {
-    protected $queryClass = Insert::class;
+    protected string $queryClass = Insert::class;
 
     /** @var Insert */
     protected $query;

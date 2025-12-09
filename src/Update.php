@@ -14,18 +14,18 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     use CommonTableExpression;
     use Where;
 
-    /** @var array|null The table for the UPDATE query */
-    protected $table;
+    /** @var ?array The table for the UPDATE query */
+    protected ?array $table = null;
 
-    /** @var array|null The columns to update in terms of column-value pairs */
-    protected $set = [];
+    /** @var ?array The columns to update in terms of column-value pairs */
+    protected ?array $set = [];
 
     /**
      * Get the table for the UPDATE query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getTable()
+    public function getTable(): ?array
     {
         return $this->table;
     }
@@ -34,17 +34,17 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * Set the table for the UPDATE query
      *
      * Note that this method does NOT quote the table you specify for the UPDATE.
-     * If you allow user input here, you must protected yourself against SQL injection using
+     * If you allow user input here, you must protect yourself against SQL injection using
      * {@link Connection::quoteIdentifier()} for the table names passed to this method.
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param string|array $table The table to update. The table specification must be in one of the
-     *                            following formats: 'table', 'table alias', ['alias' => 'table']
+     * @param string|array $table The table to update. The table specification must be in one of the following formats:
+     *   'table', 'table alias', ['alias' => 'table']
      *
      * @return $this
      */
-    public function table($table)
+    public function table(string|array $table): static
     {
         $this->table = is_array($table) ? $table : [$table];
 
@@ -54,9 +54,9 @@ class Update implements CommonTableExpressionInterface, WhereInterface
     /**
      * Get the columns to update in terms of column-value pairs
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getSet()
+    public function getSet(): ?array
     {
         return $this->set;
     }
@@ -78,7 +78,7 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      *
      * @throws InvalidArgumentException If set type is invalid
      */
-    public function set($set)
+    public function set(iterable $set): static
     {
         $this->set = arrayval($set);
 

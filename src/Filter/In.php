@@ -12,10 +12,10 @@ class In extends Filter\Condition
     /**
      * Create a new sql IN condition
      *
-     * @param string[]|string $column
+     * @param string|string[] $column
      * @param Select $select
      */
-    public function __construct($column, Select $select)
+    public function __construct(string|array $column, Select $select)
     {
         $this
             ->setColumn($column)

@@ -7,7 +7,7 @@ use ipl\Tests\Sql\TestCase;
 
 class SelectTest extends TestCase
 {
-    protected $adapterClass = Mssql::class;
+    protected string $adapterClass = Mssql::class;
 
     public function testLimitOffset()
     {
