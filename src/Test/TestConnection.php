@@ -3,6 +3,10 @@
 namespace ipl\Sql\Test;
 
 use ipl\Sql\Connection;
+use ipl\Sql\Delete;
+use ipl\Sql\Insert;
+use ipl\Sql\Select;
+use ipl\Sql\Update;
 
 /**
  * Config-less test connection
@@ -14,22 +18,22 @@ class TestConnection extends Connection
         $this->adapter = new TestAdapter();
     }
 
-    public function connect()
+    public function connect(): static
     {
         return $this;
     }
 
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         throw new \LogicException('Transactions are not supported by the test connection');
     }
 
-    public function commitTransaction()
+    public function commitTransaction(): bool
     {
         throw new \LogicException('Transactions are not supported by the test connection');
     }
 
-    public function rollbackTransaction()
+    public function rollbackTransaction(): bool
     {
         throw new \LogicException('Transactions are not supported by the test connection');
     }

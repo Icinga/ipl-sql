@@ -15,7 +15,7 @@ class In extends Filter\Condition
      * @param string[]|string $column
      * @param Select $select
      */
-    public function __construct($column, Select $select)
+    public function __construct(array|string $column, Select $select)
     {
         $this
             ->setColumn($column)

@@ -17,7 +17,7 @@ trait InAndNotInUtils
      *
      * @return string[]|string
      */
-    public function getColumn()
+    public function getColumn(): array|string
     {
         return $this->column;
     }
@@ -29,7 +29,7 @@ trait InAndNotInUtils
      *
      * @return $this
      */
-    public function setColumn($column): self
+    public function setColumn(array|string $column): self
     {
         $this->column = $column;
 
@@ -53,7 +53,7 @@ trait InAndNotInUtils
      *
      * @return $this
      */
-    public function setValue($value): self
+    public function setValue(Select $value): self
     {
         $this->value = $value;
 
