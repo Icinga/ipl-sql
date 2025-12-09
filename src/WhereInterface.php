@@ -10,9 +10,9 @@ interface WhereInterface
     /**
      * Get the WHERE part of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getWhere();
+    public function getWhere(): ?array;
 
     /**
      * Add a WHERE part of the query
@@ -37,7 +37,7 @@ interface WhereInterface
      *
      * @return $this
      */
-    public function where($condition, ...$args);
+    public function where($condition, ...$args): static;
 
     /**
      * Add a OR part to the WHERE part of the query
@@ -49,7 +49,7 @@ interface WhereInterface
      *
      * @return $this
      */
-    public function orWhere($condition, ...$args);
+    public function orWhere($condition, ...$args): static;
 
     /**
      * Add a AND NOT part to the WHERE part of the query
@@ -61,7 +61,7 @@ interface WhereInterface
      *
      * @return $this
      */
-    public function notWhere($condition, ...$args);
+    public function notWhere($condition, ...$args): static;
 
     /**
      * Add a OR NOT part to the WHERE part of the query
@@ -73,12 +73,12 @@ interface WhereInterface
      *
      * @return $this
      */
-    public function orNotWhere($condition, ...$args);
+    public function orNotWhere($condition, ...$args): static;
 
     /**
      * Reset the WHERE part of the query
      *
      * @return $this
      */
-    public function resetWhere();
+    public function resetWhere(): static;
 }

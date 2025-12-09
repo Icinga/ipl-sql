@@ -4,6 +4,7 @@ namespace ipl\Sql;
 
 use BadMethodCallException;
 use Exception;
+use Generator;
 use InvalidArgumentException;
 use ipl\Sql\Contract\Adapter;
 use ipl\Sql\Contract\Quoter;
@@ -11,6 +12,7 @@ use ipl\Stdlib\Plugins;
 use LogicException;
 use PDO;
 use PDOStatement;
+use Throwable;
 
 /**
  * Connection to a SQL database using the native PDO for database access
@@ -20,27 +22,27 @@ class Connection implements Quoter
     use Plugins;
 
     /** @var Config */
-    protected $config;
+    protected Config $config;
 
     /** @var ?PDO */
-    protected $pdo;
+    protected ?PDO $pdo = null;
 
-    /** @var QueryBuilder */
-    protected $queryBuilder;
+    /** @var ?QueryBuilder */
+    protected ?QueryBuilder $queryBuilder = null;
 
     /** @var Adapter */
-    protected $adapter;
+    protected Adapter $adapter;
 
     /**
      * Create a new database connection using the given config for initialising the options for the connection
      *
      * {@link init()} is called after construction.
      *
-     * @param Config|iterable $config
+     * @param iterable|Config $config
      *
      * @throws InvalidArgumentException If there's no adapter for the given database available
      */
-    public function __construct($config)
+    public function __construct(iterable|Config $config)
     {
         $config = $config instanceof Config ? $config : new Config($config);
 
@@ -69,7 +71,7 @@ class Connection implements Quoter
      * @throws BadMethodCallException If the called method does not exist
      *
      */
-    public function __call($name, array $arguments)
+    public function __call(string $name, array $arguments)
     {
         $this->connect();
 
@@ -88,7 +90,7 @@ class Connection implements Quoter
      *
      * If you have to adjust the connection after construction, override this method.
      */
-    public function init()
+    public function init(): void
     {
     }
 
@@ -97,7 +99,7 @@ class Connection implements Quoter
      *
      * @return Adapter
      */
-    public function getAdapter()
+    public function getAdapter(): Adapter
     {
         return $this->adapter;
     }
@@ -107,7 +109,7 @@ class Connection implements Quoter
      *
      * @return Config
      */
-    public function getConfig()
+    public function getConfig(): Config
     {
         return $this->config;
     }
@@ -117,7 +119,7 @@ class Connection implements Quoter
      *
      * @return QueryBuilder
      */
-    public function getQueryBuilder()
+    public function getQueryBuilder(): QueryBuilder
     {
         if ($this->queryBuilder === null) {
             $this->queryBuilder = new QueryBuilder($this->adapter);
@@ -134,7 +136,7 @@ class Connection implements Quoter
      *
      * @return PDO
      */
-    protected function createPdoAdapter()
+    protected function createPdoAdapter(): PDO
     {
         $adapter = $this->getAdapter();
 
@@ -153,7 +155,7 @@ class Connection implements Quoter
      *
      * @return $this
      */
-    public function connect()
+    public function connect(): static
     {
         if ($this->pdo !== null) {
             return $this;
@@ -175,7 +177,7 @@ class Connection implements Quoter
      *
      * @return $this
      */
-    public function disconnect()
+    public function disconnect(): static
     {
         $this->pdo = null;
 
@@ -189,11 +191,11 @@ class Connection implements Quoter
      *
      * @return bool
      */
-    public function ping($reconnect = true)
+    public function ping(bool $reconnect = true): bool
     {
         try {
             $this->query('SELECT 1')->closeCursor();
-        } catch (Exception $e) {
+        } catch (Throwable) {
             if (! $reconnect) {
                 return false;
             }
@@ -214,7 +216,7 @@ class Connection implements Quoter
      *
      * @return array
      */
-    public function fetchAll($stmt, ?array $values = null)
+    public function fetchAll(Select|string $stmt, ?array $values = null): array
     {
         return $this->prepexec($stmt, $values)
             ->fetchAll();
@@ -228,7 +230,7 @@ class Connection implements Quoter
      *
      * @return array
      */
-    public function fetchCol($stmt, ?array $values = null)
+    public function fetchCol(Select|string $stmt, ?array $values = null): array
     {
         return $this->prepexec($stmt, $values)
             ->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -240,9 +242,9 @@ class Connection implements Quoter
      * @param Select|string $stmt   The SQL statement to prepare and execute.
      * @param ?array        $values Values to bind to the statement
      *
-     * @return array
+     * @return mixed
      */
-    public function fetchOne($stmt, ?array $values = null)
+    public function fetchOne(Select|string $stmt, ?array $values = null): mixed
     {
         return $this->prepexec($stmt, $values)
             ->fetch();
@@ -251,7 +253,7 @@ class Connection implements Quoter
     /**
      * Alias of {@link fetchOne()}
      */
-    public function fetchRow($stmt, ?array $values = null)
+    public function fetchRow(Select|string $stmt, ?array $values = null): mixed
     {
         return $this->prepexec($stmt, $values)
             ->fetch();
@@ -267,7 +269,7 @@ class Connection implements Quoter
      *
      * @return array
      */
-    public function fetchPairs($stmt, ?array $values = null)
+    public function fetchPairs(Select|string $stmt, ?array $values = null): array
     {
         return $this->prepexec($stmt, $values)
             ->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -279,9 +281,9 @@ class Connection implements Quoter
      * @param Select|string $stmt   The SQL statement to prepare and execute.
      * @param ?array        $values Values to bind to the statement
      *
-     * @return string
+     * @return mixed
      */
-    public function fetchScalar($stmt, ?array $values = null)
+    public function fetchScalar(Select|string $stmt, ?array $values = null): mixed
     {
         return $this->prepexec($stmt, $values)
             ->fetchColumn(0);
@@ -295,9 +297,9 @@ class Connection implements Quoter
      * @param Select|string $stmt    The SQL statement to prepare and execute.
      * @param mixed         ...$args Values to bind to the statement, fetch mode for the statement, fetch mode options
      *
-     * @return \Generator
+     * @return Generator
      */
-    public function yieldAll($stmt, ...$args)
+    public function yieldAll(Select|string $stmt, ...$args): Generator
     {
         $values = null;
 
@@ -345,9 +347,9 @@ class Connection implements Quoter
      * @param Select|string $stmt   The SQL statement to prepare and execute
      * @param ?array        $values Values to bind to the statement
      *
-     * @return \Generator
+     * @return Generator
      */
-    public function yieldCol($stmt, ?array $values = null)
+    public function yieldCol(Select|string $stmt, ?array $values = null): Generator
     {
         $sth = $this->prepexec($stmt, $values);
 
@@ -364,16 +366,16 @@ class Connection implements Quoter
      * @param Select|string $stmt   The SQL statement to prepare and execute
      * @param ?array        $values Values to bind to the statement
      *
-     * @return \Generator
+     * @return Generator
      */
-    public function yieldPairs($stmt, ?array $values = null)
+    public function yieldPairs(Select|string $stmt, ?array $values = null): Generator
     {
         $sth = $this->prepexec($stmt, $values);
 
         $sth->setFetchMode(PDO::FETCH_NUM);
 
         foreach ($sth as $row) {
-            list($key, $value) = $row;
+            [$key, $value] = $row;
 
             yield $key => $value;
         }
@@ -382,8 +384,8 @@ class Connection implements Quoter
     /**
      * Prepare and execute the given statement
      *
-     * @param Delete|Insert|Select|Update|string $stmt   The SQL statement to prepare and execute
-     * @param string|array                       $values Values to bind to the statement, if any
+     * @param Delete|Insert|Select|Update|string $stmt The SQL statement to prepare and execute
+     * @param string|array $values Values to bind to the statement, if any
      *
      * @return PDOStatement
      */
@@ -394,7 +396,7 @@ class Connection implements Quoter
         }
 
         if (is_object($stmt)) {
-            list($stmt, $values) = $this->getQueryBuilder()->assemble($stmt);
+            [$stmt, $values] = $this->getQueryBuilder()->assemble($stmt);
         }
 
         $this->connect();
@@ -412,9 +414,9 @@ class Connection implements Quoter
      *
      * @return PDOStatement
      */
-    public function select(Select $select)
+    public function select(Select $select): PDOStatement
     {
-        list($stmt, $values) = $this->getQueryBuilder()->assembleSelect($select);
+        [$stmt, $values] = $this->getQueryBuilder()->assembleSelect($select);
 
         return $this->prepexec($stmt, $values);
     }
@@ -422,7 +424,7 @@ class Connection implements Quoter
     /**
      * Insert a table row with the specified data
      *
-     * @param string   $table The table to insert data into. The table specification must be in
+     * @param string $table The table to insert data into. The table specification must be in
      *                        one of the following formats: 'table' or 'schema.table'
      * @param iterable $data  Row data in terms of column-value pairs
      *
@@ -430,7 +432,7 @@ class Connection implements Quoter
      *
      * @throws InvalidArgumentException If data type is invalid
      */
-    public function insert($table, $data)
+    public function insert(string $table, iterable $data): PDOStatement
     {
         $insert = (new Insert())
             ->into($table)
@@ -461,20 +463,24 @@ class Connection implements Quoter
     /**
      * Update table rows with the specified data, optionally based on a given condition
      *
-     * @param string|array $table     The table to update. The table specification must be in one of
+     * @param array|string $table     The table to update. The table specification must be in one of
      *                                the following formats:
      *                                'table', 'table alias', ['alias' => 'table']
-     * @param iterable     $data      The columns to update in terms of column-value pairs
-     * @param mixed        $condition The WHERE condition
-     * @param string       $operator  The operator to combine multiple conditions with,
+     * @param iterable $data      The columns to update in terms of column-value pairs
+     * @param array|string|null $condition The WHERE condition
+     * @param string $operator  The operator to combine multiple conditions with,
      *                                if the condition is in the array format
      *
      * @return PDOStatement
      *
      * @throws InvalidArgumentException If data type is invalid
      */
-    public function update($table, $data, $condition = null, $operator = Sql::ALL)
-    {
+    public function update(
+        array|string $table,
+        iterable $data,
+        array|string|null $condition = null,
+        string $operator = Sql::ALL
+    ): PDOStatement {
         $update = (new Update())
             ->table($table)
             ->set($data);
@@ -489,16 +495,19 @@ class Connection implements Quoter
     /**
      * Delete table rows, optionally based on a given condition
      *
-     * @param string|array $table     The table to delete data from. The table specification must be in one of the
+     * @param array|string $table     The table to delete data from. The table specification must be in one of the
      *                                following formats: 'table', 'table alias', ['alias' => 'table']
-     * @param mixed        $condition The WHERE condition
-     * @param string       $operator  The operator to combine multiple conditions with,
+     * @param array|string|null $condition The WHERE condition
+     * @param string $operator  The operator to combine multiple conditions with,
      *                                if the condition is in the array format
      *
      * @return PDOStatement
      */
-    public function delete($table, $condition = null, $operator = Sql::ALL)
-    {
+    public function delete(
+        array|string $table,
+        array|string|null $condition = null,
+        string $operator = Sql::ALL
+    ): PDOStatement {
         $delete = (new Delete())
             ->from($table);
 
@@ -514,7 +523,7 @@ class Connection implements Quoter
      *
      * @return bool Whether the transaction was started successfully
      */
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         $this->connect();
 
@@ -526,7 +535,7 @@ class Connection implements Quoter
      *
      * @return bool Whether the transaction was committed successfully
      */
-    public function commitTransaction()
+    public function commitTransaction(): bool
     {
         return $this->pdo->commit();
     }
@@ -536,7 +545,7 @@ class Connection implements Quoter
      *
      * @return bool Whether the transaction was rolled back successfully
      */
-    public function rollBackTransaction()
+    public function rollBackTransaction(): bool
     {
         return $this->pdo->rollBack();
     }
@@ -551,7 +560,7 @@ class Connection implements Quoter
      *
      * @throws  Exception If an error occurs when running the callback
      */
-    public function transaction(callable $callback)
+    public function transaction(callable $callback): mixed
     {
         $this->beginTransaction();
 
@@ -567,8 +576,8 @@ class Connection implements Quoter
         return $result;
     }
 
-    public function quoteIdentifier($identifier)
+    public function quoteIdentifier(array|string $identifiers): string
     {
-        return $this->getAdapter()->quoteIdentifier($identifier);
+        return $this->getAdapter()->quoteIdentifier($identifiers);
     }
 }

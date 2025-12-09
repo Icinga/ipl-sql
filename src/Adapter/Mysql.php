@@ -4,22 +4,21 @@ namespace ipl\Sql\Adapter;
 
 use ipl\Sql\Config;
 use ipl\Sql\Connection;
-use PDO;
 
 class Mysql extends BaseAdapter
 {
-    protected $quoteCharacter = ['`', '`'];
+    protected array $quoteCharacter = ['`', '`'];
 
-    protected $escapeCharacter = '``';
+    protected string $escapeCharacter = '``';
 
-    public function setClientTimezone(Connection $db)
+    public function setClientTimezone(Connection $db): static
     {
         $db->exec('SET time_zone = ' . $db->quote($this->getTimezoneOffset()));
 
         return $this;
     }
 
-    public function getOptions(Config $config)
+    public function getOptions(Config $config): array
     {
         $options = parent::getOptions($config);
         // In PHP 8.5+, driver-specific constants of the PDO class are deprecated,

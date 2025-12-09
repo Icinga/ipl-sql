@@ -21,13 +21,13 @@ abstract class BaseAdapter implements Adapter
      *
      * @var array
      */
-    protected $quoteCharacter = ['"', '"'];
+    protected array $quoteCharacter = ['"', '"'];
 
     /** @var string Character to use for escaping quote characters */
-    protected $escapeCharacter = '\\"';
+    protected string $escapeCharacter = '\\"';
 
     /** @var array Default PDO connect options */
-    protected $options = [
+    protected array $options = [
         PDO::ATTR_CASE => PDO::CASE_NATURAL,
         PDO::ATTR_EMULATE_PREPARES => false,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -35,7 +35,7 @@ abstract class BaseAdapter implements Adapter
         PDO::ATTR_STRINGIFY_FETCHES => false
     ];
 
-    public function getDsn(Config $config)
+    public function getDsn(Config $config): string
     {
         $dsn = "{$config->db}:";
 
@@ -50,7 +50,7 @@ abstract class BaseAdapter implements Adapter
         return $dsn . implode(';', $parts);
     }
 
-    public function getOptions(Config $config)
+    public function getOptions(Config $config): array
     {
         if (is_array($config->options)) {
             return $config->options + $this->options;
@@ -59,12 +59,12 @@ abstract class BaseAdapter implements Adapter
         return $this->options;
     }
 
-    public function setClientTimezone(Connection $db)
+    public function setClientTimezone(Connection $db): static
     {
         return $this;
     }
 
-    public function quoteIdentifier($identifiers)
+    public function quoteIdentifier(array|string $identifiers): string
     {
         if (is_string($identifiers)) {
             $identifiers = explode('.', $identifiers);
@@ -83,7 +83,7 @@ abstract class BaseAdapter implements Adapter
         return implode('.', $identifiers);
     }
 
-    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
+    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder): static
     {
         $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select): void {
             if ($select->hasOrderBy()) {
@@ -105,7 +105,7 @@ abstract class BaseAdapter implements Adapter
         return $this;
     }
 
-    protected function getTimezoneOffset()
+    protected function getTimezoneOffset(): string
     {
         $tz = new DateTimeZone(date_default_timezone_get());
         $offset = $tz->getOffset(new DateTime());

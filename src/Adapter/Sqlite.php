@@ -6,7 +6,7 @@ use ipl\Sql\Config;
 
 class Sqlite extends BaseAdapter
 {
-    public function getDsn(Config $config)
+    public function getDsn(Config $config): string
     {
         return "sqlite:{$config->dbname}";
     }
