@@ -52,7 +52,7 @@ class ConfigTest extends TestCase
             'password'                      => 'test_password',
             'use_ssl'                       => 'true',
             'charset'                       => 'latin1',
-            'options'                       => 'test_options',
+            'options'                       => ['test_options'],
             'ssl_key'                       => 'test_ssl_key',
             'ssl_cert'                      => 'test_ssl_cert',
             'ssl_ca'                        => 'test_ssl_ca',
@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
         $this->assertSame($config->password, 'test_password');
         $this->assertSame($config->useSsl, 'true');
         $this->assertSame($config->charset, 'latin1');
-        $this->assertSame($config->options, 'test_options');
+        $this->assertSame($config->options, ['test_options']);
         $this->assertSame($config->sslKey, 'test_ssl_key');
         $this->assertSame($config->sslCert, 'test_ssl_cert');
         $this->assertSame($config->sslCa, 'test_ssl_ca');
