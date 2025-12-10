@@ -11,9 +11,6 @@ parameters:
     paths:
         - src
 
-    scanDirectories:
-        - vendor
-
     universalObjectCratesClasses: # to ignore magic property errors
         - ipl\Sql\Config
 
