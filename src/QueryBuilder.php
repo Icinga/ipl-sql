@@ -2,12 +2,9 @@
 
 namespace ipl\Sql;
 
-use InvalidArgumentException;
 use ipl\Sql\Adapter\Mssql;
 use ipl\Sql\Contract\Adapter;
 use ipl\Stdlib\Events;
-
-use function ipl\Stdlib\get_php_type;
 
 class QueryBuilder
 {
@@ -163,26 +160,15 @@ class QueryBuilder
      * @param Delete|Insert|Select|Update $stmt
      *
      * @return array
-     *
-     * @throw InvalidArgumentException If statement type is invalid
      */
     public function assemble(Select|Insert|Update|Delete $stmt): array
     {
-        switch (true) {
-            case $stmt instanceof Delete:
-                return $this->assembleDelete($stmt);
-            case $stmt instanceof Insert:
-                return $this->assembleInsert($stmt);
-            case $stmt instanceof Select:
-                return $this->assembleSelect($stmt);
-            case $stmt instanceof Update:
-                return $this->assembleUpdate($stmt);
-            default:
-                throw new InvalidArgumentException(sprintf(
-                    __METHOD__ . ' expects instances of Delete, Insert, Select or Update. Got %s instead.',
-                    get_php_type($stmt)
-                ));
-        }
+        return match (true) {
+            $stmt instanceof Delete => $this->assembleDelete($stmt),
+            $stmt instanceof Insert => $this->assembleInsert($stmt),
+            $stmt instanceof Select => $this->assembleSelect($stmt),
+            $stmt instanceof Update => $this->assembleUpdate($stmt)
+        };
     }
 
     /**
