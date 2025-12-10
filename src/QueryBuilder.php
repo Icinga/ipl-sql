@@ -163,16 +163,12 @@ class QueryBuilder
      */
     public function assemble(Delete|Insert|Select|Update $stmt): array
     {
-        switch (true) {
-            case $stmt instanceof Delete:
-                return $this->assembleDelete($stmt);
-            case $stmt instanceof Insert:
-                return $this->assembleInsert($stmt);
-            case $stmt instanceof Select:
-                return $this->assembleSelect($stmt);
-            case $stmt instanceof Update:
-                return $this->assembleUpdate($stmt);
-        }
+        return match (true) {
+            $stmt instanceof Delete => $this->assembleDelete($stmt),
+            $stmt instanceof Insert => $this->assembleInsert($stmt),
+            $stmt instanceof Select => $this->assembleSelect($stmt),
+            $stmt instanceof Update => $this->assembleUpdate($stmt)
+        };
     }
 
     /**
