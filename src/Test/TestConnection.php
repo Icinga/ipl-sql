@@ -3,10 +3,6 @@
 namespace ipl\Sql\Test;
 
 use ipl\Sql\Connection;
-use ipl\Sql\Delete;
-use ipl\Sql\Insert;
-use ipl\Sql\Select;
-use ipl\Sql\Update;
 
 /**
  * Config-less test connection
