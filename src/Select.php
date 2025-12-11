@@ -13,13 +13,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     use Where;
 
     /** @var bool Whether the query is DISTINCT */
-    protected $distinct = false;
+    protected bool $distinct = false;
 
-    /** @var array|null The columns for the SELECT query */
-    protected $columns;
+    /** @var ?array The columns for the SELECT query */
+    protected ?array $columns = null;
 
-    /** @var array|null FROM part of the query, i.e. the table names to select data from */
-    protected $from;
+    /** @var ?array FROM part of the query, i.e. the table names to select data from */
+    protected ?array $from = null;
 
     /**
      * The tables to JOIN
@@ -31,13 +31,13 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @var ?array
      */
-    protected $join;
+    protected ?array $join = null;
 
-    /** @var array|null The columns for the GROUP BY part of the query */
-    protected $groupBy;
+    /** @var ?array The columns for the GROUP BY part of the query */
+    protected ?array $groupBy = null;
 
-    /** @var array|null Internal representation for the HAVING part of the query */
-    protected $having;
+    /** @var ?array Internal representation for the HAVING part of the query */
+    protected ?array $having = null;
 
     /**
      * The queries to UNION
@@ -49,14 +49,14 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @var ?array
      */
-    protected $union;
+    protected ?array $union = null;
 
     /**
      * Get whether to SELECT DISTINCT
      *
      * @return bool
      */
-    public function getDistinct()
+    public function getDistinct(): bool
     {
         return $this->distinct;
     }
@@ -68,7 +68,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function distinct($distinct = true)
+    public function distinct(bool $distinct = true): static
     {
         $this->distinct = $distinct;
 
@@ -80,7 +80,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return array
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns ?: [];
     }
@@ -102,7 +102,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function columns($columns)
+    public function columns($columns): static
     {
         if (! is_array($columns)) {
             $columns = [$columns];
@@ -116,9 +116,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the FROM part of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getFrom()
+    public function getFrom(): ?array
     {
         return $this->from;
     }
@@ -139,7 +139,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function from($tables)
+    public function from($tables): static
     {
         if (! is_array($tables)) {
             $tables = [$tables];
@@ -153,9 +153,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the JOIN part(s) of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getJoin()
+    public function getJoin(): ?array
     {
         return $this->join;
     }
@@ -174,7 +174,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function join($table, $condition, $operator = Sql::ALL)
+    public function join($table, $condition, $operator = Sql::ALL): static
     {
         $this->join[] = ['INNER', $table, $this->buildCondition($condition, $operator)];
 
@@ -195,7 +195,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function joinLeft($table, $condition, $operator = Sql::ALL)
+    public function joinLeft($table, $condition, $operator = Sql::ALL): static
     {
         $this->join[] = ['LEFT', $table, $this->buildCondition($condition, $operator)];
 
@@ -216,7 +216,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function joinRight($table, $condition, $operator = Sql::ALL)
+    public function joinRight($table, $condition, $operator = Sql::ALL): static
     {
         $this->join[] = ['RIGHT', $table, $this->buildCondition($condition, $operator)];
 
@@ -226,9 +226,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the GROUP BY part of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getGroupBy()
+    public function getGroupBy(): ?array
     {
         return $this->groupBy;
     }
@@ -249,7 +249,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function groupBy($groupBy)
+    public function groupBy($groupBy): static
     {
         $this->groupBy = array_merge(
             $this->groupBy === null ? [] : $this->groupBy,
@@ -262,9 +262,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the HAVING part of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getHaving()
+    public function getHaving(): ?array
     {
         return $this->having;
     }
@@ -291,7 +291,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function having($condition, $operator = Sql::ALL)
+    public function having($condition, string $operator = Sql::ALL): static
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::ALL);
 
@@ -309,7 +309,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function orHaving($condition, $operator = Sql::ALL)
+    public function orHaving($condition, string $operator = Sql::ALL): static
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::ANY);
 
@@ -327,7 +327,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return  $this
      */
-    public function notHaving($condition, $operator = Sql::ALL)
+    public function notHaving($condition, string $operator = Sql::ALL)
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
 
@@ -345,7 +345,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function orNotHaving($condition, $operator = Sql::ALL)
+    public function orNotHaving($condition, string $operator = Sql::ALL)
     {
         $this->mergeCondition($this->having, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
 
@@ -355,9 +355,9 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Get the UNION parts of the query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getUnion()
+    public function getUnion(): ?array
     {
         return $this->union;
     }
@@ -365,11 +365,11 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Combine a query with UNION
      *
-     * @param Select|string $query
+     * @param string|Select $query
      *
      * @return $this
      */
-    public function union($query)
+    public function union(Select|string $query): static
     {
         $this->union[] = [$query, false];
 
@@ -379,11 +379,11 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
     /**
      * Combine a query with UNION ALL
      *
-     * @param Select|string $query
+     * @param string|Select $query
      *
      * @return $this
      */
-    public function unionAll($query)
+    public function unionAll(Select|string $query): static
     {
         $this->union[] = [$query, true];
 
@@ -395,7 +395,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetDistinct()
+    public function resetDistinct(): static
     {
         $this->distinct = false;
 
@@ -407,7 +407,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetColumns()
+    public function resetColumns(): static
     {
         $this->columns = null;
 
@@ -419,7 +419,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetFrom()
+    public function resetFrom(): static
     {
         $this->from = null;
 
@@ -431,7 +431,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetJoin()
+    public function resetJoin(): static
     {
         $this->join = null;
 
@@ -443,7 +443,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetGroupBy()
+    public function resetGroupBy(): static
     {
         $this->groupBy = null;
 
@@ -455,7 +455,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetHaving()
+    public function resetHaving(): static
     {
         $this->having = null;
 
@@ -467,7 +467,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return $this
      */
-    public function resetUnion()
+    public function resetUnion(): static
     {
         $this->union = null;
 
@@ -479,7 +479,7 @@ class Select implements CommonTableExpressionInterface, LimitOffsetInterface, Or
      *
      * @return Select
      */
-    public function getCountQuery()
+    public function getCountQuery(): Select|static
     {
         $countQuery = clone $this;
 

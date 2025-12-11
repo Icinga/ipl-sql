@@ -7,47 +7,47 @@ namespace ipl\Sql;
  */
 trait Where
 {
-    /** @var array|null Internal representation for the WHERE part of the query */
-    protected $where;
+    /** @var ?array Internal representation for the WHERE part of the query */
+    protected ?array $where = null;
 
-    public function getWhere()
+    public function getWhere(): ?array
     {
         return $this->where;
     }
 
-    public function where($condition, ...$args)
+    public function where($condition, ...$args): static
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ALL);
 
         return $this;
     }
 
-    public function orWhere($condition, ...$args)
+    public function orWhere($condition, ...$args): static
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ANY);
 
         return $this;
     }
 
-    public function notWhere($condition, ...$args)
+    public function notWhere($condition, ...$args): static
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
 
         return $this;
     }
 
-    public function orNotWhere($condition, ...$args)
+    public function orNotWhere($condition, ...$args): static
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
 
         return $this;
     }
 
-    public function resetWhere()
+    public function resetWhere(): static
     {
         $this->where = null;
 
@@ -64,7 +64,7 @@ trait Where
      *
      * @return array
      */
-    protected function buildCondition($condition, $operator)
+    protected function buildCondition($condition, string $operator): array
     {
         if (is_array($condition)) {
             if (empty($condition)) {
@@ -86,7 +86,7 @@ trait Where
      * @param array  $condition As returned by {@link buildCondition()}
      * @param string $operator
      */
-    protected function mergeCondition(&$base, array $condition, $operator)
+    protected function mergeCondition(&$base, array $condition, string $operator): void
     {
         if ($base === null) {
             $base = [$operator, [$condition]];
@@ -111,7 +111,7 @@ trait Where
      *
      * @return array
      */
-    protected function prepareConditionArguments($condition, array $args)
+    protected function prepareConditionArguments($condition, array $args): array
     {
         // Default operator
         $operator = Sql::ALL;
@@ -132,7 +132,7 @@ trait Where
      *
      * Shall be called by using classes in their __clone()
      */
-    protected function cloneWhere()
+    protected function cloneWhere(): void
     {
         if ($this->where !== null) {
             $this->cloneCondition($this->where);
@@ -144,7 +144,7 @@ trait Where
      *
      * @param array $condition As returned by {@link buildCondition()}
      */
-    protected function cloneCondition(array &$condition)
+    protected function cloneCondition(array &$condition): void
     {
         foreach ($condition as &$subCondition) {
             if (is_array($subCondition)) {

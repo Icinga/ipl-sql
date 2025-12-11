@@ -2,12 +2,9 @@
 
 namespace ipl\Sql;
 
-use InvalidArgumentException;
 use ipl\Sql\Adapter\Mssql;
 use ipl\Sql\Contract\Adapter;
 use ipl\Stdlib\Events;
-
-use function ipl\Stdlib\get_php_type;
 
 class QueryBuilder
 {
@@ -141,9 +138,9 @@ class QueryBuilder
     public const ON_DELETE_ASSEMBLED = 'deleteAssembled';
 
     /** @var Adapter */
-    protected $adapter;
+    protected Adapter $adapter;
 
-    protected $separator = " ";
+    protected string $separator = " ";
 
     /**
      * Create a new query builder for the specified database adapter
@@ -163,26 +160,15 @@ class QueryBuilder
      * @param Delete|Insert|Select|Update $stmt
      *
      * @return array
-     *
-     * @throw InvalidArgumentException If statement type is invalid
      */
-    public function assemble($stmt)
+    public function assemble(Select|Insert|Update|Delete $stmt): array
     {
-        switch (true) {
-            case $stmt instanceof Delete:
-                return $this->assembleDelete($stmt);
-            case $stmt instanceof Insert:
-                return $this->assembleInsert($stmt);
-            case $stmt instanceof Select:
-                return $this->assembleSelect($stmt);
-            case $stmt instanceof Update:
-                return $this->assembleUpdate($stmt);
-            default:
-                throw new InvalidArgumentException(sprintf(
-                    __METHOD__ . ' expects instances of Delete, Insert, Select or Update. Got %s instead.',
-                    get_php_type($stmt)
-                ));
-        }
+        return match (true) {
+            $stmt instanceof Delete => $this->assembleDelete($stmt),
+            $stmt instanceof Insert => $this->assembleInsert($stmt),
+            $stmt instanceof Select => $this->assembleSelect($stmt),
+            $stmt instanceof Update => $this->assembleUpdate($stmt)
+        };
     }
 
     /**
@@ -192,7 +178,7 @@ class QueryBuilder
      *
      * @return array
      */
-    public function assembleDelete(Delete $delete)
+    public function assembleDelete(Delete $delete): array
     {
         $values = [];
 
@@ -218,7 +204,7 @@ class QueryBuilder
      *
      * @return array
      */
-    public function assembleInsert(Insert $insert)
+    public function assembleInsert(Insert $insert): array
     {
         $values = [];
 
@@ -249,7 +235,7 @@ class QueryBuilder
      *
      * @return array
      */
-    public function assembleSelect(Select $select, array &$values = [])
+    public function assembleSelect(Select $select, array &$values = []): array
     {
         $select = clone $select;
 
@@ -271,7 +257,7 @@ class QueryBuilder
 
         $unions = $this->buildUnions($select->getUnion(), $values);
         if ($unions) {
-            list($unionKeywords, $selects) = $unions;
+            [$unionKeywords, $selects] = $unions;
 
             if ($sql) {
                 $sql = "($sql)";
@@ -307,7 +293,7 @@ class QueryBuilder
      *
      * @return array
      */
-    public function assembleUpdate(Update $update)
+    public function assembleUpdate(Update $update): array
     {
         $values = [];
 
@@ -335,7 +321,7 @@ class QueryBuilder
      *
      * @return string The WITH part of a query
      */
-    public function buildWith(array $with, array &$values)
+    public function buildWith(array $with, array &$values): string
     {
         if (empty($with)) {
             return '';
@@ -345,8 +331,8 @@ class QueryBuilder
         $hasRecursive = false;
 
         foreach ($with as $cte) {
-            list($query, $alias, $recursive) = $cte;
-            list($cteSql, $cteValues) = $this->assembleSelect($query);
+            [$query, $alias, $recursive] = $cte;
+            [$cteSql, $cteValues] = $this->assembleSelect($query);
 
             $ctes[] = "$alias AS ($cteSql)";
 
@@ -364,7 +350,7 @@ class QueryBuilder
      *
      * @return string The DELETE FROM part of a query
      */
-    public function buildDeleteFrom(?array $from = null)
+    public function buildDeleteFrom(?array $from = null): string
     {
         if ($from === null) {
             return '';
@@ -393,7 +379,7 @@ class QueryBuilder
      *
      * @return array
      */
-    public function unpackCondition($expression, array $values)
+    public function unpackCondition(string $expression, array $values): array
     {
         $placeholders = preg_match_all('/(\?)/', $expression, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 
@@ -440,7 +426,7 @@ class QueryBuilder
      *
      * @return string
      */
-    public function buildCondition(array $condition, array &$values)
+    public function buildCondition(array $condition, array &$values): string
     {
         $sql = [];
 
@@ -491,7 +477,7 @@ class QueryBuilder
      *
      * @return string The WHERE part of the query
      */
-    public function buildWhere(?array $where = null, array &$values = [])
+    public function buildWhere(?array $where = null, array &$values = []): string
     {
         if ($where === null) {
             return '';
@@ -507,7 +493,7 @@ class QueryBuilder
      *
      * @return string The INSERT INTO part of a INSERT INTO ... statement
      */
-    public function buildInsertInto($into)
+    public function buildInsertInto(?string $into): string
     {
         if (empty($into)) {
             return '';
@@ -525,7 +511,7 @@ class QueryBuilder
      *
      * @return string The columns and SELECT part of the INSERT INTO ... SELECT statement
      */
-    public function buildInsertIntoSelect(array $columns, Select $select, array &$values)
+    public function buildInsertIntoSelect(array $columns, Select $select, array &$values): string
     {
         $sql = [
             '(' . implode(',', $columns) . ')',
@@ -544,7 +530,7 @@ class QueryBuilder
      *
      * @return string The columns and values part of a INSERT INTO ... statement
      */
-    public function buildInsertColumnsAndValues(array $columns, array $insertValues, array &$values)
+    public function buildInsertColumnsAndValues(array $columns, array $insertValues, array &$values): string
     {
         $sql = ['(' . implode(',', $columns) . ')'];
 
@@ -570,12 +556,12 @@ class QueryBuilder
      * Build the SELECT part of a query
      *
      * @param array $columns
-     * @param bool  $distinct
+     * @param bool $distinct
      * @param array $values
      *
      * @return string The SELECT part of the query
      */
-    public function buildSelect(array $columns, $distinct, array &$values)
+    public function buildSelect(array $columns, bool $distinct, array &$values): string
     {
         if (empty($columns)) {
             return '';
@@ -614,7 +600,7 @@ class QueryBuilder
      *
      * @return string The FROM part of the query
      */
-    public function buildFrom(?array $from = null, array &$values = [])
+    public function buildFrom(?array $from = null, array &$values = []): string
     {
         if ($from === null) {
             return '';
@@ -640,12 +626,13 @@ class QueryBuilder
     /**
      * Build the JOIN part(s) of a query
      *
-     * @param array $joins
+     * @param ?array $joins
+     *
      * @oaram array $values
      *
      * @return string The JOIN part(s) of the query
      */
-    public function buildJoin($joins, array &$values)
+    public function buildJoin(?array $joins, array &$values): string
     {
         if ($joins === null) {
             return '';
@@ -653,7 +640,7 @@ class QueryBuilder
 
         $sql = [];
         foreach ($joins as $join) {
-            list($joinType, $table, $condition) = $join;
+            [$joinType, $table, $condition] = $join;
 
             if (is_array($table)) {
                 $tableName = null;
@@ -691,7 +678,7 @@ class QueryBuilder
      *
      * @return string The GROUP BY part of the query
      */
-    public function buildGroupBy(?array $groupBy = null, array &$values = [])
+    public function buildGroupBy(?array $groupBy = null, array &$values = []): string
     {
         if ($groupBy === null) {
             return '';
@@ -716,7 +703,7 @@ class QueryBuilder
      *
      * @return string The HAVING part of the query
      */
-    public function buildHaving(?array $having = null, array &$values = [])
+    public function buildHaving(?array $having = null, array &$values = []): string
     {
         if ($having === null) {
             return '';
@@ -733,7 +720,7 @@ class QueryBuilder
      *
      * @return string The ORDER BY part of the query
      */
-    public function buildOrderBy(?array $orderBy = null, array &$values = [])
+    public function buildOrderBy(?array $orderBy = null, array &$values = []): string
     {
         if ($orderBy === null) {
             return '';
@@ -742,7 +729,7 @@ class QueryBuilder
         $sql = [];
 
         foreach ($orderBy as $column) {
-            list($column, $direction) = $column;
+            [$column, $direction] = $column;
 
             if ($column instanceof ExpressionInterface) {
                 $column = $this->buildExpression($column, $values);
@@ -763,12 +750,12 @@ class QueryBuilder
     /**
      * Build the LIMIT and OFFSET part of a query
      *
-     * @param int $limit
-     * @param int $offset
+     * @param ?int $limit
+     * @param ?int $offset
      *
      * @return string The LIMIT and OFFSET part of the query
      */
-    public function buildLimitOffset($limit = null, $offset = null)
+    public function buildLimitOffset(?int $limit = null, ?int $offset = null): string
     {
         $sql = [];
 
@@ -801,9 +788,9 @@ class QueryBuilder
      * @param ?array $unions
      * @param array $values
      *
-     * @return array|null The UNION parts of the query
+     * @return ?array The UNION parts of the query
      */
-    public function buildUnions(?array $unions = null, array &$values = [])
+    public function buildUnions(?array $unions = null, array &$values = []): ?array
     {
         if ($unions === null) {
             return null;
@@ -813,10 +800,10 @@ class QueryBuilder
         $selects = [];
 
         foreach ($unions as $union) {
-            list($select, $all) = $union;
+            [$select, $all] = $union;
 
             if ($select instanceof Select) {
-                list($select, $values) = $this->assembleSelect($select, $values);
+                [$select, $values] = $this->assembleSelect($select, $values);
             }
 
             $unionKeywords[] = ($all ? 'UNION ALL' : 'UNION');
@@ -833,7 +820,7 @@ class QueryBuilder
      *
      * @return string The UPDATE {table} part of the query
      */
-    public function buildUpdateTable(?array $updateTable = null)
+    public function buildUpdateTable(?array $updateTable = null): string
     {
         if ($updateTable === null) {
             return '';
@@ -862,7 +849,7 @@ class QueryBuilder
      *
      * @return string The SET part of a UPDATE query
      */
-    public function buildUpdateSet(?array $set = null, array &$values = [])
+    public function buildUpdateSet(?array $set = null, array &$values = []): string
     {
         if (empty($set)) {
             return '';
@@ -892,7 +879,7 @@ class QueryBuilder
      *
      * @return string The expression's statement
      */
-    public function buildExpression(ExpressionInterface $expression, array &$values = [])
+    public function buildExpression(ExpressionInterface $expression, array &$values = []): string
     {
         $stmt = $expression->getStatement();
         $columns = $expression->getColumns();
