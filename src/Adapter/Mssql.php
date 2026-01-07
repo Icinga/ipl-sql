@@ -10,11 +10,11 @@ use RuntimeException;
 
 class Mssql extends BaseAdapter
 {
-    protected $quoteCharacter = ['[', ']'];
+    protected array $quoteCharacter = ['[', ']'];
 
-    protected $escapeCharacter = '[[]';
+    protected string $escapeCharacter = '[[]';
 
-    public function getDsn(Config $config)
+    public function getDsn(Config $config): string
     {
         $drivers = array_intersect(['sqlsrv', 'dblib', 'mssql', 'sybase'], PDO::getAvailableDrivers());
 
@@ -62,7 +62,7 @@ class Mssql extends BaseAdapter
         return $dsn;
     }
 
-    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
+    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder): static
     {
         parent::registerQueryBuilderCallbacks($queryBuilder);
 

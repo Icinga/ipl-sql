@@ -10,15 +10,15 @@ class Delete implements CommonTableExpressionInterface, WhereInterface
     use CommonTableExpression;
     use Where;
 
-    /** @var array|null The FROM part of the DELETE query */
-    protected $from;
+    /** @var ?array The FROM part of the DELETE query */
+    protected ?array $from = null;
 
     /**
      * Get the FROM part of the DELETE query
      *
-     * @return array|null
+     * @return ?array
      */
-    public function getFrom()
+    public function getFrom(): ?array
     {
         return $this->from;
     }
@@ -32,12 +32,12 @@ class Delete implements CommonTableExpressionInterface, WhereInterface
      * If you are using special table names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param string|array $table The table to delete data from. The table specification must be in one of the
+     * @param array|string $table The table to delete data from. The table specification must be in one of the
      *                            following formats: 'table', 'table alias', ['alias' => 'table']
      *
      * @return $this
      */
-    public function from($table)
+    public function from(array|string $table): static
     {
         $this->from = ! is_array($table) ? [$table] : $table;
 
