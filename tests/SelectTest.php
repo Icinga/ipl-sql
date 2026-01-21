@@ -580,6 +580,17 @@ class SelectTest extends TestCase
         );
     }
 
+    public function testFor()
+    {
+        $this->setupTest();
+
+        $this->query->from('b')->columns('a')->for('UPDATE');
+        $this->assertCorrectStatementAndValues(
+            'SELECT a FROM b FOR UPDATE',
+            []
+        );
+    }
+
     public function testUnion()
     {
         $this->setupTest();
