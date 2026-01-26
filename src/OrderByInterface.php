@@ -17,7 +17,7 @@ interface OrderByInterface
     /**
      * Get the ORDER BY part of the query
      *
-     * @return array|null
+     * @return ?array
      */
     public function getOrderBy();
 
@@ -33,9 +33,9 @@ interface OrderByInterface
      * If you are using special field names, e.g. reserved keywords for your DBMS, you are required to use
      * {@link Connection::quoteIdentifier()} as well.
      *
-     * @param string|int|array $orderBy   The ORDER BY part. The items can be in any format of the following:
+     * @param int|array|string $orderBy   The ORDER BY part. The items can be in any format of the following:
      *                                    ['column', 'column' => 'DESC', 'column' => SORT_DESC, ['column', 'DESC']]
-     * @param string|int   $direction     The default direction. Can be any of the following:
+     * @param int|string|null $direction     The default direction. Can be any of the following:
      *                                    'ASC', 'DESC', SORT_ASC, SORT_DESC
      *
      * @return $this

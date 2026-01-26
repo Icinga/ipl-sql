@@ -7,8 +7,8 @@ namespace ipl\Sql;
  */
 trait Where
 {
-    /** @var array|null Internal representation for the WHERE part of the query */
-    protected $where;
+    /** @var ?array Internal representation for the WHERE part of the query */
+    protected $where = null;
 
     public function getWhere()
     {
@@ -17,7 +17,7 @@ trait Where
 
     public function where($condition, ...$args)
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ALL);
 
         return $this;
@@ -25,7 +25,7 @@ trait Where
 
     public function orWhere($condition, ...$args)
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::ANY);
 
         return $this;
@@ -33,7 +33,7 @@ trait Where
 
     public function notWhere($condition, ...$args)
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ALL);
 
         return $this;
@@ -41,7 +41,7 @@ trait Where
 
     public function orNotWhere($condition, ...$args)
     {
-        list($condition, $operator) = $this->prepareConditionArguments($condition, $args);
+        [$condition, $operator] = $this->prepareConditionArguments($condition, $args);
         $this->mergeCondition($this->where, $this->buildCondition($condition, $operator), Sql::NOT_ANY);
 
         return $this;

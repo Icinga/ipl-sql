@@ -12,13 +12,13 @@ use Traversable;
 class Cursor implements IteratorAggregate, Paginatable
 {
     /** @var Connection */
-    protected $db;
+    protected Connection $db;
 
     /** @var Select */
-    protected $select;
+    protected Select $select;
 
     /** @var array */
-    protected $fetchModeAndArgs = [];
+    protected array $fetchModeAndArgs = [];
 
     /**
      * Create a new cursor for the given connection and query
@@ -37,7 +37,7 @@ class Cursor implements IteratorAggregate, Paginatable
      *
      * @return array
      */
-    public function getFetchMode()
+    public function getFetchMode(): array
     {
         return $this->fetchModeAndArgs;
     }
@@ -45,13 +45,13 @@ class Cursor implements IteratorAggregate, Paginatable
     /**
      * Set the fetch mode
      *
-     * @param int   $fetchMode Fetch mode as one of the PDO fetch mode constants.
+     * @param int $fetchMode Fetch mode as one of the PDO fetch mode constants.
      *                         Please see {@link https://www.php.net/manual/en/pdostatement.setfetchmode} for details
      * @param mixed ...$args   Fetch mode arguments
      *
      * @return $this
      */
-    public function setFetchMode($fetchMode, ...$args)
+    public function setFetchMode(int $fetchMode, ...$args): static
     {
         array_unshift($args, $fetchMode);
 
@@ -65,12 +65,12 @@ class Cursor implements IteratorAggregate, Paginatable
         return $this->db->yieldAll($this->select, ...$this->getFetchMode());
     }
 
-    public function hasLimit()
+    public function hasLimit(): bool
     {
         return $this->select->hasLimit();
     }
 
-    public function getLimit()
+    public function getLimit(): ?int
     {
         return $this->select->getLimit();
     }
@@ -82,12 +82,12 @@ class Cursor implements IteratorAggregate, Paginatable
         return $this;
     }
 
-    public function hasOffset()
+    public function hasOffset(): bool
     {
         return $this->select->hasOffset();
     }
 
-    public function getOffset()
+    public function getOffset(): ?int
     {
         return $this->select->getOffset();
     }

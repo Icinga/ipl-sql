@@ -12,18 +12,18 @@ trait LimitOffset
      *
      * If unset or lower than 0, no limit will be applied.
      *
-     * @var int|null
+     * @var ?int
      */
-    protected $limit;
+    protected $limit = null;
 
     /**
      * Offset from where to start the result set
      *
      * If unset or lower than 0, the result set will start from the beginning.
      *
-     * @var int|null
+     * @var ?int
      */
-    protected $offset;
+    protected $offset = null;
 
     public function hasLimit()
     {
@@ -37,14 +37,7 @@ trait LimitOffset
 
     public function limit($limit)
     {
-        if ($limit !== null) {
-            $limit = (int) $limit;
-            if ($limit < 0) {
-                $limit = null;
-            }
-        }
-
-        $this->limit = $limit;
+        $this->limit = $limit < 0 ? null : $limit;
 
         return $this;
     }
@@ -68,14 +61,7 @@ trait LimitOffset
 
     public function offset($offset)
     {
-        if ($offset !== null) {
-            $offset = (int) $offset;
-            if ($offset <= 0) {
-                $offset = null;
-            }
-        }
-
-        $this->offset = $offset;
+        $this->offset = $offset <= 0 ? null : $offset;
 
         return $this;
     }

@@ -4,7 +4,6 @@ namespace ipl\Sql\Adapter;
 
 use ipl\Sql\Config;
 use ipl\Sql\Connection;
-use PDO;
 
 class Mysql extends BaseAdapter
 {
@@ -12,7 +11,7 @@ class Mysql extends BaseAdapter
 
     protected $escapeCharacter = '``';
 
-    public function setClientTimezone(Connection $db)
+    public function setClientTimezone(Connection $db): static
     {
         $db->exec('SET time_zone = ' . $db->quote($this->getTimezoneOffset()));
 

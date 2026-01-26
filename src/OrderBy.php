@@ -8,7 +8,7 @@ namespace ipl\Sql;
 trait OrderBy
 {
     /** @var ?array ORDER BY part of the query */
-    protected $orderBy;
+    protected $orderBy = null;
 
     public function hasOrderBy()
     {

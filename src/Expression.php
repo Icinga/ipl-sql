@@ -8,13 +8,13 @@ namespace ipl\Sql;
 class Expression implements ExpressionInterface
 {
     /** @var string The statement of the expression */
-    protected $statement;
+    protected string $statement;
 
-    /** @var array The columns used by the expression */
-    protected $columns;
+    /** @var ?array The columns used by the expression */
+    protected ?array $columns;
 
     /** @var array The values for the expression */
-    protected $values;
+    protected array $values;
 
     /**
      * Create a new database expression
@@ -23,31 +23,31 @@ class Expression implements ExpressionInterface
      * @param ?array $columns The columns used by the expression
      * @param mixed  ...$values The values for the expression
      */
-    public function __construct($statement, ?array $columns = null, ...$values)
+    public function __construct(string $statement, ?array $columns = null, ...$values)
     {
         $this->statement = $statement;
         $this->columns = $columns;
         $this->values = $values;
     }
 
-    public function getStatement()
+    public function getStatement(): string
     {
         return $this->statement;
     }
 
-    public function getColumns()
+    public function getColumns(): array
     {
         return $this->columns ?: [];
     }
 
-    public function setColumns(array $columns)
+    public function setColumns(array $columns): static
     {
         $this->columns = $columns;
 
         return $this;
     }
 
-    public function getValues()
+    public function getValues(): array
     {
         return $this->values;
     }

@@ -13,7 +13,7 @@ use ipl\Stdlib\Filter;
 
 class FilterProcessor
 {
-    public static function assembleFilter(Filter\Rule $filter, $level = 0)
+    public static function assembleFilter(Filter\Rule $filter, int $level = 0): ?array
     {
         $condition = null;
 
@@ -60,7 +60,7 @@ class FilterProcessor
         return $condition;
     }
 
-    public static function assemblePredicate(Filter\Condition $filter)
+    public static function assemblePredicate(Filter\Condition $filter): array
     {
         $column = $filter->getColumn();
         $expression = $filter->getValue();

@@ -10,7 +10,7 @@ interface WhereInterface
     /**
      * Get the WHERE part of the query
      *
-     * @return array|null
+     * @return ?array
      */
     public function getWhere();
 

@@ -17,14 +17,14 @@ interface LimitOffsetInterface
     /**
      * Get the limit
      *
-     * @return int|null
+     * @return ?int
      */
     public function getLimit();
 
     /**
      * Set the limit
      *
-     * @param int|null $limit Maximum number of items to return.
+     * @param ?int $limit Maximum number of items to return.
      *                        If you want to disable the limit, use null or a negative value
      *
      * @return $this
@@ -48,14 +48,14 @@ interface LimitOffsetInterface
     /**
      * Get the offset
      *
-     * @return int|null
+     * @return ?int
      */
     public function getOffset();
 
     /**
      * Set the offset
      *
-     * @param int|null $offset Start result set after this many rows.
+     * @param ?int $offset Start result set after this many rows.
      *                         If you want to disable the offset, use null, 0, or a negative value
      *
      * @return $this
