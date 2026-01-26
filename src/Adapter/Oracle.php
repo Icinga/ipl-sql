@@ -7,7 +7,7 @@ use ipl\Sql\Connection;
 
 class Oracle extends BaseAdapter
 {
-    public function getDsn(Config $config): string
+    public function getDsn(Config $config)
     {
         $dsn = 'oci:dbname=';
 
@@ -30,7 +30,7 @@ class Oracle extends BaseAdapter
         return $dsn;
     }
 
-    public function setClientTimezone(Connection $db): static
+    public function setClientTimezone(Connection $db)
     {
         $db->prepexec('ALTER SESSION SET TIME_ZONE = ?', [$this->getTimezoneOffset()]);
 

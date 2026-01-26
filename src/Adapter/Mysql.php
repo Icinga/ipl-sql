@@ -7,9 +7,9 @@ use ipl\Sql\Connection;
 
 class Mysql extends BaseAdapter
 {
-    protected array $quoteCharacter = ['`', '`'];
+    protected $quoteCharacter = ['`', '`'];
 
-    protected string $escapeCharacter = '``';
+    protected $escapeCharacter = '``';
 
     public function setClientTimezone(Connection $db): static
     {
@@ -18,7 +18,7 @@ class Mysql extends BaseAdapter
         return $this;
     }
 
-    public function getOptions(Config $config): array
+    public function getOptions(Config $config)
     {
         $options = parent::getOptions($config);
         // In PHP 8.5+, driver-specific constants of the PDO class are deprecated,
