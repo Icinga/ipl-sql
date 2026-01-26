@@ -20,7 +20,7 @@ trait OrderBy
         return $this->orderBy;
     }
 
-    public function orderBy($orderBy, int|string|null $direction = null): static
+    public function orderBy($orderBy, $direction = null)
     {
         if (! is_array($orderBy)) {
             $orderBy = [$orderBy];

@@ -35,7 +35,7 @@ trait LimitOffset
         return $this->limit;
     }
 
-    public function limit(?int $limit): static
+    public function limit($limit): static
     {
         $this->limit = $limit < 0 ? null : $limit;
 
@@ -59,7 +59,7 @@ trait LimitOffset
         return $this->offset;
     }
 
-    public function offset(?int $offset): static
+    public function offset($offset): static
     {
         $this->offset = $offset <= 0 ? null : $offset;
 

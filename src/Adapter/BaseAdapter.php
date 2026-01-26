@@ -64,7 +64,7 @@ abstract class BaseAdapter implements Adapter
         return $this;
     }
 
-    public function quoteIdentifier(array|string $identifiers): string
+    public function quoteIdentifier($identifiers)
     {
         if (is_string($identifiers)) {
             $identifiers = explode('.', $identifiers);

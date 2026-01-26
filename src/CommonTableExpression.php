@@ -24,7 +24,7 @@ trait CommonTableExpression
         return $this->with;
     }
 
-    public function with(Select $query, string $alias, bool $recursive = false): static
+    public function with(Select $query, $alias, $recursive = false)
     {
         $this->with[] = [$query, $alias, $recursive];
 

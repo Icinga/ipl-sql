@@ -576,7 +576,7 @@ class Connection implements Quoter
         return $result;
     }
 
-    public function quoteIdentifier(array|string $identifiers): string
+    public function quoteIdentifier($identifiers)
     {
         return $this->getAdapter()->quoteIdentifier($identifiers);
     }
