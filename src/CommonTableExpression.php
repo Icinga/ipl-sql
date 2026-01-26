@@ -17,9 +17,9 @@ trait CommonTableExpression
      *
      * @var array[]
      */
-    protected array $with = [];
+    protected $with = [];
 
-    public function getWith(): array
+    public function getWith()
     {
         return $this->with;
     }
@@ -31,7 +31,7 @@ trait CommonTableExpression
         return $this;
     }
 
-    public function resetWith(): static
+    public function resetWith()
     {
         $this->with = [];
 
@@ -43,7 +43,7 @@ trait CommonTableExpression
      *
      * Shall be called by using classes in their __clone()
      */
-    protected function cloneCte(): void
+    protected function cloneCte()
     {
         foreach ($this->with as &$cte) {
             $cte[0] = clone $cte[0];

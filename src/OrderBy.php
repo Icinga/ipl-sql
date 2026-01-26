@@ -8,14 +8,14 @@ namespace ipl\Sql;
 trait OrderBy
 {
     /** @var ?array ORDER BY part of the query */
-    protected ?array $orderBy = null;
+    protected $orderBy = null;
 
-    public function hasOrderBy(): bool
+    public function hasOrderBy()
     {
         return $this->orderBy !== null;
     }
 
-    public function getOrderBy(): ?array
+    public function getOrderBy()
     {
         return $this->orderBy;
     }
@@ -48,7 +48,7 @@ trait OrderBy
         return $this;
     }
 
-    public function resetOrderBy(): static
+    public function resetOrderBy()
     {
         $this->orderBy = null;
 
@@ -60,7 +60,7 @@ trait OrderBy
      *
      * Shall be called by using classes in their __clone()
      */
-    protected function cloneOrderBy(): void
+    protected function cloneOrderBy()
     {
         if ($this->orderBy !== null) {
             foreach ($this->orderBy as &$orderBy) {

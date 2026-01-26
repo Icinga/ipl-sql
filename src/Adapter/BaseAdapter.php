@@ -21,13 +21,13 @@ abstract class BaseAdapter implements Adapter
      *
      * @var array
      */
-    protected array $quoteCharacter = ['"', '"'];
+    protected $quoteCharacter = ['"', '"'];
 
     /** @var string Character to use for escaping quote characters */
-    protected string $escapeCharacter = '\\"';
+    protected $escapeCharacter = '\\"';
 
     /** @var array Default PDO connect options */
-    protected array $options = [
+    protected $options = [
         PDO::ATTR_CASE => PDO::CASE_NATURAL,
         PDO::ATTR_EMULATE_PREPARES => false,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -35,7 +35,7 @@ abstract class BaseAdapter implements Adapter
         PDO::ATTR_STRINGIFY_FETCHES => false
     ];
 
-    public function getDsn(Config $config): string
+    public function getDsn(Config $config)
     {
         $dsn = "{$config->db}:";
 
@@ -50,7 +50,7 @@ abstract class BaseAdapter implements Adapter
         return $dsn . implode(';', $parts);
     }
 
-    public function getOptions(Config $config): array
+    public function getOptions(Config $config)
     {
         if (is_array($config->options)) {
             return $config->options + $this->options;
@@ -59,7 +59,7 @@ abstract class BaseAdapter implements Adapter
         return $this->options;
     }
 
-    public function setClientTimezone(Connection $db): static
+    public function setClientTimezone(Connection $db)
     {
         return $this;
     }
@@ -83,7 +83,7 @@ abstract class BaseAdapter implements Adapter
         return implode('.', $identifiers);
     }
 
-    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder): static
+    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder)
     {
         $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select): void {
             if ($select->hasOrderBy()) {
@@ -105,7 +105,7 @@ abstract class BaseAdapter implements Adapter
         return $this;
     }
 
-    protected function getTimezoneOffset(): string
+    protected function getTimezoneOffset()
     {
         $tz = new DateTimeZone(date_default_timezone_get());
         $offset = $tz->getOffset(new DateTime());

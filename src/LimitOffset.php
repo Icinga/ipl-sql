@@ -14,7 +14,7 @@ trait LimitOffset
      *
      * @var ?int
      */
-    protected ?int $limit = null;
+    protected $limit = null;
 
     /**
      * Offset from where to start the result set
@@ -23,50 +23,50 @@ trait LimitOffset
      *
      * @var ?int
      */
-    protected ?int $offset = null;
+    protected $offset = null;
 
-    public function hasLimit(): bool
+    public function hasLimit()
     {
         return $this->limit !== null;
     }
 
-    public function getLimit(): ?int
+    public function getLimit()
     {
         return $this->limit;
     }
 
-    public function limit($limit): static
+    public function limit($limit)
     {
         $this->limit = $limit < 0 ? null : $limit;
 
         return $this;
     }
 
-    public function resetLimit(): static
+    public function resetLimit()
     {
         $this->limit = null;
 
         return $this;
     }
 
-    public function hasOffset(): bool
+    public function hasOffset()
     {
         return $this->offset !== null;
     }
 
-    public function getOffset(): ?int
+    public function getOffset()
     {
         return $this->offset;
     }
 
-    public function offset($offset): static
+    public function offset($offset)
     {
         $this->offset = $offset <= 0 ? null : $offset;
 
         return $this;
     }
 
-    public function resetOffset(): static
+    public function resetOffset()
     {
         $this->offset = null;
 
