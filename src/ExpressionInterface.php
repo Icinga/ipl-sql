@@ -12,14 +12,14 @@ interface ExpressionInterface
      *
      * @return string
      */
-    public function getStatement(): string;
+    public function getStatement();
 
     /**
      * Get the columns used by the expression
      *
      * @return array
      */
-    public function getColumns(): array;
+    public function getColumns();
 
     /**
      * Set the columns to use by the expression
@@ -28,12 +28,12 @@ interface ExpressionInterface
      *
      * @return $this
      */
-    public function setColumns(array $columns): static;
+    public function setColumns(array $columns);
 
     /**
      * Get the values for the expression
      *
      * @return array
      */
-    public function getValues(): array;
+    public function getValues();
 }

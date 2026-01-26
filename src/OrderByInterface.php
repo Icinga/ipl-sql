@@ -12,14 +12,14 @@ interface OrderByInterface
      *
      * @return bool
      */
-    public function hasOrderBy(): bool;
+    public function hasOrderBy();
 
     /**
      * Get the ORDER BY part of the query
      *
      * @return ?array
      */
-    public function getOrderBy(): ?array;
+    public function getOrderBy();
 
     /**
      * Set the ORDER BY part of the query - either plain columns or expressions or scalar subqueries
@@ -40,12 +40,12 @@ interface OrderByInterface
      *
      * @return $this
      */
-    public function orderBy($orderBy, int|string|null $direction = null): static;
+    public function orderBy($orderBy, $direction = null);
 
     /**
      * Reset the ORDER BY part of the query
      *
      * @return $this
      */
-    public function resetOrderBy(): static;
+    public function resetOrderBy();
 }

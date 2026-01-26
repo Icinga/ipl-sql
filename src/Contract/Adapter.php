@@ -15,7 +15,7 @@ interface Adapter extends Quoter
      *
      * @return string
      */
-    public function getDsn(Config $config): string;
+    public function getDsn(Config $config);
 
     /**
      * Get the PDO connect options based on the specified connection configuration
@@ -24,7 +24,7 @@ interface Adapter extends Quoter
      *
      * @return array
      */
-    public function getOptions(Config $config): array;
+    public function getOptions(Config $config);
 
     /**
      * Set the client time zone
@@ -33,7 +33,7 @@ interface Adapter extends Quoter
      *
      * @return $this
      */
-    public function setClientTimezone(Connection $db): static;
+    public function setClientTimezone(Connection $db);
 
     /**
      * Register callbacks for query builder events
@@ -42,5 +42,5 @@ interface Adapter extends Quoter
      *
      * @return $this
      */
-    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder): static;
+    public function registerQueryBuilderCallbacks(QueryBuilder $queryBuilder);
 }

@@ -17,5 +17,5 @@ interface Quoter
      *
      * @return string
      */
-    public function quoteIdentifier(array|string $identifiers): string;
+    public function quoteIdentifier($identifiers);
 }

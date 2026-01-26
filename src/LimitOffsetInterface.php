@@ -12,14 +12,14 @@ interface LimitOffsetInterface
      *
      * @return bool
      */
-    public function hasLimit(): bool;
+    public function hasLimit();
 
     /**
      * Get the limit
      *
      * @return ?int
      */
-    public function getLimit(): ?int;
+    public function getLimit();
 
     /**
      * Set the limit
@@ -29,28 +29,28 @@ interface LimitOffsetInterface
      *
      * @return $this
      */
-    public function limit(?int $limit): static;
+    public function limit($limit);
 
     /**
      * Reset the limit
      *
      * @return $this
      */
-    public function resetLimit(): static;
+    public function resetLimit();
 
     /**
      * Get whether an offset is configured
      *
      * @return bool
      */
-    public function hasOffset(): bool;
+    public function hasOffset();
 
     /**
      * Get the offset
      *
      * @return ?int
      */
-    public function getOffset(): ?int;
+    public function getOffset();
 
     /**
      * Set the offset
@@ -60,12 +60,12 @@ interface LimitOffsetInterface
      *
      * @return $this
      */
-    public function offset(?int $offset): static;
+    public function offset($offset);
 
     /**
      * Reset the offset
      *
      * @return $this
      */
-    public function resetOffset(): static;
+    public function resetOffset();
 }

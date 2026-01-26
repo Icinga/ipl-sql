@@ -17,7 +17,7 @@ interface CommonTableExpressionInterface
      *
      * @return array[]
      */
-    public function getWith(): array;
+    public function getWith();
 
     /**
      * Add a CTE
@@ -28,12 +28,12 @@ interface CommonTableExpressionInterface
      *
      * @return $this
      */
-    public function with(Select $query, string $alias, bool $recursive = false): static;
+    public function with(Select $query, $alias, $recursive = false);
 
     /**
      * Reset all CTEs
      *
      * @return $this
      */
-    public function resetWith(): static;
+    public function resetWith();
 }
