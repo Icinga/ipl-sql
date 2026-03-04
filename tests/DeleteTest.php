@@ -19,7 +19,7 @@ class DeleteTest extends TestCase
 
         $this->query->from('table');
         $this->assertSame(['table'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('DELETE FROM table', []);
+        $this->assertSql('DELETE FROM table', $this->query, []);
     }
 
     public function testFromWithAlias()
@@ -28,7 +28,7 @@ class DeleteTest extends TestCase
 
         $this->query->from('table t1');
         $this->assertSame(['table t1'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('DELETE FROM table t1', []);
+        $this->assertSql('DELETE FROM table t1', $this->query, []);
     }
 
     public function testFromWithArray()
@@ -37,6 +37,6 @@ class DeleteTest extends TestCase
 
         $this->query->from(['t1' => 'table']);
         $this->assertSame(['t1' => 'table'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('DELETE FROM table t1', []);
+        $this->assertSql('DELETE FROM table t1', $this->query, []);
     }
 }

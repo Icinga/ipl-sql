@@ -11,71 +11,57 @@ class SelectTest extends TestCase
 {
     public function testDistinct()
     {
-        $this->setupTest();
-
         $this->query
             ->distinct()
             ->columns('1');
 
         $this->assertSame(true, $this->query->getDistinct());
-        $this->assertCorrectStatementAndValues('SELECT DISTINCT 1', []);
+        $this->assertSql('SELECT DISTINCT 1', $this->query, []);
     }
 
     public function testColumns()
     {
-        $this->setupTest();
-
         $this->query->columns('1');
 
         $this->assertSame(['1'], $this->query->getColumns());
-        $this->assertCorrectStatementAndValues('SELECT 1', []);
+        $this->assertSql('SELECT 1', $this->query, []);
     }
 
     public function testColumnsWithAlias()
     {
-        $this->setupTest();
-
         $this->query->columns('1 AS one');
 
         $this->assertSame(['1 AS one'], $this->query->getColumns());
-        $this->assertCorrectStatementAndValues('SELECT 1 AS one', []);
+        $this->assertSql('SELECT 1 AS one', $this->query, []);
     }
 
     public function testColumnsWithArray()
     {
-        $this->setupTest();
-
         $this->query->columns(['1', '2']);
 
         $this->assertSame(['1', '2'], $this->query->getColumns());
-        $this->assertCorrectStatementAndValues('SELECT 1, 2', []);
+        $this->assertSql('SELECT 1, 2', $this->query, []);
     }
 
     public function testColumnsWithArrayAndAlias()
     {
-        $this->setupTest();
-
         $this->query->columns(['one' => '1', '2']);
 
         $this->assertSame(['one' => '1', '2'], $this->query->getColumns());
-        $this->assertCorrectStatementAndValues('SELECT 1 AS one, 2', []);
+        $this->assertSql('SELECT 1 AS one, 2', $this->query, []);
     }
 
     public function testColumnsWithExpression()
     {
-        $this->setupTest();
-
         $columns = ['three' => new Expression('? + ?', null, 1, 2)];
         $this->query->columns($columns);
 
         $this->assertSame($columns, $this->query->getColumns());
-        $this->assertCorrectStatementAndValues('SELECT (? + ?) AS three', [1, 2]);
+        $this->assertSql('SELECT (? + ?) AS three', $this->query, [1, 2]);
     }
 
     public function testColumnsWithSelect()
     {
-        $this->setupTest();
-
         $columns = [
             'customers' => (new Select())
                 ->columns('COUNT(*)')
@@ -86,46 +72,39 @@ class SelectTest extends TestCase
         $this->query->columns($columns);
 
         $this->assertSame($columns, $this->query->getColumns());
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'SELECT (SELECT COUNT(*) FROM customers WHERE ctime > ?) AS customers',
+            $this->query,
             [1234567890]
         );
     }
 
     public function testFrom()
     {
-        $this->setupTest();
-
         $this->query->from('table');
 
         $this->assertSame(['table'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('FROM table', []);
+        $this->assertSql('FROM table', $this->query, []);
     }
 
     public function testFromWithAlias()
     {
-        $this->setupTest();
-
         $this->query->from('table t1');
 
         $this->assertSame(['table t1'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('FROM table t1', []);
+        $this->assertSql('FROM table t1', $this->query, []);
     }
 
     public function testFromWithArray()
     {
-        $this->setupTest();
-
         $this->query->from(['t1' => 'table']);
 
         $this->assertSame(['t1' => 'table'], $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('FROM table t1', []);
+        $this->assertSql('FROM table t1', $this->query, []);
     }
 
     public function testFromWithSelect()
     {
-        $this->setupTest();
-
         $from = ['t1' => (new Select())
             ->columns('*')
             ->from('table')
@@ -134,456 +113,393 @@ class SelectTest extends TestCase
         $this->query->from($from);
 
         $this->assertSame($from, $this->query->getFrom());
-        $this->assertCorrectStatementAndValues('FROM (SELECT * FROM table WHERE ctime > ?) t1', [1234567890]);
+        $this->assertSql('FROM (SELECT * FROM table WHERE ctime > ?) t1', $this->query, [1234567890]);
     }
 
     public function testInnerJoin()
     {
-        $this->setupTest();
-
         $this->query->join('table2', 'table2.table1_id = table1.id');
 
-        $this->assertCorrectStatementAndValues('INNER JOIN table2 ON table2.table1_id = table1.id', []);
+        $this->assertSql('INNER JOIN table2 ON table2.table1_id = table1.id', $this->query, []);
     }
 
     public function testInnerJoinWithAlias()
     {
-        $this->setupTest();
-
         $this->query->join('table2 t2', 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
+        $this->assertSql('INNER JOIN table2 t2 ON t2.table1_id = t1.id', $this->query, []);
     }
 
     public function testInnerJoinWithArray()
     {
-        $this->setupTest();
-
         $this->query->join(['t2' => 'table2'], 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues('INNER JOIN table2 t2 ON t2.table1_id = t1.id', []);
+        $this->assertSql('INNER JOIN table2 t2 ON t2.table1_id = t1.id', $this->query, []);
     }
 
     public function testInnerJoinWithComplexCondition()
     {
-        $this->setupTest();
-
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'INNER JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testInnerJoinWithOperatorAll()
     {
-        $this->setupTest();
-
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'INNER JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testInnerJoinWithOperatorAny()
     {
-        $this->setupTest();
-
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'INNER JOIN table2 ON (table2.table1_id = table1.id) OR (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testInnerJoinWithParametrizedCondition()
     {
-        $this->setupTest();
-
         $this->query->join('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'INNER JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
+            $this->query,
             [42]
         );
     }
 
     public function testInnerJoinWithSelect()
     {
-        $this->setupTest();
-
         $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
         $this->query->join($table2, 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'INNER JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            $this->query,
             [1]
         );
     }
 
     public function testInnerJoinWithExpressionCondition()
     {
-        $this->setupTest();
-
         $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->join('table2', $condition);
 
-        $this->assertCorrectStatementAndValues('INNER JOIN table2 ON t2.table1_id = ?', [1]);
+        $this->assertSql('INNER JOIN table2 ON t2.table1_id = ?', $this->query, [1]);
     }
 
     public function testInnerJoinWithSelectCondition()
     {
-        $this->setupTest();
-
         $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->join('table2', $condition);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'INNER JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            $this->query,
             [1]
         );
     }
 
     public function testLeftJoin()
     {
-        $this->setupTest();
-
         $this->query->joinLeft('table2', 'table2.table1_id = table1.id');
 
-        $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON table2.table1_id = table1.id', []);
+        $this->assertSql('LEFT JOIN table2 ON table2.table1_id = table1.id', $this->query, []);
     }
 
     public function testLeftJoinWithAlias()
     {
-        $this->setupTest();
-
         $this->query->joinLeft('table2 t2', 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+        $this->assertSql('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', $this->query, []);
     }
 
     public function testLeftJoinWithArray()
     {
-        $this->setupTest();
-
         $this->query->joinLeft(['t2' => 'table2'], 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+        $this->assertSql('LEFT JOIN table2 t2 ON t2.table1_id = t1.id', $this->query, []);
     }
 
     public function testLeftJoinWithComplexCondition()
     {
-        $this->setupTest();
-
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'LEFT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testLeftJoinWithOperatorAll()
     {
-        $this->setupTest();
-
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'LEFT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testLeftJoinWithOperatorAny()
     {
-        $this->setupTest();
-
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'LEFT JOIN table2 ON (table2.table1_id = table1.id) OR (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testLeftJoinWithParametrizedCondition()
     {
-        $this->setupTest();
-
         $this->query->joinLeft('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'LEFT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
+            $this->query,
             [42]
         );
     }
 
     public function testLeftJoinWithSelect()
     {
-        $this->setupTest();
-
         $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
         $this->query->joinLeft($table2, 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'LEFT JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            $this->query,
             [1]
         );
     }
 
     public function testLeftJoinWithExpressionCondition()
     {
-        $this->setupTest();
-
         $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->joinLeft('table2', $condition);
 
-        $this->assertCorrectStatementAndValues('LEFT JOIN table2 ON t2.table1_id = ?', [1]);
+        $this->assertSql('LEFT JOIN table2 ON t2.table1_id = ?', $this->query, [1]);
     }
 
     public function testLeftJoinWithSelectCondition()
     {
-        $this->setupTest();
-
         $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->joinLeft('table2', $condition);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'LEFT JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            $this->query,
             [1]
         );
     }
 
     public function testRightJoin()
     {
-        $this->setupTest();
-
         $this->query->joinRight('table2', 'table2.table1_id = table1.id');
 
-        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON table2.table1_id = table1.id', []);
+        $this->assertSql('RIGHT JOIN table2 ON table2.table1_id = table1.id', $this->query, []);
     }
 
     public function testRightJoinWithAlias()
     {
-        $this->setupTest();
-
         $this->query->joinRight('table2 t2', 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+        $this->assertSql('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', $this->query, []);
     }
 
     public function testRightJoinWithArray()
     {
-        $this->setupTest();
-
         $this->query->joinRight(['t2' => 'table2'], 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', []);
+        $this->assertSql('RIGHT JOIN table2 t2 ON t2.table1_id = t1.id', $this->query, []);
     }
 
     public function testRightJoinWithComplexCondition()
     {
-        $this->setupTest();
-
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42']);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'RIGHT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testRightJoinWithOperatorAll()
     {
-        $this->setupTest();
-
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ALL);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'RIGHT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testRightJoinWithOperatorAny()
     {
-        $this->setupTest();
-
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = 42'], Sql::ANY);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'RIGHT JOIN table2 ON (table2.table1_id = table1.id) OR (table2.table3_id = 42)',
+            $this->query,
             []
         );
     }
 
     public function testRightJoinWithParametrizedCondition()
     {
-        $this->setupTest();
-
         $this->query->joinRight('table2', ['table2.table1_id = table1.id', 'table2.table3_id = ?' => 42]);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'RIGHT JOIN table2 ON (table2.table1_id = table1.id) AND (table2.table3_id = ?)',
+            $this->query,
             [42]
         );
     }
 
     public function testRightJoinWithSelect()
     {
-        $this->setupTest();
-
         $table2 = ['t2' => (new Select())->columns('*')->from('table2')->where(['active = ?' => 1])];
         $this->query->joinRight($table2, 't2.table1_id = t1.id');
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'RIGHT JOIN (SELECT * FROM table2 WHERE active = ?) t2 ON t2.table1_id = t1.id',
+            $this->query,
             [1]
         );
     }
 
     public function testRightJoinWithExpressionCondition()
     {
-        $this->setupTest();
-
         $condition = new Expression('t2.table1_id = ?', null, 1);
         $this->query->joinRight('table2', $condition);
 
-        $this->assertCorrectStatementAndValues('RIGHT JOIN table2 ON t2.table1_id = ?', [1]);
+        $this->assertSql('RIGHT JOIN table2 ON t2.table1_id = ?', $this->query, [1]);
     }
 
     public function testRightJoinWithSelectCondition()
     {
-        $this->setupTest();
-
         $condition = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->joinRight('table2', $condition);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'RIGHT JOIN table2 ON (SELECT COUNT(*) FROM table2 WHERE active = ?)',
+            $this->query,
             [1]
         );
     }
 
     public function testGroupBy()
     {
-        $this->setupTest();
-
         $this->query->groupBy(['a', 'b']);
 
-        $this->assertCorrectStatementAndValues('GROUP BY a, b', []);
+        $this->assertSql('GROUP BY a, b', $this->query, []);
     }
 
     public function testGroupByWithAlias()
     {
-        $this->setupTest();
-
         $this->query->groupBy(['t.a', 't.b']);
 
-        $this->assertCorrectStatementAndValues('GROUP BY t.a, t.b', []);
+        $this->assertSql('GROUP BY t.a, t.b', $this->query, []);
     }
 
     public function testGroupByWithExpression()
     {
-        $this->setupTest();
-
         $column = new Expression('x = ?', null, 1);
         $this->query->groupBy([$column]);
 
-        $this->assertCorrectStatementAndValues('GROUP BY x = ?', [1]);
+        $this->assertSql('GROUP BY x = ?', $this->query, [1]);
     }
 
     public function testGroupByWithSelect()
     {
-        $this->setupTest();
-
         $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->groupBy([$column]);
 
-        $this->assertCorrectStatementAndValues('GROUP BY (SELECT COUNT(*) FROM table2 WHERE active = ?)', [1]);
+        $this->assertSql('GROUP BY (SELECT COUNT(*) FROM table2 WHERE active = ?)', $this->query, [1]);
     }
 
     public function testOrderBy()
     {
-        $this->setupTest();
-
         $this->query->orderBy(['a', 'b' => 'ASC'], 'DESC');
 
-        $this->assertCorrectStatementAndValues('ORDER BY a DESC, b ASC', []);
+        $this->assertSql('ORDER BY a DESC, b ASC', $this->query, []);
     }
 
     public function testOrderByWithExpression()
     {
-        $this->setupTest();
-
         $column = new Expression('x = ?', null, 1);
         $this->query->orderBy($column, 'DESC');
 
-        $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);
+        $this->assertSql('ORDER BY x = ? DESC', $this->query, [1]);
     }
 
     public function testOrderByWithExpressionAndExplicitDirection()
     {
-        $this->setupTest();
-
         $column = new Expression('x = ?', null, 1);
         $this->query->orderBy([[$column, 'DESC']]);
 
-        $this->assertCorrectStatementAndValues('ORDER BY x = ? DESC', [1]);
+        $this->assertSql('ORDER BY x = ? DESC', $this->query, [1]);
     }
 
     public function testOrderByWithSelect()
     {
-        $this->setupTest();
-
         $column = (new Select())->columns('COUNT(*)')->from('table2')->where(['active = ?' => 1]);
         $this->query->orderBy($column, 'DESC');
 
-        $this->assertCorrectStatementAndValues('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?) DESC', [1]);
+        $this->assertSql('ORDER BY (SELECT COUNT(*) FROM table2 WHERE active = ?) DESC', $this->query, [1]);
     }
 
     public function testLimitOffset()
     {
-        $this->setupTest();
-
         $this->query = (new Select())->columns(['a'])->from('b')->limit(4)->offset(1);
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'SELECT a FROM b LIMIT 4 OFFSET 1',
+            $this->query,
             []
         );
     }
 
     public function testLimitWithoutOffset()
     {
-        $this->setupTest();
-
         $this->query = (new Select())->columns(['a'])->from('b')->limit(4);
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'SELECT a FROM b LIMIT 4',
+            $this->query,
             []
         );
     }
 
     public function testOffsetWithoutLimit()
     {
-        $this->setupTest();
-
         $this->query = (new Select())->columns(['a'])->from('b')->offset(1);
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'SELECT a FROM b OFFSET 1',
+            $this->query,
             []
         );
     }
 
     public function testUnion()
     {
-        $this->setupTest();
-
         $unionQuery = (new Select())
             ->columns('a')
             ->from('table2')
@@ -595,16 +511,15 @@ class SelectTest extends TestCase
             ->where(['b > ?' => 1])
             ->union($unionQuery);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             '(SELECT a FROM table1 WHERE b > ?) UNION (SELECT a FROM table2 WHERE b < ?)',
+            $this->query,
             [1, 2]
         );
     }
 
     public function testUnionAll()
     {
-        $this->setupTest();
-
         $unionQuery = (new Select())
             ->columns('a')
             ->from('table2')
@@ -616,16 +531,15 @@ class SelectTest extends TestCase
             ->where(['b > ?' => 1])
             ->unionAll($unionQuery);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             '(SELECT a FROM table1 WHERE b > ?) UNION ALL (SELECT a FROM table2 WHERE b < ?)',
+            $this->query,
             [1, 2]
         );
     }
 
     public function testElementOrder()
     {
-        $this->setupTest();
-
         $this->query
             ->distinct()
             ->columns(['c.id', 'c.name', 'orders' => 'COUNT(o.customer)'])
@@ -641,21 +555,20 @@ class SelectTest extends TestCase
             ->limit(25)
             ->unionAll((new Select())->columns(['id' => -1, 'name' => "''", 'orders' => -1]));
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             "(SELECT DISTINCT c.id, c.name, COUNT(o.customer) AS orders"
                 . " FROM customer c LEFT JOIN order o ON o.customer = c.id"
                 . " WHERE (c.name LIKE ?) OR (c.name LIKE ?)"
                 . " GROUP BY c.id HAVING (COUNT(o.customer) >= ?) OR (COUNT(o.customer) <= ?)"
                 . " ORDER BY COUNT(o.customer), c.name LIMIT 25 OFFSET 75)"
                 . " UNION ALL (SELECT -1 AS id, '' AS name, -1 AS orders)",
+            $this->query,
             ['%Doe%', '%Deo%', 42, 3]
         );
     }
 
     public function testRollupMysql()
     {
-        $this->setupTest();
-
         $this->query
             ->columns([
                 'division' => 'di.name',
@@ -667,20 +580,19 @@ class SelectTest extends TestCase
             ->joinRight('division di', 'di.id = de.division')
             ->groupBy(['di.id', 'de.id WITH ROLLUP']);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'SELECT di.name AS division, de.name AS department, COUNT(e.id) AS employees'
                 . ' FROM employee e'
                 . ' RIGHT JOIN department de ON de.id = e.department'
                 . ' RIGHT JOIN division di ON di.id = de.division'
                 . ' GROUP BY di.id, de.id WITH ROLLUP',
+            $this->query,
             []
         );
     }
 
     public function testRollupPostgresql()
     {
-        $this->setupTest();
-
         $this->query
             ->columns([
                 'division' => 'di.name',
@@ -692,20 +604,19 @@ class SelectTest extends TestCase
             ->joinRight('division di', 'di.id = de.division')
             ->groupBy(['ROLLUP (di.id, de.id)']);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'SELECT di.name AS division, de.name AS department, COUNT(e.id) AS employees'
                 . ' FROM employee e'
                 . ' RIGHT JOIN department de ON de.id = e.department'
                 . ' RIGHT JOIN division di ON di.id = de.division'
                 . ' GROUP BY ROLLUP (di.id, de.id)',
+            $this->query,
             []
         );
     }
 
     public function testJustAUnionRendersAsSelect()
     {
-        $this->setupTest();
-
         $unionQuery = (new Select())
             ->columns('a')
             ->from('table2')
@@ -714,16 +625,15 @@ class SelectTest extends TestCase
         $this->query
             ->union($unionQuery);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             '(SELECT a FROM table2 WHERE b < ?)',
+            $this->query,
             [2]
         );
     }
 
     public function testMoreThanOneUnionWithoutSelect()
     {
-        $this->setupTest();
-
         $union1 = (new Select())
             ->columns('a')
             ->from('table1')
@@ -738,16 +648,15 @@ class SelectTest extends TestCase
             ->unionAll($union1)
             ->unionAll($union2);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             '(SELECT a FROM table1 WHERE b < ?) UNION ALL (SELECT a FROM table2 WHERE b > ?)',
+            $this->query,
             [1, 2]
         );
     }
 
     public function testMoreThanOneUnionWithSelect()
     {
-        $this->setupTest();
-
         $union1 = (new Select())
             ->columns('a')
             ->from('table1')
@@ -764,34 +673,32 @@ class SelectTest extends TestCase
             ->unionAll($union1)
             ->unionAll($union2);
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             '(SELECT a FROM table3)'
             . ' UNION ALL (SELECT a FROM table1 WHERE b < ?)'
             . ' UNION ALL (SELECT a FROM table2 WHERE b > ?)',
+            $this->query,
             [1, 2]
         );
     }
 
     public function testCountDistinct()
     {
-        $this->setupTest();
-
         $this->query = $this->query
             ->distinct()
             ->from('table')
             ->columns('column')
             ->getCountQuery();
 
-        $this->assertCorrectStatementAndValues(
+        $this->assertSql(
             'SELECT COUNT(*) AS cnt FROM (SELECT DISTINCT column FROM table) s',
+            $this->query,
             []
         );
     }
 
     public function testInvalidOderByDirectionsThrowAnError()
     {
-        $this->setupTest();
-
         $this->query = $this->query
             ->orderBy([['foo', 'bar']]);
 
