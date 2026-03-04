@@ -373,7 +373,7 @@ class Connection implements Quoter
         $sth->setFetchMode(PDO::FETCH_NUM);
 
         foreach ($sth as $row) {
-            list($key, $value) = $row;
+            [$key, $value] = $row;
 
             yield $key => $value;
         }
@@ -394,7 +394,7 @@ class Connection implements Quoter
         }
 
         if (is_object($stmt)) {
-            list($stmt, $values) = $this->getQueryBuilder()->assemble($stmt);
+            [$stmt, $values] = $this->getQueryBuilder()->assemble($stmt);
         }
 
         $this->connect();
@@ -414,7 +414,7 @@ class Connection implements Quoter
      */
     public function select(Select $select)
     {
-        list($stmt, $values) = $this->getQueryBuilder()->assembleSelect($select);
+        [$stmt, $values] = $this->getQueryBuilder()->assembleSelect($select);
 
         return $this->prepexec($stmt, $values);
     }

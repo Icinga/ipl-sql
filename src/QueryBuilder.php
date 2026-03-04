@@ -271,7 +271,7 @@ class QueryBuilder
 
         $unions = $this->buildUnions($select->getUnion(), $values);
         if ($unions) {
-            list($unionKeywords, $selects) = $unions;
+            [$unionKeywords, $selects] = $unions;
 
             if ($sql) {
                 $sql = "($sql)";
@@ -345,8 +345,8 @@ class QueryBuilder
         $hasRecursive = false;
 
         foreach ($with as $cte) {
-            list($query, $alias, $recursive) = $cte;
-            list($cteSql, $cteValues) = $this->assembleSelect($query);
+            [$query, $alias, $recursive] = $cte;
+            [$cteSql, $cteValues] = $this->assembleSelect($query);
 
             $ctes[] = "$alias AS ($cteSql)";
 
@@ -453,7 +453,7 @@ class QueryBuilder
                     // Operator format
                     $sql[] = $this->buildCondition($value, $values);
                 } else {
-                    list($unpackedExpression, $unpackedValues) = $this->unpackCondition($expression, $value);
+                    [$unpackedExpression, $unpackedValues] = $this->unpackCondition($expression, $value);
                     $sql[] = $unpackedExpression;
                     $values = array_merge($values, $unpackedValues);
                 }
@@ -653,7 +653,7 @@ class QueryBuilder
 
         $sql = [];
         foreach ($joins as $join) {
-            list($joinType, $table, $condition) = $join;
+            [$joinType, $table, $condition] = $join;
 
             if (is_array($table)) {
                 $tableName = null;
@@ -742,7 +742,7 @@ class QueryBuilder
         $sql = [];
 
         foreach ($orderBy as $column) {
-            list($column, $direction) = $column;
+            [$column, $direction] = $column;
 
             if ($column instanceof ExpressionInterface) {
                 $column = $this->buildExpression($column, $values);
@@ -813,10 +813,10 @@ class QueryBuilder
         $selects = [];
 
         foreach ($unions as $union) {
-            list($select, $all) = $union;
+            [$select, $all] = $union;
 
             if ($select instanceof Select) {
-                list($select, $values) = $this->assembleSelect($select, $values);
+                [$select, $values] = $this->assembleSelect($select, $values);
             }
 
             $unionKeywords[] = ($all ? 'UNION ALL' : 'UNION');

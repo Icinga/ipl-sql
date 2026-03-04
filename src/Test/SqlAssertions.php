@@ -38,7 +38,7 @@ trait SqlAssertions
         // Reduce whitespaces to just one space
         $sql = preg_replace('/\s+/', ' ', trim($sql));
 
-        list($stmt, $bind) = $this->queryBuilder->assemble($statement);
+        [$stmt, $bind] = $this->queryBuilder->assemble($statement);
 
         $this->assertSame($sql, $stmt, $message);
 

@@ -87,7 +87,7 @@ abstract class BaseAdapter implements Adapter
     {
         $queryBuilder->on(QueryBuilder::ON_ASSEMBLE_SELECT, function (Select $select): void {
             if ($select->hasOrderBy()) {
-                foreach ($select->getOrderBy() as list($_, $direction)) {
+                foreach ($select->getOrderBy() as [$_, $direction]) {
                     switch (strtolower($direction ?? '')) {
                         case '':
                         case 'asc':

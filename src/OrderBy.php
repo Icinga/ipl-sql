@@ -33,7 +33,7 @@ trait OrderBy
             }
 
             if (is_array($column) && count($column) === 2) {
-                list($column, $dir) = $column;
+                [$column, $dir] = $column;
             }
 
             if ($dir === SORT_ASC) {
