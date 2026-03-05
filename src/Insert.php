@@ -2,8 +2,6 @@
 
 namespace ipl\Sql;
 
-use InvalidArgumentException;
-
 use function ipl\Stdlib\arrayval;
 
 /**
@@ -118,8 +116,6 @@ class Insert implements CommonTableExpressionInterface
      * @param iterable $values List of values or associative set of column-value pairs
      *
      * @return $this
-     *
-     * @throws InvalidArgumentException If values type is invalid
      */
     public function values(iterable $values): static
     {

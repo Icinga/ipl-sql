@@ -429,8 +429,6 @@ class Connection implements Quoter
      * @param iterable $data Row data in terms of column-value pairs
      *
      * @return PDOStatement
-     *
-     * @throws InvalidArgumentException If data type is invalid
      */
     public function insert(string $table, iterable $data): PDOStatement
     {
@@ -470,8 +468,6 @@ class Connection implements Quoter
      * @param string $operator The operator to combine multiple conditions with, if the condition is in the array format
      *
      * @return PDOStatement
-     *
-     * @throws InvalidArgumentException If data type is invalid
      */
     public function update(
         string|array $table,

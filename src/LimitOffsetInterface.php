@@ -28,7 +28,7 @@ interface LimitOffsetInterface
      *
      * @return $this
      */
-    public function limit($limit);
+    public function limit(?int $limit): static;
 
     /**
      * Reset the limit
@@ -59,7 +59,7 @@ interface LimitOffsetInterface
      *
      * @return $this
      */
-    public function offset($offset);
+    public function offset(?int $offset): static;
 
     /**
      * Reset the offset

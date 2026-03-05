@@ -2,8 +2,6 @@
 
 namespace ipl\Sql;
 
-use InvalidArgumentException;
-
 use function ipl\Stdlib\arrayval;
 
 /**
@@ -75,8 +73,6 @@ class Update implements CommonTableExpressionInterface, WhereInterface
      * @param iterable $set Associative set of column-value pairs
      *
      * @return $this
-     *
-     * @throws InvalidArgumentException If set type is invalid
      */
     public function set(iterable $set): static
     {

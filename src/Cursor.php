@@ -75,7 +75,7 @@ class Cursor implements IteratorAggregate, Paginatable
         return $this->select->getLimit();
     }
 
-    public function limit($limit)
+    public function limit(?int $limit): static
     {
         $this->select->limit($limit);
 
@@ -92,7 +92,7 @@ class Cursor implements IteratorAggregate, Paginatable
         return $this->select->getOffset();
     }
 
-    public function offset($offset)
+    public function offset(?int $offset): static
     {
         $this->select->offset($offset);
 
