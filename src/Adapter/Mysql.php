@@ -22,40 +22,33 @@ class Mysql extends BaseAdapter
     public function getOptions(Config $config)
     {
         $options = parent::getOptions($config);
-        // In PHP 8.5+, driver-specific constants of the PDO class are deprecated,
-        // but the replacements are only available since php 8.4
-        if (version_compare(PHP_VERSION, '8.4.0', '<')) {
-            $mysqlConstantPrefix = 'PDO::MYSQL_ATTR_';
-        } else {
-            $mysqlConstantPrefix = 'Pdo\Mysql::ATTR_';
-        }
 
         if (! empty($config->useSsl)) {
             if (! empty($config->sslKey)) {
-                $options[constant($mysqlConstantPrefix . 'SSL_KEY')] = $config->sslKey;
+                $options[PDO::MYSQL_ATTR_SSL_KEY] = $config->sslKey;
             }
 
             if (! empty($config->sslCert)) {
-                $options[constant($mysqlConstantPrefix . 'SSL_CERT')] = $config->sslCert;
+                $options[PDO::MYSQL_ATTR_SSL_CERT] = $config->sslCert;
             }
 
             if (! empty($config->sslCa)) {
-                $options[constant($mysqlConstantPrefix . 'SSL_CA')] = $config->sslCa;
+                $options[PDO::MYSQL_ATTR_SSL_CA] = $config->sslCa;
             }
 
             if (! empty($config->sslCapath)) {
-                $options[constant($mysqlConstantPrefix . 'SSL_CAPATH')] = $config->sslCapath;
+                $options[PDO::MYSQL_ATTR_SSL_CAPATH] = $config->sslCapath;
             }
 
             if (! empty($config->sslCipher)) {
-                $options[constant($mysqlConstantPrefix . 'SSL_CIPHER')] = $config->sslCipher;
+                $options[PDO::MYSQL_ATTR_SSL_CIPHER] = $config->sslCipher;
             }
 
             if (
-                defined($mysqlConstantPrefix . 'SSL_VERIFY_SERVER_CERT')
+                defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')
                 && ! empty($config->sslDoNotVerifyServerCert)
             ) {
-                $options[constant($mysqlConstantPrefix . 'SSL_VERIFY_SERVER_CERT')] = false;
+                $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
             }
         }
 
