@@ -1,9 +1,5 @@
-# Exclude all hidden files
-.*
-
-# Except those related to Git (and GitHub)
-!.git*
-
-# Exclude files from composer install
-vendor/
+# Ignore Composer installation artifacts; composer.lock is intentionally
+# excluded as this is a library - applications depending on this package
+# manage their own lock file.
+/vendor/
 composer.lock

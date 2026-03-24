@@ -1,10 +1,13 @@
 {
   "name": "ipl/sql",
-  "type": "library",
   "description": "Icinga PHP Library - SQL abstraction layer",
-  "keywords": ["sql", "database"],
-  "homepage": "https://github.com/Icinga/ipl-sql",
   "license": "MIT",
+  "type": "library",
+  "keywords": [
+    "sql",
+    "database"
+  ],
+  "homepage": "https://github.com/Icinga/ipl-sql",
   "require": {
     "php": ">=8.2",
     "ext-pdo": "*",
@@ -14,17 +17,20 @@
     "ipl/stdlib": "dev-main"
   },
   "autoload": {
-    "files": [
-      "src/pdo-driver-consts-forward-compat.php"
-    ],
     "psr-4": {
       "ipl\\Sql\\": "src"
-    }
+    },
+    "files": [
+      "src/pdo-driver-consts-forward-compat.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
       "ipl\\Tests\\Sql\\": "tests"
     }
+  },
+  "config": {
+    "sort-packages": true
   },
   "scripts": {
     "test": "vendor/bin/phpunit"

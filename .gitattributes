@@ -1,0 +1,7 @@
+# Exclude Git and CI configuration files from archives.
+.git* export-ignore
+.github/ export-ignore
+
+# Exclude test-related files from archives.
+tests/ export-ignore
+phpstan* export-ignore
