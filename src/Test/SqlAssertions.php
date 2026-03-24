@@ -11,10 +11,10 @@ use ipl\Sql\Update;
 trait SqlAssertions
 {
     /** @var string The adapter to use */
-    protected $adapterClass = TestAdapter::class;
+    protected string $adapterClass = TestAdapter::class;
 
     /** @var QueryBuilder */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
     abstract public function setUp(): void;
 
@@ -33,12 +33,16 @@ trait SqlAssertions
      *
      * @return void
      */
-    public function assertSql(string $sql, $statement, ?array $values = null, string $message = ''): void
-    {
+    public function assertSql(
+        string $sql,
+        Delete|Insert|Select|Update $statement,
+        ?array $values = null,
+        string $message = ''
+    ): void {
         // Reduce whitespaces to just one space
         $sql = preg_replace('/\s+/', ' ', trim($sql));
 
-        list($stmt, $bind) = $this->queryBuilder->assemble($statement);
+        [$stmt, $bind] = $this->queryBuilder->assemble($statement);
 
         $this->assertSame($sql, $stmt, $message);
 

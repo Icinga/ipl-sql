@@ -10,7 +10,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     use SqlAssertions;
 
     /** @var string The statement to use */
-    protected $queryClass = Select::class;
+    protected string $queryClass = Select::class;
 
     /** @var Select The statement in use */
     protected $query;
@@ -19,23 +19,5 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $this->query = new $this->queryClass();
         $this->setUpSqlAssertions();
-    }
-
-    /** @deprecated Unused. */
-    protected function setupTest()
-    {
-    }
-
-    /**
-     * @deprecated Use {@see self::assertSql} instead.
-     *
-     * @param string $statement
-     * @param array $values
-     *
-     * @return void
-     */
-    protected function assertCorrectStatementAndValues($statement, $values = null)
-    {
-        $this->assertSql($statement, $this->query, $values);
     }
 }

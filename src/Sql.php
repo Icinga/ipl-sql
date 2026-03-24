@@ -33,17 +33,17 @@ class Sql
      *
      * @return Delete
      */
-    public static function delete()
+    public static function delete(): Delete
     {
         return new Delete();
     }
 
     /**
-     * Create and return a INSERT statement
+     * Create and return an INSERT statement
      *
      * @return Insert
      */
-    public static function insert()
+    public static function insert(): Insert
     {
         return new Insert();
     }
@@ -53,7 +53,7 @@ class Sql
      *
      * @return Select
      */
-    public static function select()
+    public static function select(): Select
     {
         return new Select();
     }
@@ -63,7 +63,7 @@ class Sql
      *
      * @return Update
      */
-    public static function update()
+    public static function update(): Update
     {
         return new Update();
     }

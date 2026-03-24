@@ -2,8 +2,6 @@
 
 namespace ipl\Sql;
 
-use InvalidArgumentException;
-
 use function ipl\Stdlib\arrayval;
 
 /**
@@ -13,24 +11,24 @@ class Insert implements CommonTableExpressionInterface
 {
     use CommonTableExpression;
 
-    /** @var string|null The table for the INSERT INTO query */
-    protected $into;
+    /** @var ?string The table for the INSERT INTO query */
+    protected ?string $into = null;
 
-    /** @var array|null The columns for which the query provides values */
-    protected $columns;
+    /** @var ?array The columns for which the query provides values */
+    protected ?array $columns = null;
 
-    /** @var array|null The values to insert */
-    protected $values;
+    /** @var ?array $values The values to insert */
+    protected ?array $values = null;
 
-    /** @var Select|null The select query for INSERT INTO ... SELECT queries */
-    protected $select;
+    /** @var ?Select The select query for INSERT INTO ... SELECT queries */
+    protected ?Select $select = null;
 
     /**
      * Get the table for the INSERT INTo query
      *
-     * @return string|null
+     * @return ?string
      */
-    public function getInto()
+    public function getInto(): ?string
     {
         return $this->into;
     }
@@ -45,11 +43,11 @@ class Insert implements CommonTableExpressionInterface
      * {@link Connection::quoteIdentifier()} as well.
      *
      * @param string $table The table to insert data into. The table specification must be in one of the following
-     *                      formats: 'table' or 'schema.table'
+     *   formats: 'table' or 'schema.table'
      *
      * @return $this
      */
-    public function into($table)
+    public function into(string $table): static
     {
         $this->into = $table;
 
@@ -61,7 +59,7 @@ class Insert implements CommonTableExpressionInterface
      *
      * @return array
      */
-    public function getColumns()
+    public function getColumns(): array
     {
         if (! empty($this->columns)) {
             return array_keys($this->columns);
@@ -90,7 +88,7 @@ class Insert implements CommonTableExpressionInterface
      *
      * @return $this
      */
-    public function columns(array $columns)
+    public function columns(array $columns): static
     {
         $this->columns = array_flip($columns);
 
@@ -102,7 +100,7 @@ class Insert implements CommonTableExpressionInterface
      *
      * @return array
      */
-    public function getValues()
+    public function getValues(): array
     {
         return array_values($this->values ?: []);
     }
@@ -118,10 +116,8 @@ class Insert implements CommonTableExpressionInterface
      * @param iterable $values List of values or associative set of column-value pairs
      *
      * @return $this
-     *
-     * @throws InvalidArgumentException If values type is invalid
      */
-    public function values($values)
+    public function values(iterable $values): static
     {
         $this->values = arrayval($values);
 
@@ -135,7 +131,7 @@ class Insert implements CommonTableExpressionInterface
      *
      * @return $this
      */
-    public function select(Select $select)
+    public function select(Select $select): static
     {
         $this->select = $select;
 
@@ -145,9 +141,9 @@ class Insert implements CommonTableExpressionInterface
     /**
      * Get the select query for the INSERT INTO ... SELECT statement
      *
-     * @return Select|null
+     * @return ?Select
      */
-    public function getSelect()
+    public function getSelect(): ?Select
     {
         return $this->select;
     }
