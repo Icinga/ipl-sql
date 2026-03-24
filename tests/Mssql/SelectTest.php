@@ -3,7 +3,7 @@
 namespace ipl\Tests\Sql\Mssql;
 
 use ipl\Sql\Adapter\Mssql;
-use ipl\Tests\Sql\TestCase;
+use ipl\Sql\Test\TestCase;
 
 class SelectTest extends TestCase
 {

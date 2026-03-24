@@ -1,9 +1,8 @@
 <?php
 
-namespace ipl\Tests\Sql;
+namespace ipl\Sql\Test;
 
 use ipl\Sql\Select;
-use ipl\Sql\Test\SqlAssertions;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {

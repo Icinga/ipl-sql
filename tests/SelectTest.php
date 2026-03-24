@@ -5,6 +5,7 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Expression;
 use ipl\Sql\Select;
 use ipl\Sql\Sql;
+use ipl\Sql\Test\TestCase;
 use UnexpectedValueException;
 
 class SelectTest extends TestCase

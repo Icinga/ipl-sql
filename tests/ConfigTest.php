@@ -3,6 +3,7 @@
 namespace ipl\Tests\Sql;
 
 use ipl\Sql\Config;
+use ipl\Sql\Test\TestCase;
 
 class ConfigTest extends TestCase
 {

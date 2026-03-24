@@ -5,6 +5,7 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Expression;
 use ipl\Sql\Insert;
 use ipl\Sql\Select;
+use ipl\Sql\Test\TestCase;
 
 class InsertTest extends TestCase
 {

@@ -5,6 +5,7 @@ namespace ipl\Tests\Sql;
 use ipl\Sql\Connection;
 use ipl\Sql\Select;
 use ipl\Sql\Test\SharedDatabases;
+use ipl\Sql\Test\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 
