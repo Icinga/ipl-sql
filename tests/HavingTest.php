@@ -4,6 +4,7 @@ namespace ipl\Tests\Sql;
 
 use ipl\Sql\Expression;
 use ipl\Sql\Select;
+use ipl\Sql\Test\TestCase;
 
 class HavingTest extends TestCase
 {

@@ -8,6 +8,7 @@ use ipl\Sql\Filter\In;
 use ipl\Sql\Filter\NotExists;
 use ipl\Sql\Filter\NotIn;
 use ipl\Sql\Select;
+use ipl\Sql\Test\TestCase;
 use ipl\Stdlib\Filter;
 
 class FilterProcessorTest extends TestCase

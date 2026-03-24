@@ -4,6 +4,7 @@ namespace ipl\Tests\Sql;
 
 use ipl\Sql\Delete;
 use ipl\Sql\QueryBuilder;
+use ipl\Sql\Test\TestCase;
 
 class DeleteTest extends TestCase
 {
