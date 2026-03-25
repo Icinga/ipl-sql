@@ -3,6 +3,11 @@
 namespace ipl\Sql\Test;
 
 use ipl\Sql\Connection;
+use ipl\Sql\Delete;
+use ipl\Sql\Insert;
+use ipl\Sql\Select;
+use ipl\Sql\Update;
+use PDOStatement;
 
 /**
  * Config-less test connection
@@ -34,7 +39,7 @@ class TestConnection extends Connection
         throw new \LogicException('Transactions are not supported by the test connection');
     }
 
-    public function prepexec($stmt, $values = null)
+    public function prepexec(Delete|Insert|Select|Update|string $stmt, string|array|null $values = null): PDOStatement
     {
         if (PHP_MAJOR_VERSION >= 8) {
             return new class extends \PDOStatement {
