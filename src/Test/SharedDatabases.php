@@ -80,10 +80,10 @@ trait SharedDatabases
     /**
      * Get the current database connection
      *
-     * @return Connection
+     * @return ?Connection
      * @throws RuntimeException if the connection cannot be retrieved
      */
-    final protected function getConnection(): Connection
+    final protected function getConnection(): ?Connection
     {
         if (method_exists($this, 'getProvidedData')) {
             $connections = $this->getProvidedData();
@@ -91,6 +91,10 @@ trait SharedDatabases
             $connections = $this->providedData();
         } else {
             throw new RuntimeException('Cannot get connection: Unsupported PHPUnit version?');
+        }
+
+        if (empty($connections)) {
+            return null;
         }
 
         $connection = $connections[0];
@@ -113,6 +117,10 @@ trait SharedDatabases
         }
 
         $connection = $this->getConnection();
+        if ($connection === null) {
+            return;
+        }
+
         while ($connection->inTransaction()) {
             $connection->rollBackTransaction();
         }
