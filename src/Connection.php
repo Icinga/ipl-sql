@@ -384,12 +384,12 @@ class Connection implements Quoter
     /**
      * Prepare and execute the given statement
      *
-     * @param Delete|Insert|Select|Update|string $stmt   The SQL statement to prepare and execute
-     * @param string|array                       $values Values to bind to the statement, if any
+     * @param Delete|Insert|Select|Update|string $stmt The SQL statement to prepare and execute
+     * @param string|array|null $values Values to bind to the statement, if any
      *
      * @return PDOStatement
      */
-    public function prepexec($stmt, $values = null)
+    public function prepexec(Delete|Insert|Select|Update|string $stmt, string|array|null $values = null): PDOStatement
     {
         if ($values !== null && ! is_array($values)) {
             $values = [$values];
