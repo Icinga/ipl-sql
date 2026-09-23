@@ -3,6 +3,7 @@
 namespace ipl\Tests\Sql;
 
 use ipl\Sql\Compat\FilterProcessor;
+use ipl\Sql\Expression;
 use ipl\Sql\Filter\Exists;
 use ipl\Sql\Filter\In;
 use ipl\Sql\Filter\NotExists;
@@ -114,6 +115,16 @@ class FilterProcessorTest extends TestCase
         $this->assertSame(
             [' NOT EXISTS ?' => $select],
             FilterProcessor::assemblePredicate(new NotExists($select))
+        );
+    }
+
+    public function testFilterWithExpressionToSql(): void
+    {
+        $expression = new Expression('NOW()');
+
+        $this->assertSame(
+            ['foo = ?' => $expression],
+            FilterProcessor::assemblePredicate(Filter::equal('foo', $expression))
         );
     }
 }

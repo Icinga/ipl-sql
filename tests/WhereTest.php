@@ -198,6 +198,11 @@ class WhereTest extends TestCase
         $this->query->where($expression);
 
         $this->assertSql('WHERE c2 = ?', $this->query, [1]);
+
+        $expression = new Expression('NOW()');
+        $this->query->where(['c3 = ?' => $expression]);
+
+        $this->assertSql('WHERE (c2 = ?) AND (c3 = NOW())', $this->query, [1]);
     }
 
     public function testWhereWithSelect()
